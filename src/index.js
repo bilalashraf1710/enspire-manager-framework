@@ -1,4 +1,5 @@
 import React from 'react';
 
-export { Fancy } from './components/fancy';
+export { Ibox } from './components/ibox';
 export { Spinner } from './components/spinner';
+export { Table } from './components/table';
