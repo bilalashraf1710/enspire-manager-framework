@@ -34,6 +34,8 @@ export class Table extends React.Component {
 
 	render() {
 
+		var click_append = (this.props.options.click_append) ? this.props.options.click_append : '';
+
 		/* Sort ------------------------------------*/
 
 		var ordered_data = (this.props.options.order) ? _.orderBy(this.props.options.data, this.props.options.order.fields, this.props.options.order.direction) : this.props.options.data;
@@ -80,7 +82,7 @@ export class Table extends React.Component {
 					return ( <td key={ i }>{ this.formatItem(item, column) }</td> );
 				}
 			}) : null;
-			return <tr key={ index } style={{ cursor: 'pointer' }} onClick={ () => this.props.history.push(this.props.options.click_url+item[this.props.options.click_id]) }>{ fields }</tr>
+			return <tr key={ index } style={{ cursor: 'pointer' }} onClick={ () => this.props.history.push(this.props.options.click_url+item[this.props.options.click_id]+click_append) }>{ fields }</tr>
 		}) : null;
 
 		/* Filter Buttons --------------------------*/

@@ -17103,6 +17103,8 @@ var Table = exports.Table = function (_React$Component) {
 		value: function render() {
 			var _this2 = this;
 
+			var click_append = this.props.options.click_append ? this.props.options.click_append : '';
+
 			/* Sort ------------------------------------*/
 
 			var ordered_data = this.props.options.order ? _.orderBy(this.props.options.data, this.props.options.order.fields, this.props.options.order.direction) : this.props.options.data;
@@ -17164,7 +17166,7 @@ var Table = exports.Table = function (_React$Component) {
 				return _react2.default.createElement(
 					'tr',
 					{ key: index, style: { cursor: 'pointer' }, onClick: function onClick() {
-							return _this2.props.history.push(_this2.props.options.click_url + item[_this2.props.options.click_id]);
+							return _this2.props.history.push(_this2.props.options.click_url + item[_this2.props.options.click_id] + click_append);
 						} },
 					fields
 				);
