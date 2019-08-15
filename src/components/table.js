@@ -129,7 +129,7 @@ export class Table extends React.Component {
 								{ this.props.options.search && 
 									<div className="input-group">
 										<input name="search" placeholder="Search" type="text" className="form-control form-control-sm" value={ this.state.search } onChange={ this.handleChange.bind(this) }/>
-										<button type="button" className="btn btn-sm btn-primary ml-3" onClick={ () => { this.props.history.push(this.props.options.click_url+'0') } }>{ '+ New '+this.props.options.item }</button>
+										<button type="button" className="btn btn-sm btn-primary ml-3" onClick={ () => { this.props.history.push(this.props.options.click_url+'0'+click_append) } }>{ '+ New '+this.props.options.item }</button>
 									</div>
 								}
 							</div>
