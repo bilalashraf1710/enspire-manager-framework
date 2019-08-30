@@ -94,21 +94,21 @@ export class Dropzone extends React.Component {
 			<div>
 				{ this.props.filename 
 
-					? 	<div style={{ position: 'relative' }}>
+					? 	<div style={{ position: 'relative', textAlign: 'center', border: '1px solid #e5e6e7', padding: '10px' }}>
 							<i className="fa fa-times-circle-o fa-3x" 
 								style={{ 
 									color: 'white', 
 									cursor: 'pointer',
 									opacity: '.5', 
 									position: 'absolute', 
-									right: '3px', 
+									right: '5px', 
 									textShadow: '2px 2px 5px black', 
 									top: '3px', 
 									zIndex: '100', 
 								}}
 								onClick={ this.removeFile.bind(this) }
 							></i>
-							<img className={ this.props.className } src={ this.props.filename  } width={ this.props.width } />
+							<img className={ this.props.className } src={ this.props.filename  } width={ this.props.width } style={{ maxWidth: this.props.maxWidth, maxHeight: this.props.maxHeight }} />
 						</div>
 
 					:	<div id={ 'dropzone' } 
