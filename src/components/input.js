@@ -46,15 +46,16 @@ export class Input extends React.Component {
 
 			<div className={ 'form-group '+this.props.className+' '+((this.state.error)?'has-error':'') }>
 				<label>{ this.props.label + ((this.props.required)?' *':'') }</label> 
-				<div className="input-group">
+				<div className={ 'input-group ' + this.props.classInputGroup }>
 					{ this.props.prepend &&
 						<div className="input-group-prepend">
-							<span className="input-group-addon">{ this.props.prepend }</span>
+							<span className="input-group-text input-group-addon">{ this.props.prepend }</span>
 						</div>
 					}
 					<input 
 						autoComplete="off" 
 						className="form-control" 
+						defaultValue={ this.props.defaultValue }
 						name={ this.props.name } 
 						onChange={ this.props.onChange.bind(this) } 
 						placeholder={ this.props.placeholder } 
@@ -62,6 +63,11 @@ export class Input extends React.Component {
 						type="text" 
 						value={ this.props.value } 
 					/>
+					{ this.props.append &&
+						<div className="input-group-append">
+							<span className="input-group-text input-group-addon">{ this.props.append }</span>
+						</div>
+					}
 					{ this.state.error_message &&
 						<div className="invalid-feedback" style={{ display: 'block' }}>
 							{ this.state.error_message }

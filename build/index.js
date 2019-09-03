@@ -5033,6 +5033,34 @@ module.exports = require("react");
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
+exports.ModalAlert = ModalAlert;
+function ModalAlert(options) {
+
+	window.swal({
+		title: options.title,
+		text: options.text,
+		type: options.type,
+		showCancelButton: options.show_cancel !== undefined ? options.show_cancel : true,
+		confirmButtonColor: "#DD6B55",
+		confirmButtonText: options.confirm_text !== undefined ? options.confirm_text : "Yes, delete it!",
+		closeOnConfirm: true
+	}, function () {
+		options.callback();
+	});
+
+	return null;
+}
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
 exports.Spinner = Spinner;
 
 var _react = __webpack_require__(2);
@@ -5052,34 +5080,6 @@ function Spinner() {
 		_react2.default.createElement("div", { className: "sk-rect4" }),
 		_react2.default.createElement("div", { className: "sk-rect5" })
 	);
-}
-
-/***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
-exports.SweetAlert = SweetAlert;
-function SweetAlert(options) {
-
-	window.swal({
-		title: options.title,
-		text: options.text,
-		type: options.type,
-		showCancelButton: options.show_cancel !== undefined ? options.show_cancel : true,
-		confirmButtonColor: "#DD6B55",
-		confirmButtonText: options.confirm_text !== undefined ? options.confirm_text : "Yes, delete it!",
-		closeOnConfirm: true
-	}, function () {
-		options.callback();
-	});
-
-	return null;
 }
 
 /***/ }),
@@ -34949,7 +34949,7 @@ var _react = __webpack_require__(2);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _sweet_alert = __webpack_require__(4);
+var _modal_alert = __webpack_require__(3);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -35025,13 +35025,13 @@ var Dropzone = exports.Dropzone = function (_React$Component) {
 		value: function removeFile() {
 			var _this2 = this;
 
-			(0, _sweet_alert.SweetAlert)({
-				text: 'The Existing Image will be Removed!',
-				title: 'Are you sure?',
-				type: 'warning',
+			(0, _modal_alert.ModalAlert)({
 				callback: function callback() {
 					_this2.props.onChange(null);
-				}
+				},
+				text: 'The Existing Image will be Removed!',
+				title: 'Are you sure?',
+				type: 'warning'
 			});
 		}
 	}, {
@@ -35173,7 +35173,7 @@ var _react = __webpack_require__(2);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _spinner = __webpack_require__(3);
+var _spinner = __webpack_require__(4);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -35329,19 +35329,20 @@ var Input = exports.Input = function (_React$Component) {
 				),
 				_react2.default.createElement(
 					'div',
-					{ className: 'input-group' },
+					{ className: 'input-group ' + this.props.classInputGroup },
 					this.props.prepend && _react2.default.createElement(
 						'div',
 						{ className: 'input-group-prepend' },
 						_react2.default.createElement(
 							'span',
-							{ className: 'input-group-addon' },
+							{ className: 'input-group-text input-group-addon' },
 							this.props.prepend
 						)
 					),
 					_react2.default.createElement('input', {
 						autoComplete: 'off',
 						className: 'form-control',
+						defaultValue: this.props.defaultValue,
 						name: this.props.name,
 						onChange: this.props.onChange.bind(this),
 						placeholder: this.props.placeholder,
@@ -35349,6 +35350,15 @@ var Input = exports.Input = function (_React$Component) {
 						type: 'text',
 						value: this.props.value
 					}),
+					this.props.append && _react2.default.createElement(
+						'div',
+						{ className: 'input-group-append' },
+						_react2.default.createElement(
+							'span',
+							{ className: 'input-group-text input-group-addon' },
+							this.props.append
+						)
+					),
 					this.state.error_message && _react2.default.createElement(
 						'div',
 						{ className: 'invalid-feedback', style: { display: 'block' } },
@@ -35608,7 +35618,7 @@ var Table = exports.Table = function (_React$Component) {
 				return _react2.default.createElement(
 					'tr',
 					{ key: index, style: { cursor: 'pointer' }, onClick: function onClick() {
-							return _this2.props.history.push(_this2.props.options.click_url + item[_this2.props.options.click_id] + click_append);
+							return _this2.props.history.push(_this2.props.options.click_url + '/' + item[_this2.props.options.click_id] + click_append);
 						} },
 					fields
 				);
@@ -35628,99 +35638,95 @@ var Table = exports.Table = function (_React$Component) {
 
 			return _react2.default.createElement(
 				'div',
-				{ className: 'wrapper wrapper-content animated fadeInRight pt-0' },
+				{ className: 'row' },
 				_react2.default.createElement(
 					'div',
-					{ className: 'row' },
+					{ className: 'col-lg-12' },
 					_react2.default.createElement(
-						'div',
-						{ className: 'col-lg-12' },
+						'form',
+						{ className: 'row', autoComplete: 'off' },
 						_react2.default.createElement(
-							'form',
-							{ className: 'row', autoComplete: 'off' },
-							_react2.default.createElement(
-								'div',
-								{ className: 'col-sm-3 m-b-xs' },
-								this.props.options.limit && _react2.default.createElement(
-									'select',
-									{ className: 'form-control-sm form-control input-s-sm inline', defaultValue: this.props.options.limit },
-									_react2.default.createElement(
-										'option',
-										{ value: '25' },
-										'25'
-									),
-									_react2.default.createElement(
-										'option',
-										{ value: '50' },
-										'50'
-									),
-									_react2.default.createElement(
-										'option',
-										{ value: '100' },
-										'100'
-									),
-									_react2.default.createElement(
-										'option',
-										{ value: '0' },
-										'All'
-									)
-								)
-							),
-							_react2.default.createElement(
-								'div',
-								{ className: 'col-sm-5 m-b-xs' },
-								filters && _react2.default.createElement(
-									'div',
-									{ className: 'btn-group btn-group-toggle', 'data-toggle': 'buttons' },
-									filters
-								)
-							),
-							_react2.default.createElement(
-								'div',
-								{ className: 'col-sm-4 m-b-xs' },
-								this.props.options.search && _react2.default.createElement(
-									'div',
-									{ className: 'input-group' },
-									_react2.default.createElement('input', { name: 'search', placeholder: 'Search', type: 'text', className: 'form-control form-control-sm', value: this.state.search, onChange: this.handleChange.bind(this) }),
-									_react2.default.createElement(
-										'button',
-										{ type: 'button', className: 'btn btn-sm btn-primary ml-3', onClick: function onClick() {
-												_this2.props.history.push(_this2.props.options.click_url + '0' + click_append);
-											} },
-										'+ New ' + this.props.options.item
-									)
+							'div',
+							{ className: 'col-sm-3 m-b-xs' },
+							this.props.options.limit && _react2.default.createElement(
+								'select',
+								{ className: 'form-control-sm form-control input-s-sm inline', defaultValue: this.props.options.limit },
+								_react2.default.createElement(
+									'option',
+									{ value: '25' },
+									'25'
+								),
+								_react2.default.createElement(
+									'option',
+									{ value: '50' },
+									'50'
+								),
+								_react2.default.createElement(
+									'option',
+									{ value: '100' },
+									'100'
+								),
+								_react2.default.createElement(
+									'option',
+									{ value: '0' },
+									'All'
 								)
 							)
 						),
 						_react2.default.createElement(
 							'div',
-							{ className: 'table-responsive' },
+							{ className: 'col-sm-5 m-b-xs' },
+							filters && _react2.default.createElement(
+								'div',
+								{ className: 'btn-group btn-group-toggle', 'data-toggle': 'buttons' },
+								filters
+							)
+						),
+						_react2.default.createElement(
+							'div',
+							{ className: 'col-sm-4 m-b-xs' },
+							(this.props.options.search || this.props.options.new) && _react2.default.createElement(
+								'div',
+								{ className: 'input-group' },
+								this.props.options.search && _react2.default.createElement('input', { name: 'search', placeholder: 'Search', type: 'text', className: 'form-control form-control-sm', value: this.state.search, onChange: this.handleChange.bind(this) }),
+								this.props.options.new && _react2.default.createElement(
+									'button',
+									{ type: 'button', className: 'btn btn-sm btn-primary ml-3', onClick: function onClick() {
+											_this2.props.history.push(_this2.props.options.click_url + '/0' + click_append);
+										} },
+									'+ New ' + this.props.options.item
+								)
+							)
+						)
+					),
+					_react2.default.createElement(
+						'div',
+						{ className: 'table-responsive' },
+						_react2.default.createElement(
+							'table',
+							{ className: 'table table-striped table-hover' },
 							_react2.default.createElement(
-								'table',
-								{ className: 'table table-striped table-hover' },
+								'thead',
+								null,
 								_react2.default.createElement(
-									'thead',
+									'tr',
 									null,
+									columns
+								)
+							),
+							_react2.default.createElement(
+								'tbody',
+								null,
+								rows ? rows : _react2.default.createElement(
+									'tr',
+									{ style: { backgroundColor: 'transparent' } },
 									_react2.default.createElement(
-										'tr',
-										null,
-										columns
-									)
-								),
-								_react2.default.createElement(
-									'tbody',
-									null,
-									rows ? rows : _react2.default.createElement(
-										'tr',
-										{ style: { backgroundColor: 'transparent' } },
+										'td',
+										{ colSpan: this.props.options.columns.length },
 										_react2.default.createElement(
-											'td',
-											{ colSpan: this.props.options.columns.length },
-											_react2.default.createElement(
-												'h2',
-												{ className: 'text-center', style: { marginTop: '40px' } },
-												'No Records Found'
-											)
+											'h2',
+											{ className: 'text-center', style: { marginTop: '40px' } },
+											'No Records Found'
 										)
 									)
 								)
@@ -36665,7 +36671,7 @@ module.exports = function isBuffer (obj) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.ValidateForm = exports.Table = exports.SweetAlert = exports.Spinner = exports.Textarea = exports.Select = exports.Input = exports.Ibox = exports.Dropzone = undefined;
+exports.ValidateForm = exports.Textarea = exports.Table = exports.Spinner = exports.Select = exports.ModalAlert = exports.Input = exports.Ibox = exports.Dropzone = undefined;
 
 var _dropzone = __webpack_require__(142);
 
@@ -36694,6 +36700,15 @@ Object.defineProperty(exports, 'Input', {
   }
 });
 
+var _modal_alert = __webpack_require__(3);
+
+Object.defineProperty(exports, 'ModalAlert', {
+  enumerable: true,
+  get: function get() {
+    return _modal_alert.ModalAlert;
+  }
+});
+
 var _select = __webpack_require__(145);
 
 Object.defineProperty(exports, 'Select', {
@@ -36703,30 +36718,12 @@ Object.defineProperty(exports, 'Select', {
   }
 });
 
-var _textarea = __webpack_require__(147);
-
-Object.defineProperty(exports, 'Textarea', {
-  enumerable: true,
-  get: function get() {
-    return _textarea.Textarea;
-  }
-});
-
-var _spinner = __webpack_require__(3);
+var _spinner = __webpack_require__(4);
 
 Object.defineProperty(exports, 'Spinner', {
   enumerable: true,
   get: function get() {
     return _spinner.Spinner;
-  }
-});
-
-var _sweet_alert = __webpack_require__(4);
-
-Object.defineProperty(exports, 'SweetAlert', {
-  enumerable: true,
-  get: function get() {
-    return _sweet_alert.SweetAlert;
   }
 });
 
@@ -36736,6 +36733,15 @@ Object.defineProperty(exports, 'Table', {
   enumerable: true,
   get: function get() {
     return _table.Table;
+  }
+});
+
+var _textarea = __webpack_require__(147);
+
+Object.defineProperty(exports, 'Textarea', {
+  enumerable: true,
+  get: function get() {
+    return _textarea.Textarea;
   }
 });
 

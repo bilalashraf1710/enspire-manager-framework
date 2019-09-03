@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React from 'react';
-import { SweetAlert } from './sweet_alert';
+import { ModalAlert } from './modal_alert';
 
 export class Dropzone extends React.Component {
 
@@ -49,11 +49,11 @@ export class Dropzone extends React.Component {
 		if (file) this.uploadFile(file);
 	}
 	removeFile() {
-		SweetAlert({
+		ModalAlert({
+			callback: () => { this.props.onChange(null) },
 			text: 'The Existing Image will be Removed!',
 			title: 'Are you sure?',
 			type: 'warning',
-			callback: () => { this.props.onChange(null) },
 		});
 	}
 	chooseFile(e) {

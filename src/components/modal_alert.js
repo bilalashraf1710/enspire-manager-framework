@@ -1,4 +1,4 @@
-export function SweetAlert(options) {
+export function ModalAlert(options) {
 
 	window.swal({
 		title: options.title,
