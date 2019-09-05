@@ -63,13 +63,13 @@ export class Input extends React.Component {
 		// input CANNOT have both value and defaultValue
 		var inputProps = {};
 		if (this.props.defaultValue) inputProps.defaultValue = this.props.defaultValue;
-		else if (this.props.value) inputProps.value = this.props.value;
+		else if (this.props.value !== undefined) inputProps.value = this.props.value;
 
 		return (
 
 			<div className={ 'form-group '+this.props.className+' '+((this.state.error)?'has-error':'') }>
 				<label>{ this.props.label + ((this.props.required)?' *':'') }</label> 
-				<div className={ 'input-group ' + ((this.props.type === 'date') ? 'date '+this.props.name : '') }>
+					<div className={ 'input-group ' + ((this.props.type === 'date') ? 'date '+this.props.name : '') }>
 					{ this.props.prepend &&
 						<div className="input-group-prepend">
 							<span className="input-group-text input-group-addon">{ this.props.prepend }</span>

@@ -25,8 +25,18 @@ export class Table extends React.Component {
 		this.setState({ filter_button: button });
 	}
 	formatItem(item, column) {
-		if (column.date_format) {
-			return moment(item[column.field]).format(column.date_format);
+		if (column.type === 'date') {
+			if (column.format) {
+				return moment(item[column.field]).format(column.format);
+			} else console.error('EM Table: Format required for Date field');
+
+		} else if (column.type === 'number') {
+			if (column.format) {
+				if (column.format === 'usd') {
+					return '$ '+parseFloat(item[column.field]).toFixed(2);
+				} else console.error('EM Table: Unknown number format'); 
+			} else console.error('EM Table: Format required for Number field');
+
 		} else {
 			return item[column.field];
 		}
