@@ -14,8 +14,8 @@ export class Table extends React.Component {
 	}
 
 	componentDidMount() {
-		if (_.get(this.props.options, 'filters.active', null)) {
-			this.setState({ filter_button: this.props.options.filters.active });
+		if (_.get(this.props, 'filters.active', null)) {
+			this.setState({ filter_button: this.props.filters.active });
 		}
 	}
 	handleChange(event) {
@@ -34,11 +34,11 @@ export class Table extends React.Component {
 
 	render() {
 
-		var click_append = (this.props.options.click_append) ? this.props.options.click_append : '';
+		var click_append = (this.props.click_append) ? this.props.click_append : '';
 
 		/* Sort ------------------------------------*/
 
-		var ordered_data = (this.props.options.order) ? _.orderBy(this.props.options.data, this.props.options.order.fields, this.props.options.order.direction) : this.props.options.data;
+		var ordered_data = (this.props.order) ? _.orderBy(this.props.data, this.props.order.fields, this.props.order.direction) : this.props.data;
 
 		/* Search all Fields -----------------------*/
 	
@@ -50,20 +50,27 @@ export class Table extends React.Component {
 			return result;
 		}) : ordered_data;
 
-		if (this.state.filter_button && this.props.options.filters.buttons[this.state.filter_button-1].value !== null) {
-			filtered_data = _.filter(filtered_data, { [this.props.options.filters.field]: this.props.options.filters.buttons[this.state.filter_button-1].value }); 
+		if (this.state.filter_button && this.props.filters.buttons[this.state.filter_button-1].value !== null) {
+			filtered_data = _.filter(filtered_data, { [this.props.filters.field]: this.props.filters.buttons[this.state.filter_button-1].value }); 
 		}
 
 		/* Columns ---------------------------------*/
 
-		var columns = (this.props.options.columns.length) ? this.props.options.columns.map((column, index) => {
+		var columns = (this.props.columns.length) ? this.props.columns.map((column, index) => {
 			return ( <th key={ index }>{ column.name }</th> );
 		}) : null;
 
 		/* Rows ------------------------------------*/
 
 		var rows = (filtered_data.length) ? filtered_data.map((item, index) => {
-			var fields = (this.props.options.columns.length) ? this.props.options.columns.map((column, i) => {
+
+			var inputProps = {};
+			if (this.props.click) {
+				var link = this.props.click_url+'/'+item[this.props.id]+click_append;
+				inputProps.onClick = () => this.props.history.push(link);
+			}
+
+			var fields = (this.props.columns.length) ? this.props.columns.map((column, i) => {
 				if (column.data) {
 					var items = [];
 					var linked = _.filter(column.data, { [column.link]: item[column.link] });
@@ -77,17 +84,24 @@ export class Table extends React.Component {
 						items = linked;
 					}
 
-					return ( <td key={ i }>{ (items.length) ? this.formatItem(items[0], column) : '' }</td> ); // TODO check for multiple
+					return ( <td key={ i } { ...inputProps }>{ (items.length) ? this.formatItem(items[0], column) : '' }</td> ); // TODO check for multiple
 				} else {
-					return ( <td key={ i }>{ this.formatItem(item, column) }</td> );
+					return ( <td key={ i } { ...inputProps }>{ this.formatItem(item, column) }</td> );
 				}
 			}) : null;
-			return <tr key={ index } style={{ cursor: 'pointer' }} onClick={ () => this.props.history.push(this.props.options.click_url+'/'+item[this.props.options.click_id]+click_append) }>{ fields }</tr>
+
+			return <tr key={ index } style={{ cursor: ((this.props.click) ? 'pointer' : 'default') }}>
+				{ fields }
+				{ this.props.delete &&
+					<td key={ 'delete' } style={{ cursor: 'pointer' }} onClick={ this.props.onDelete.bind(this, item) }><i className="fa fa-times"></i></td>
+				}
+			</tr>
+
 		}) : null;
 
 		/* Filter Buttons --------------------------*/
 
-		var filters = (this.props.options.filters) ? this.props.options.filters.buttons.map((item, index) => {
+		var filters = (this.props.filters) ? this.props.filters.buttons.map((item, index) => {
 			return (
 				<label key={ index } className={ 'btn btn-sm' + ((index == this.state.filter_button - 1) ? ' btn-success active' : ' btn-white') } onClick={ this.handleFilter.bind(this, index + 1) }>
 					<input type="radio" name="filters" value={ this.state.filter_button } /> { item.name }
@@ -104,8 +118,8 @@ export class Table extends React.Component {
 					<form className="row" autoComplete="off">
 
 						<div className="col-sm-3 m-b-xs">
-							{ this.props.options.limit && 
-								<select className="form-control-sm form-control input-s-sm inline" defaultValue={ this.props.options.limit }>
+							{ this.props.limit && 
+								<select className="form-control-sm form-control input-s-sm inline" defaultValue={ this.props.limit }>
 									<option value="25">25</option>
 									<option value="50">50</option>
 									<option value="100">100</option>
@@ -115,23 +129,21 @@ export class Table extends React.Component {
 						</div>
 
 						<div className="col-sm-5 m-b-xs">
-
 							{ filters &&
 								<div className="btn-group btn-group-toggle" data-toggle="buttons">
 									{ filters }
 								</div>
 							}
-
 						</div>
 
 						<div className="col-sm-4 m-b-xs">
-							{ (this.props.options.search || this.props.options.new) && 
+							{ (this.props.search || this.props.new) && 
 								<div className="input-group">
-									{ this.props.options.search && 
+									{ this.props.search && 
 										<input name="search" placeholder="Search" type="text" className="form-control form-control-sm" value={ this.state.search } onChange={ this.handleChange.bind(this) }/>
 									}
-									{ this.props.options.new && 
-										<button type="button" className="btn btn-sm btn-primary ml-3" onClick={ () => { this.props.history.push(this.props.options.click_url+'/0'+click_append) } }>{ '+ New '+this.props.options.item }</button>
+									{ this.props.new && 
+										<button type="button" className="btn btn-sm btn-primary ml-3" onClick={ () => { this.props.history.push(this.props.click_url+'/0'+click_append) } }>{ this.props.new }</button>
 									}
 								</div>
 							}
@@ -143,15 +155,16 @@ export class Table extends React.Component {
 							<thead>
 								<tr>
 									{ columns }
+									{ this.props.delete &&
+										<th key={ 'delete' }></th>
+									}
 								</tr>
 							</thead>
 							<tbody>
-							
 								{ rows
 									?	rows
-									: 	<tr style={{ backgroundColor: 'transparent' }}><td colSpan={ this.props.options.columns.length }><h2 className="text-center" style={{ marginTop: '40px' }}>No Records Found</h2></td></tr>
+									: 	<tr style={{ backgroundColor: 'transparent' }}><td colSpan={ this.props.columns.length }><h2 className="text-center" style={{ marginTop: '40px' }}>No Records Found</h2></td></tr>
 								}
-
 							</tbody>
 						</table>
 					</div>

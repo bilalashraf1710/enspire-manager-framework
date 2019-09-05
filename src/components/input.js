@@ -1,6 +1,7 @@
 import React from 'react';
 
 var _ = require('lodash');
+var moment = require('moment'); 
 
 export class Input extends React.Component {
 
@@ -14,7 +15,24 @@ export class Input extends React.Component {
 	}
 
 	componentDidMount() {
-
+		$('.input-group.date.'+this.props.name).datepicker({
+			todayBtn: "linked",
+			keyboardNavigation: false,
+			forceParse: false,
+			calendarWeeks: true,
+			autoclose: true,
+			format: 'yyyy-mm-dd',
+			defaultViewDate: this.props.defaultValue,
+		}).on('changeDate', (event) => {
+			var e = {
+				target: { 
+					name: this.props.name,
+					value: moment(event.date).format('YYYY-MM-DD'), 
+				},
+			};
+			this.props.onChange(e);
+			// this.setState({ ...this.state, permit: { ...this.state.permit, [event.target.lastChild.name]: moment(event.date).format('YYYY-MM-DD') } });
+		});
 	}
 	componentDidUpdate() {
 		if (this.props.form_error !== undefined) {
@@ -42,11 +60,16 @@ export class Input extends React.Component {
 
 	render() {
 
+		// input CANNOT have both value and defaultValue
+		var inputProps = {};
+		if (this.props.defaultValue) inputProps.defaultValue = this.props.defaultValue;
+		else if (this.props.value) inputProps.value = this.props.value;
+
 		return (
 
 			<div className={ 'form-group '+this.props.className+' '+((this.state.error)?'has-error':'') }>
 				<label>{ this.props.label + ((this.props.required)?' *':'') }</label> 
-				<div className={ 'input-group ' + this.props.classInputGroup }>
+				<div className={ 'input-group ' + ((this.props.type === 'date') ? 'date '+this.props.name : '') }>
 					{ this.props.prepend &&
 						<div className="input-group-prepend">
 							<span className="input-group-text input-group-addon">{ this.props.prepend }</span>
@@ -55,13 +78,12 @@ export class Input extends React.Component {
 					<input 
 						autoComplete="off" 
 						className="form-control" 
-						defaultValue={ this.props.defaultValue }
 						name={ this.props.name } 
 						onChange={ this.props.onChange.bind(this) } 
 						placeholder={ this.props.placeholder } 
 						ref={ this.field_ref } 
 						type="text" 
-						value={ this.props.value } 
+						{ ...inputProps }
 					/>
 					{ this.props.append &&
 						<div className="input-group-append">

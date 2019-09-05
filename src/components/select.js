@@ -20,8 +20,6 @@ export class Select extends React.Component {
 			var error = _.find(this.props.form_error, { field: this.props.name })
 			var error_message;
 
-			console.log(error);
-
 			if (error && !this.state.error) {
 
 				if (this.props.form_error[0].field === this.props.name) this.field_ref.current.focus();

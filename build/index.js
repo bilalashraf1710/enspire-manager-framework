@@ -35256,6 +35256,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.Input = undefined;
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = __webpack_require__(2);
@@ -35271,6 +35273,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var _ = __webpack_require__(13);
+var moment = __webpack_require__(0);
 
 var Input = exports.Input = function (_React$Component) {
 	_inherits(Input, _React$Component);
@@ -35290,7 +35293,28 @@ var Input = exports.Input = function (_React$Component) {
 
 	_createClass(Input, [{
 		key: 'componentDidMount',
-		value: function componentDidMount() {}
+		value: function componentDidMount() {
+			var _this2 = this;
+
+			$('.input-group.date.' + this.props.name).datepicker({
+				todayBtn: "linked",
+				keyboardNavigation: false,
+				forceParse: false,
+				calendarWeeks: true,
+				autoclose: true,
+				format: 'yyyy-mm-dd',
+				defaultViewDate: this.props.defaultValue
+			}).on('changeDate', function (event) {
+				var e = {
+					target: {
+						name: _this2.props.name,
+						value: moment(event.date).format('YYYY-MM-DD')
+					}
+				};
+				_this2.props.onChange(e);
+				// this.setState({ ...this.state, permit: { ...this.state.permit, [event.target.lastChild.name]: moment(event.date).format('YYYY-MM-DD') } });
+			});
+		}
 	}, {
 		key: 'componentDidUpdate',
 		value: function componentDidUpdate() {
@@ -35319,6 +35343,10 @@ var Input = exports.Input = function (_React$Component) {
 		key: 'render',
 		value: function render() {
 
+			// input CANNOT have both value and defaultValue
+			var inputProps = {};
+			if (this.props.defaultValue) inputProps.defaultValue = this.props.defaultValue;else if (this.props.value) inputProps.value = this.props.value;
+
 			return _react2.default.createElement(
 				'div',
 				{ className: 'form-group ' + this.props.className + ' ' + (this.state.error ? 'has-error' : '') },
@@ -35329,7 +35357,7 @@ var Input = exports.Input = function (_React$Component) {
 				),
 				_react2.default.createElement(
 					'div',
-					{ className: 'input-group ' + this.props.classInputGroup },
+					{ className: 'input-group ' + (this.props.type === 'date' ? 'date ' + this.props.name : '') },
 					this.props.prepend && _react2.default.createElement(
 						'div',
 						{ className: 'input-group-prepend' },
@@ -35339,17 +35367,15 @@ var Input = exports.Input = function (_React$Component) {
 							this.props.prepend
 						)
 					),
-					_react2.default.createElement('input', {
+					_react2.default.createElement('input', _extends({
 						autoComplete: 'off',
 						className: 'form-control',
-						defaultValue: this.props.defaultValue,
 						name: this.props.name,
 						onChange: this.props.onChange.bind(this),
 						placeholder: this.props.placeholder,
 						ref: this.field_ref,
-						type: 'text',
-						value: this.props.value
-					}),
+						type: 'text'
+					}, inputProps)),
 					this.props.append && _react2.default.createElement(
 						'div',
 						{ className: 'input-group-append' },
@@ -35425,8 +35451,6 @@ var Select = exports.Select = function (_React$Component) {
 				var error = _.find(this.props.form_error, { field: this.props.name });
 				var error_message;
 
-				console.log(error);
-
 				if (error && !this.state.error) {
 
 					if (this.props.form_error[0].field === this.props.name) this.field_ref.current.focus();
@@ -35490,6 +35514,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.Table = undefined;
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = __webpack_require__(2);
@@ -35527,8 +35553,8 @@ var Table = exports.Table = function (_React$Component) {
 	_createClass(Table, [{
 		key: 'componentDidMount',
 		value: function componentDidMount() {
-			if (_.get(this.props.options, 'filters.active', null)) {
-				this.setState({ filter_button: this.props.options.filters.active });
+			if (_.get(this.props, 'filters.active', null)) {
+				this.setState({ filter_button: this.props.filters.active });
 			}
 		}
 	}, {
@@ -35555,11 +35581,11 @@ var Table = exports.Table = function (_React$Component) {
 		value: function render() {
 			var _this2 = this;
 
-			var click_append = this.props.options.click_append ? this.props.options.click_append : '';
+			var click_append = this.props.click_append ? this.props.click_append : '';
 
 			/* Sort ------------------------------------*/
 
-			var ordered_data = this.props.options.order ? _.orderBy(this.props.options.data, this.props.options.order.fields, this.props.options.order.direction) : this.props.options.data;
+			var ordered_data = this.props.order ? _.orderBy(this.props.data, this.props.order.fields, this.props.order.direction) : this.props.data;
 
 			/* Search all Fields -----------------------*/
 
@@ -35571,13 +35597,13 @@ var Table = exports.Table = function (_React$Component) {
 				return result;
 			}) : ordered_data;
 
-			if (this.state.filter_button && this.props.options.filters.buttons[this.state.filter_button - 1].value !== null) {
-				filtered_data = _.filter(filtered_data, _defineProperty({}, this.props.options.filters.field, this.props.options.filters.buttons[this.state.filter_button - 1].value));
+			if (this.state.filter_button && this.props.filters.buttons[this.state.filter_button - 1].value !== null) {
+				filtered_data = _.filter(filtered_data, _defineProperty({}, this.props.filters.field, this.props.filters.buttons[this.state.filter_button - 1].value));
 			}
 
 			/* Columns ---------------------------------*/
 
-			var columns = this.props.options.columns.length ? this.props.options.columns.map(function (column, index) {
+			var columns = this.props.columns.length ? this.props.columns.map(function (column, index) {
 				return _react2.default.createElement(
 					'th',
 					{ key: index },
@@ -35588,7 +35614,16 @@ var Table = exports.Table = function (_React$Component) {
 			/* Rows ------------------------------------*/
 
 			var rows = filtered_data.length ? filtered_data.map(function (item, index) {
-				var fields = _this2.props.options.columns.length ? _this2.props.options.columns.map(function (column, i) {
+
+				var inputProps = {};
+				if (_this2.props.click) {
+					var link = _this2.props.click_url + '/' + item[_this2.props.id] + click_append;
+					inputProps.onClick = function () {
+						return _this2.props.history.push(link);
+					};
+				}
+
+				var fields = _this2.props.columns.length ? _this2.props.columns.map(function (column, i) {
 					if (column.data) {
 						var items = [];
 						var linked = _.filter(column.data, _defineProperty({}, column.link, item[column.link]));
@@ -35604,29 +35639,33 @@ var Table = exports.Table = function (_React$Component) {
 
 						return _react2.default.createElement(
 							'td',
-							{ key: i },
+							_extends({ key: i }, inputProps),
 							items.length ? _this2.formatItem(items[0], column) : ''
 						); // TODO check for multiple
 					} else {
 						return _react2.default.createElement(
 							'td',
-							{ key: i },
+							_extends({ key: i }, inputProps),
 							_this2.formatItem(item, column)
 						);
 					}
 				}) : null;
+
 				return _react2.default.createElement(
 					'tr',
-					{ key: index, style: { cursor: 'pointer' }, onClick: function onClick() {
-							return _this2.props.history.push(_this2.props.options.click_url + '/' + item[_this2.props.options.click_id] + click_append);
-						} },
-					fields
+					{ key: index, style: { cursor: _this2.props.click ? 'pointer' : 'default' } },
+					fields,
+					_this2.props.delete && _react2.default.createElement(
+						'td',
+						{ key: 'delete', style: { cursor: 'pointer' }, onClick: _this2.props.onDelete.bind(_this2, item) },
+						_react2.default.createElement('i', { className: 'fa fa-times' })
+					)
 				);
 			}) : null;
 
 			/* Filter Buttons --------------------------*/
 
-			var filters = this.props.options.filters ? this.props.options.filters.buttons.map(function (item, index) {
+			var filters = this.props.filters ? this.props.filters.buttons.map(function (item, index) {
 				return _react2.default.createElement(
 					'label',
 					{ key: index, className: 'btn btn-sm' + (index == _this2.state.filter_button - 1 ? ' btn-success active' : ' btn-white'), onClick: _this2.handleFilter.bind(_this2, index + 1) },
@@ -35648,9 +35687,9 @@ var Table = exports.Table = function (_React$Component) {
 						_react2.default.createElement(
 							'div',
 							{ className: 'col-sm-3 m-b-xs' },
-							this.props.options.limit && _react2.default.createElement(
+							this.props.limit && _react2.default.createElement(
 								'select',
-								{ className: 'form-control-sm form-control input-s-sm inline', defaultValue: this.props.options.limit },
+								{ className: 'form-control-sm form-control input-s-sm inline', defaultValue: this.props.limit },
 								_react2.default.createElement(
 									'option',
 									{ value: '25' },
@@ -35685,16 +35724,16 @@ var Table = exports.Table = function (_React$Component) {
 						_react2.default.createElement(
 							'div',
 							{ className: 'col-sm-4 m-b-xs' },
-							(this.props.options.search || this.props.options.new) && _react2.default.createElement(
+							(this.props.search || this.props.new) && _react2.default.createElement(
 								'div',
 								{ className: 'input-group' },
-								this.props.options.search && _react2.default.createElement('input', { name: 'search', placeholder: 'Search', type: 'text', className: 'form-control form-control-sm', value: this.state.search, onChange: this.handleChange.bind(this) }),
-								this.props.options.new && _react2.default.createElement(
+								this.props.search && _react2.default.createElement('input', { name: 'search', placeholder: 'Search', type: 'text', className: 'form-control form-control-sm', value: this.state.search, onChange: this.handleChange.bind(this) }),
+								this.props.new && _react2.default.createElement(
 									'button',
 									{ type: 'button', className: 'btn btn-sm btn-primary ml-3', onClick: function onClick() {
-											_this2.props.history.push(_this2.props.options.click_url + '/0' + click_append);
+											_this2.props.history.push(_this2.props.click_url + '/0' + click_append);
 										} },
-									'+ New ' + this.props.options.item
+									this.props.new
 								)
 							)
 						)
@@ -35711,7 +35750,8 @@ var Table = exports.Table = function (_React$Component) {
 								_react2.default.createElement(
 									'tr',
 									null,
-									columns
+									columns,
+									this.props.delete && _react2.default.createElement('th', { key: 'delete' })
 								)
 							),
 							_react2.default.createElement(
@@ -35722,7 +35762,7 @@ var Table = exports.Table = function (_React$Component) {
 									{ style: { backgroundColor: 'transparent' } },
 									_react2.default.createElement(
 										'td',
-										{ colSpan: this.props.options.columns.length },
+										{ colSpan: this.props.columns.length },
 										_react2.default.createElement(
 											'h2',
 											{ className: 'text-center', style: { marginTop: '40px' } },
