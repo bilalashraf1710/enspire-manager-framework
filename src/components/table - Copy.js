@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 
 var _ = require('lodash');
 var moment = require('moment'); 
@@ -12,38 +11,12 @@ export class Table extends React.Component {
 			search: '',
 			filter_button: 0,
 			page: 0,
-			limit: 0,
-			show_limit: false,
 		};
 	}
 
 	componentDidMount() {
 		if (_.get(this.props, 'filters.active', null)) {
 			this.setState({ filter_button: this.props.filters.active });
-		}
-		if (this.props.limit) this.setState({ limit: parseInt(this.props.limit), show_limit: true });
-		this.updateTableFields();
-	}
-	componentDidUpdate() {
-		this.updateTableFields();
-	}
-	updateTableFields() {
-		if (this.props.columnDefs) {
-			var rows = document.querySelectorAll('tbody tr');
-			if (rows.length) {
-				rows.forEach((row, index_row) => {
-					var tds = row.querySelectorAll('td');
-					if (tds.length) {
-						tds.forEach((td, index_td) => {
-							this.props.columnDefs.forEach((columnDef) => {
-								if (index_td == columnDef.targets) {
-									columnDef.createdCell(td, td.innerHTML, index_td);
-								}
-							});
-						});
-					}
-				});
-			}
 		}
 	}
 	handleChange(event) {
@@ -64,12 +37,6 @@ export class Table extends React.Component {
 		if (this.state.page < max_page) {
 			this.setState({ page: this.state.page + 1 });
 		}
-	}
-	handleFirst() {
-		this.setState({ page: 0 });
-	}
-	handleLast(max_page) {
-		this.setState({ page: max_page });
 	}
 	formatItem(item, column) {
 		if (column.type === 'date') {
@@ -111,9 +78,10 @@ export class Table extends React.Component {
 		}
 
 		/* Display ---------------------------------*/
+		var limit = parseInt(this.props.limit);
 		var page = this.state.page;
-		var display_data = (this.state.limit > 0)
-			? filtered_data.slice(page * this.state.limit, page * this.state.limit + this.state.limit)
+		var display_data = (this.props.limit && parseInt(this.props.limit) > 0)
+			? filtered_data.slice(page * limit, page * limit + limit)
 			: filtered_data;
 
 		/* Columns ---------------------------------*/
@@ -124,22 +92,20 @@ export class Table extends React.Component {
 		/* Pagination ---------------------------------*/
 		var gap_low = false;
 		var gap_high = false;
-		var max_page = Math.round(filtered_data.length / this.props.limit) - 1;
-
+		var max_page;
 		var pagination = [];
-		if (this.state.limit > 0 && filtered_data.length > this.state.limit) {
-			for (var i=0; i * this.props.limit < filtered_data.length; i++) {
+		for (var i=0; i * parseInt(this.props.limit) < filtered_data.length; i++) {
 
-				if (i < this.state.page - 2) {
-					gap_low = true;
-				} else if (i > this.state.page + 2) {
-					gap_high = true;
-				} else {
-					pagination.push(
-						<button key={ i } type="button" className={ 'btn btn-'+((this.state.page == i)?'primary':'default') } onClick={ this.handlePage.bind(this, i) }>{ i + 1 }</button>
-					);
-				}
+			if (i < this.state.page - 3) {
+				gap_low = true;
+			} else if (i > this.state.page + 3) {
+				gap_high = true;
+			} else {
+				pagination.push(
+					<button key={ i } type="button" className={ 'btn btn-'+((this.state.page == i)?'primary':'default') } onClick={ this.handlePage.bind(this, i) }>{ i + 1 }</button>
+				);
 			}
+			max_page = i;
 		}
 
 		/* Rows ------------------------------------*/
@@ -197,9 +163,9 @@ export class Table extends React.Component {
 
 					<form className="row" autoComplete="off">
 
-						<div className="col-sm-3 col-md-2 m-b-xs">
-							{ this.state.show_limit &&
-								<select className="form-control-sm form-control input-s-sm inline" name="limit" value={ this.state.limit } onChange={ this.handleChange.bind(this) }>
+						<div className="col-sm-3 m-b-xs">
+							{ this.props.limit && 
+								<select className="form-control-sm form-control input-s-sm inline" defaultValue={ this.props.limit }>
 									<option value="10">10</option>
 									<option value="25">25</option>
 									<option value="50">50</option>
@@ -217,7 +183,7 @@ export class Table extends React.Component {
 							}
 						</div>
 
-						<div className="col-sm-4 col-md-5 m-b-xs">
+						<div className="col-sm-4 m-b-xs">
 							{ (this.props.search || this.props.new) && 
 								<div className="input-group">
 									{ this.props.search && 
@@ -249,19 +215,17 @@ export class Table extends React.Component {
 							</tbody>
 						</table>
 						
-						{ this.state.show_limit &&
-							<div className="btn-group pull-right" role="group" aria-label="Basic example">
-								<button type="button" className="btn btn-default" onClick={ this.handleFirst.bind(this) }>First</button>
-								<button type="button" className="btn btn-default" onClick={ this.handlePrevious.bind(this) }>Prev</button>
+						{ this.props.limit &&
+							<div class="btn-group pull-right" role="group" aria-label="Basic example">
+								<button type="button" class="btn btn-default" onClick={ this.handlePrevious.bind(this) }>Previous</button>
 								{ gap_low &&
-									<button type="button" className="btn btn-default">...</button>
+									<button type="button" class="btn btn-default">...</button>
 								}
 								{ pagination }
 								{ gap_high &&
-									<button type="button" className="btn btn-default">...</button>
+									<button type="button" class="btn btn-default">...</button>
 								}
-								<button type="button" className="btn btn-default" onClick={ this.handleNext.bind(this, max_page) }>Next</button>
-								<button type="button" className="btn btn-default" onClick={ this.handleLast.bind(this, max_page) }>Last</button>
+								<button type="button" class="btn btn-default" onClick={ this.handleNext.bind(this, max_page) }>Next</button>
 							</div>
 						}
 					</div>
