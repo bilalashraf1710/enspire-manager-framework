@@ -14,6 +14,10 @@ export class Table extends React.Component {
 			page: 0,
 			limit: 0,
 			show_limit: false,
+			order: {
+				fields: [],
+				direction: []
+			}
 		};
 	}
 
@@ -22,10 +26,11 @@ export class Table extends React.Component {
 			this.setState({ filter_button: this.props.filters.active });
 		}
 		if (this.props.limit) this.setState({ limit: parseInt(this.props.limit), show_limit: true });
+		if (this.props.order) this.setState({ order: this.props.order });
 		this.updateTableFields();
 	}
 	componentDidUpdate() {
-		this.updateTableFields();
+		// this.updateTableFields();
 	}
 	updateTableFields() {
 		if (this.props.columnDefs) {
@@ -46,6 +51,9 @@ export class Table extends React.Component {
 			}
 		}
 	}
+
+	/* HANDLERS --------------------------------------------------------------------*/
+
 	handleChange(event) {
 		this.setState({ [event.target.name]: event.target.value });
 	}
@@ -71,6 +79,18 @@ export class Table extends React.Component {
 	handleLast(max_page) {
 		this.setState({ page: max_page });
 	}
+	columnSort(column) {
+		var sortindex = (this.state.order) ? this.state.order.fields.indexOf(column.field) : -1;
+		var direction = (sortindex > -1) ? ((this.state.order.direction[sortindex] === 'asc') ? 'desc' : 'asc' ) : 'asc';
+		var order = {
+			fields: [ column.field ],
+			direction: [ direction ],
+		}
+		this.setState({ order });
+	}
+
+	/* ACTIONS --------------------------------------------------------------------*/
+
 	formatItem(item, column) {
 		if (column.type === 'date') {
 			if (column.format) {
@@ -94,34 +114,46 @@ export class Table extends React.Component {
 		var click_append = (this.props.click_append) ? this.props.click_append : '';
 
 		/* Sort ------------------------------------*/
-		var ordered_data = (this.props.order) ? _.orderBy(this.props.data, this.props.order.fields, this.props.order.direction) : this.props.data;
+
+		var ordered_data = (this.state.order) ? _.orderBy(this.props.data, this.state.order.fields, this.state.order.direction) : this.props.data;
 
 		/* Search all Fields -----------------------*/
+
 		var filtered_data = (this.state.search) ? _.filter(ordered_data, (o) => {
 			var result = false;
 			Object.keys(o).forEach((k, index) => {
-				if (o[k] && o[k].toLowerCase().includes(this.state.search.toLowerCase())) result = true;
+				if (typeof o[k] === 'string' && o[k].toLowerCase().includes(this.state.search.toLowerCase())) result = true;
 			});
 			return result;
 		}) : ordered_data;
 
 		/* Filtered --------------------------------*/
+
 		if (this.state.filter_button && this.props.filters.buttons[this.state.filter_button-1].value !== null) {
 			filtered_data = _.filter(filtered_data, { [this.props.filters.field]: this.props.filters.buttons[this.state.filter_button-1].value }); 
 		}
 
 		/* Display ---------------------------------*/
+
 		var page = this.state.page;
 		var display_data = (this.state.limit > 0)
 			? filtered_data.slice(page * this.state.limit, page * this.state.limit + this.state.limit)
 			: filtered_data;
 
 		/* Columns ---------------------------------*/
+
 		var columns = (this.props.columns.length) ? this.props.columns.map((column, index) => {
-			return ( <th key={ index }>{ column.name }</th> );
+			var sortindex = (this.state.order) ? this.state.order.fields.indexOf(column.field) : -1;
+			var sort = (sortindex > -1) ? ((this.state.order.direction[sortindex] === 'asc') ? 'sort-up' : 'sort-down' ) : null;
+			return ( 
+				<th key={ 'th'+index } style={{ whiteSpace: 'nowrap' }}><a style={{ cursor: 'pointer' }} onClick={ this.columnSort.bind(this, column) }>
+					{ column.name }<i className={ 'fa fa-'+sort } style={{ color: '#aaaaaa', marginLeft: '7px' }} />
+				</a></th>
+			);
 		}) : null;
 
 		/* Pagination ---------------------------------*/
+
 		var gap_low = false;
 		var gap_high = false;
 		var max_page = Math.round(filtered_data.length / this.props.limit) - 1;
@@ -143,7 +175,8 @@ export class Table extends React.Component {
 		}
 
 		/* Rows ------------------------------------*/
-		var rows = (display_data.length) ? display_data.map((item, index) => {
+
+		var rows = (display_data.length) ? display_data.map((item, row_index) => {
 
 			var inputProps = {};
 			if (this.props.click) {
@@ -151,13 +184,13 @@ export class Table extends React.Component {
 				inputProps.onClick = () => this.props.history.push(link);
 			}
 
-			var fields = (this.props.columns.length) ? this.props.columns.map((column, i) => {
+			var fields = (this.props.columns.length) ? this.props.columns.map((column, column_index) => {
 				if (column.data) {
 					var items = [];
 					var linked = _.filter(column.data, { [column.link]: item[column.link] });
 
 					if (column.filter){
-						column.filter.forEach((element, index) => {
+						column.filter.forEach((element, element_index) => {
 							let filtered = _.filter(linked, { [column.filter_field]: element });
 							if (filtered.length) items = items.concat(filtered);
 						});
@@ -165,22 +198,23 @@ export class Table extends React.Component {
 						items = linked;
 					}
 
-					return ( <td key={ i } { ...inputProps }>{ (items.length) ? this.formatItem(items[0], column) : '' }</td> ); // TODO check for multiple
+					return ( <td key={ 'td'+column_index } { ...inputProps }>{ (items.length) ? this.formatItem(items[0], column) : '' }</td> ); // TODO check for multiple
 				} else {
-					return ( <td key={ i } { ...inputProps }>{ this.formatItem(item, column) }</td> );
+					return ( <td key={ 'td'+column_index } { ...inputProps }>{ this.formatItem(item, column) }</td> );
 				}
 			}) : null;
 
-			return <tr key={ index } style={{ cursor: ((this.props.click) ? 'pointer' : 'default') }}>
+			return <tr key={ 'tr'+row_index } style={{ cursor: ((this.props.click) ? 'pointer' : 'default') }}>
 				{ fields }
 				{ this.props.delete &&
-					<td key={ 'delete' } style={{ cursor: 'pointer' }} onClick={ this.props.onDelete.bind(this, item) }><i className="fa fa-times"></i></td>
+					<td key={ 'delete'+row_index } style={{ cursor: 'pointer' }} onClick={ this.props.onDelete.bind(this, item) }><i className="fa fa-times"></i></td>
 				}
 			</tr>
 
 		}) : null;
 
 		/* Filter Buttons --------------------------*/
+
 		var filters = (this.props.filters) ? this.props.filters.buttons.map((item, index) => {
 			return (
 				<label key={ index } className={ 'btn btn-sm' + ((index == this.state.filter_button - 1) ? ' btn-success active' : ' btn-white') } onClick={ this.handleFilter.bind(this, index + 1) }>

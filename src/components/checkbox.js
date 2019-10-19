@@ -1,6 +1,6 @@
 import React from 'react';
 
-export class Select extends React.Component {
+export class Checkbox extends React.Component {
 
 	constructor(props) {
 		super(props);
@@ -42,23 +42,19 @@ export class Select extends React.Component {
 
 		return (
 
-			<div className={ 'form-group '+this.props.className+' '+((this.state.error)?'has-error':'') }>
-				<label>{ this.props.label + ((this.props.required)?' *':'') }</label> 
-				<select 
-					className="form-control" 
-					name={ this.props.name } 
-					onChange={ this.props.onChange.bind(this) } 
-					ref={ this.field_ref } 
-					value={ this.props.value } 
-				>
-					{ this.props.children }
-				</select>
+			<span className={ 'form-group '+this.props.className+' '+((this.state.error)?'has-error':'') }>
+				<label className="checkbox-inline i-checks" onClick={ (this.props.onClick) ? this.props.onClick.bind(this) : null } style={{ cursor: 'pointer' }}>
+					<div className={ 'icheckbox_square-green '+((this.props.checked) ? 'checked':'') } style={{ position: 'relative' }}>
+						<ins className="iCheck-helper" style={{ position: 'absolute', top: '0%', left: '0%', display: 'block', width: '100%', height: '100%', margin: '0px', padding: '0px', background: 'rgb(255, 255, 255)', border: '0px', opacity: 0 }} />
+					</div>
+					<span style={{ padding: '0 25px 0 8px' }}>{ this.props.label }</span> 
+				</label>
 				{ this.state.error_message &&
 					<div className="invalid-feedback" style={{ display: 'block' }}>
 						{ this.state.error_message }
 					</div>
 				}
-			</div>
+			</span>
 		);
 	}
 }

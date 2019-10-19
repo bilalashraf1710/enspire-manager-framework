@@ -5,7 +5,7 @@ export function Ibox(props) {
 
 	return (
 
-		<div className="wrapper wrapper-content animated fadeInRight px-0">
+		<div className="wrapper wrapper-content animated fadeInRight px-0" style={ props.style }>
 			<div className="row">
 				<div className="col-lg-12">
 					<div className="ibox ">
