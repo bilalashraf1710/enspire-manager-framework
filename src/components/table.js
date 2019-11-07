@@ -156,7 +156,7 @@ export class Table extends React.Component {
 
 		var gap_low = false;
 		var gap_high = false;
-		var max_page = Math.round(filtered_data.length / this.props.limit) - 1;
+		var max_page = Math.round(filtered_data.length / this.props.limit);
 
 		var pagination = [];
 		if (this.state.limit > 0 && filtered_data.length > this.state.limit) {
