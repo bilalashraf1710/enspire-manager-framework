@@ -28,9 +28,27 @@ export class Table extends React.Component {
 		if (this.props.limit) this.setState({ limit: parseInt(this.props.limit), show_limit: true });
 		if (this.props.order) this.setState({ order: this.props.order });
 		this.updateTableFields();
+
+		var storagekey = this.props.history.location.pathname.replace (/\//g, "_");
+		if (sessionStorage[storagekey]) {
+			var saved_state = JSON.parse(sessionStorage[storagekey]);
+			this.setState({
+				search: saved_state.search,
+				filter_button: saved_state.filter_button,
+				page: saved_state.page,
+				order: saved_state.order,
+			});
+		}
+		this.updateSessionStorage();
 	}
 	componentDidUpdate() {
-		// this.updateTableFields();
+		this.updateSessionStorage();
+	}
+	updateSessionStorage() {
+		if (this.props.savestate) {
+			var storagekey = this.props.history.location.pathname.replace (/\//g, "_");
+			sessionStorage[storagekey] = JSON.stringify(this.state);
+		}
 	}
 	updateTableFields() {
 		if (this.props.columnDefs) {
@@ -217,7 +235,7 @@ export class Table extends React.Component {
 
 		var filters = (this.props.filters) ? this.props.filters.buttons.map((item, index) => {
 			return (
-				<label key={ index } className={ 'btn btn-sm' + ((index == this.state.filter_button - 1) ? ' btn-success active' : ' btn-white') } onClick={ this.handleFilter.bind(this, index + 1) }>
+				<label key={ index } className={ 'btn btn-sm' + ((index == this.state.filter_button - 1) ? ' btn-primary active' : ' btn-white') } onClick={ this.handleFilter.bind(this, index + 1) }>
 					<input type="radio" name="filters" value={ this.state.filter_button } /> { item.name }
 				</label>
 			)
