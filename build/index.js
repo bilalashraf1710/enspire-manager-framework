@@ -5354,16 +5354,21 @@ var Checkbox = exports.Checkbox = function (_React$Component) {
 
 			return _react2.default.createElement(
 				'span',
-				{ className: 'form-group ' + this.props.className + ' ' + (this.state.error ? 'has-error' : '') },
+				{ className: 'form-group ' + (this.props.className ? this.props.className : '') + ' ' + (this.state.error ? 'has-error' : '') },
 				_react2.default.createElement(
 					'label',
 					{ className: 'checkbox-inline i-checks text-left', onClick: this.props.onClick ? this.props.onClick.bind(this) : null, style: { cursor: 'pointer' } },
+					this.props.prelabel && _react2.default.createElement(
+						'span',
+						{ style: { padding: '0 8px 0 25px' } },
+						this.props.prelabel
+					),
 					_react2.default.createElement(
 						'div',
 						{ className: 'icheckbox_square-green ' + (this.props.checked ? 'checked' : ''), style: { position: 'relative' } },
 						_react2.default.createElement('ins', { className: 'iCheck-helper', style: { position: 'absolute', top: '0%', left: '0%', display: 'block', width: '100%', height: '100%', margin: '0px', padding: '0px', background: 'rgb(255, 255, 255)', border: '0px', opacity: 0 } })
 					),
-					_react2.default.createElement(
+					this.props.label && _react2.default.createElement(
 						'span',
 						{ style: { padding: '0 25px 0 8px' } },
 						this.props.label

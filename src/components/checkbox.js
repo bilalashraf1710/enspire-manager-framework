@@ -41,12 +41,17 @@ export class Checkbox extends React.Component {
 
 		return (
 
-			<span className={ 'form-group '+this.props.className+' '+((this.state.error)?'has-error':'') }>
+			<span className={ 'form-group '+((this.props.className) ? this.props.className : '')+' '+((this.state.error)?'has-error':'') }>
 				<label className="checkbox-inline i-checks text-left" onClick={ (this.props.onClick) ? this.props.onClick.bind(this) : null } style={{ cursor: 'pointer' }}>
+					{ this.props.prelabel &&
+						<span style={{ padding: '0 8px 0 25px' }}>{ this.props.prelabel }</span> 
+					}
 					<div className={ 'icheckbox_square-green '+((this.props.checked) ? 'checked':'') } style={{ position: 'relative' }}>
 						<ins className="iCheck-helper" style={{ position: 'absolute', top: '0%', left: '0%', display: 'block', width: '100%', height: '100%', margin: '0px', padding: '0px', background: 'rgb(255, 255, 255)', border: '0px', opacity: 0 }} />
 					</div>
-					<span style={{ padding: '0 25px 0 8px' }}>{ this.props.label }</span> 
+					{ this.props.label &&
+						<span style={{ padding: '0 25px 0 8px' }}>{ this.props.label }</span> 
+					}
 					{ this.state.error_message &&
 						<span className="invalid-feedback" style={{ display: 'block' }}>
 							{ this.state.error_message }
