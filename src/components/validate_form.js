@@ -19,7 +19,7 @@ export function ValidateForm(record, form_builder_layout) {
 		 }
 
 		/* numeric -----------------------------------------*/
-		 if (field.valid && field.valid.includes('numeric') && !isNumeric(record[field.field])) {
+		 if (field.valid && field.valid.includes('numeric') && record[field.field] && !isNumeric(record[field.field])) {
 			form_error.push({ field: field.field, type: 'numeric' });
 		 }
 

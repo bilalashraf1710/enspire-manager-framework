@@ -30,14 +30,8 @@ export class Table extends React.Component {
 		this.updateTableFields();
 
 		var storagekey = this.props.history.location.pathname.replace (/\//g, "_");
-		if (sessionStorage[storagekey]) {
-			var saved_state = JSON.parse(sessionStorage[storagekey]);
-			this.setState({
-				search: saved_state.search,
-				filter_button: saved_state.filter_button,
-				page: saved_state.page,
-				order: saved_state.order,
-			});
+		if (sessionStorage['table'+storagekey]) {
+			this.setState(JSON.parse(sessionStorage['table'+storagekey]));
 		}
 		this.updateSessionStorage();
 	}
@@ -47,7 +41,7 @@ export class Table extends React.Component {
 	updateSessionStorage() {
 		if (this.props.savestate) {
 			var storagekey = this.props.history.location.pathname.replace (/\//g, "_");
-			sessionStorage[storagekey] = JSON.stringify(this.state);
+			sessionStorage['table'+storagekey] = JSON.stringify(this.state);
 		}
 	}
 	updateTableFields() {
@@ -73,7 +67,7 @@ export class Table extends React.Component {
 	/* HANDLERS --------------------------------------------------------------------*/
 
 	handleChange(event) {
-		this.setState({ [event.target.name]: event.target.value });
+		this.setState({ [event.target.name]: event.target.value, page: 0 });
 	}
 	handleFilter(button) {
 		this.setState({ filter_button: button });
@@ -97,14 +91,9 @@ export class Table extends React.Component {
 	handleLast(max_page) {
 		this.setState({ page: max_page });
 	}
-	columnSort(column) {
-		var sortindex = (this.state.order) ? this.state.order.fields.indexOf(column.field) : -1;
-		var direction = (sortindex > -1) ? ((this.state.order.direction[sortindex] === 'asc') ? 'desc' : 'asc' ) : 'asc';
-		var order = {
-			fields: [ column.field ],
-			direction: [ direction ],
-		}
-		this.setState({ order });
+	handleNewButton() {
+		var new_append = (this.props.new_append) ? this.props.new_append : '';
+		this.props.history.push(this.props.click_url+'/0'+new_append);
 	}
 
 	/* ACTIONS --------------------------------------------------------------------*/
@@ -126,6 +115,15 @@ export class Table extends React.Component {
 			return item[column.field];
 		}
 	}
+	columnSort(column) {
+		var sortindex = (this.state.order) ? this.state.order.fields.indexOf(column.field) : -1;
+		var direction = (sortindex > -1) ? ((this.state.order.direction[sortindex] === 'asc') ? 'desc' : 'asc' ) : 'asc';
+		var order = {
+			fields: [ column.field ],
+			direction: [ direction ],
+		}
+		this.setState({ order });
+	}
 
 	render() {
 
@@ -139,8 +137,9 @@ export class Table extends React.Component {
 
 		var filtered_data = (this.state.search) ? _.filter(ordered_data, (o) => {
 			var result = false;
-			Object.keys(o).forEach((k, index) => {
-				if (typeof o[k] === 'string' && o[k].toLowerCase().includes(this.state.search.toLowerCase())) result = true;
+			this.props.columns.forEach((k, index) => {
+				if (typeof o[k.field] === 'string' && o[k.field].toLowerCase().includes(this.state.search.toLowerCase())) result = true;
+				if (typeof o[k.field] === 'number' && o[k.field].toString().startsWith(this.state.search.toLowerCase())) result = true;
 			});
 			return result;
 		}) : ordered_data;
@@ -222,7 +221,17 @@ export class Table extends React.Component {
 				}
 			}) : null;
 
-			return <tr key={ 'tr'+row_index } style={{ cursor: ((this.props.click) ? 'pointer' : 'default') }}>
+			var highlight = null;
+			if (this.props.highlight) {
+				this.props.highlight.forEach((entry, index) => {
+					if (item[entry.field] == entry.value) {
+						highlight = { border: '2px solid '+entry.border, backgroundColor: entry.color }
+					}
+				});
+				
+			}
+
+			return <tr key={ 'tr'+row_index } style={{ cursor: ((this.props.click) ? 'pointer' : 'default'), ...highlight }}>
 				{ fields }
 				{ this.props.delete &&
 					<td key={ 'delete'+row_index } style={{ cursor: 'pointer' }} onClick={ this.props.onDelete.bind(this, item) }><i className="fa fa-times"></i></td>
@@ -271,12 +280,15 @@ export class Table extends React.Component {
 
 						<div className="col-sm-4 col-md-5 m-b-xs">
 							{ (this.props.search || this.props.new) && 
-								<div className="input-group">
+								<div className="input-group" style={{ position: 'relative' }}>
+									{ this.props.search && this.state.search &&
+										<i className="fas fa-times-circle" style={{ position: 'absolute', color: '#bbbbbb', zIndex: 9, right: '140px', top: '5px', fontSize: '20px', cursor: 'pointer' }} onClick={ () => { this.setState({ search: '' }); } }></i>
+									}
 									{ this.props.search && 
 										<input name="search" placeholder="Search" type="text" className="form-control form-control-sm" value={ this.state.search } onChange={ this.handleChange.bind(this) }/>
 									}
 									{ this.props.new && 
-										<button type="button" className="btn btn-sm btn-primary ml-3" onClick={ () => { this.props.history.push(this.props.click_url+'/0'+click_append) } }>{ this.props.new }</button>
+										<button type="button" className="btn btn-sm btn-primary ml-3" onClick={ this.handleNewButton.bind(this) }>{ this.props.new }</button>
 									}
 								</div>
 							}

@@ -36366,14 +36366,8 @@ var Table = exports.Table = function (_React$Component) {
 			this.updateTableFields();
 
 			var storagekey = this.props.history.location.pathname.replace(/\//g, "_");
-			if (sessionStorage[storagekey]) {
-				var saved_state = JSON.parse(sessionStorage[storagekey]);
-				this.setState({
-					search: saved_state.search,
-					filter_button: saved_state.filter_button,
-					page: saved_state.page,
-					order: saved_state.order
-				});
+			if (sessionStorage['table' + storagekey]) {
+				this.setState(JSON.parse(sessionStorage['table' + storagekey]));
 			}
 			this.updateSessionStorage();
 		}
@@ -36387,7 +36381,7 @@ var Table = exports.Table = function (_React$Component) {
 		value: function updateSessionStorage() {
 			if (this.props.savestate) {
 				var storagekey = this.props.history.location.pathname.replace(/\//g, "_");
-				sessionStorage[storagekey] = JSON.stringify(this.state);
+				sessionStorage['table' + storagekey] = JSON.stringify(this.state);
 			}
 		}
 	}, {
@@ -36419,7 +36413,9 @@ var Table = exports.Table = function (_React$Component) {
 	}, {
 		key: 'handleChange',
 		value: function handleChange(event) {
-			this.setState(_defineProperty({}, event.target.name, event.target.value));
+			var _setState;
+
+			this.setState((_setState = {}, _defineProperty(_setState, event.target.name, event.target.value), _defineProperty(_setState, 'page', 0), _setState));
 		}
 	}, {
 		key: 'handleFilter',
@@ -36456,15 +36452,10 @@ var Table = exports.Table = function (_React$Component) {
 			this.setState({ page: max_page });
 		}
 	}, {
-		key: 'columnSort',
-		value: function columnSort(column) {
-			var sortindex = this.state.order ? this.state.order.fields.indexOf(column.field) : -1;
-			var direction = sortindex > -1 ? this.state.order.direction[sortindex] === 'asc' ? 'desc' : 'asc' : 'asc';
-			var order = {
-				fields: [column.field],
-				direction: [direction]
-			};
-			this.setState({ order: order });
+		key: 'handleNewButton',
+		value: function handleNewButton() {
+			var new_append = this.props.new_append ? this.props.new_append : '';
+			this.props.history.push(this.props.click_url + '/0' + new_append);
 		}
 
 		/* ACTIONS --------------------------------------------------------------------*/
@@ -36487,6 +36478,17 @@ var Table = exports.Table = function (_React$Component) {
 			}
 		}
 	}, {
+		key: 'columnSort',
+		value: function columnSort(column) {
+			var sortindex = this.state.order ? this.state.order.fields.indexOf(column.field) : -1;
+			var direction = sortindex > -1 ? this.state.order.direction[sortindex] === 'asc' ? 'desc' : 'asc' : 'asc';
+			var order = {
+				fields: [column.field],
+				direction: [direction]
+			};
+			this.setState({ order: order });
+		}
+	}, {
 		key: 'render',
 		value: function render() {
 			var _this3 = this;
@@ -36501,8 +36503,9 @@ var Table = exports.Table = function (_React$Component) {
 
 			var filtered_data = this.state.search ? _.filter(ordered_data, function (o) {
 				var result = false;
-				Object.keys(o).forEach(function (k, index) {
-					if (typeof o[k] === 'string' && o[k].toLowerCase().includes(_this3.state.search.toLowerCase())) result = true;
+				_this3.props.columns.forEach(function (k, index) {
+					if (typeof o[k.field] === 'string' && o[k.field].toLowerCase().includes(_this3.state.search.toLowerCase())) result = true;
+					if (typeof o[k.field] === 'number' && o[k.field].toString().startsWith(_this3.state.search.toLowerCase())) result = true;
 				});
 				return result;
 			}) : ordered_data;
@@ -36599,9 +36602,18 @@ var Table = exports.Table = function (_React$Component) {
 					}
 				}) : null;
 
+				var highlight = null;
+				if (_this3.props.highlight) {
+					_this3.props.highlight.forEach(function (entry, index) {
+						if (item[entry.field] == entry.value) {
+							highlight = { border: '2px solid ' + entry.border, backgroundColor: entry.color };
+						}
+					});
+				}
+
 				return _react2.default.createElement(
 					'tr',
-					{ key: 'tr' + row_index, style: { cursor: _this3.props.click ? 'pointer' : 'default' } },
+					{ key: 'tr' + row_index, style: _extends({ cursor: _this3.props.click ? 'pointer' : 'default' }, highlight) },
 					fields,
 					_this3.props.delete && _react2.default.createElement(
 						'td',
@@ -36679,13 +36691,14 @@ var Table = exports.Table = function (_React$Component) {
 							{ className: 'col-sm-4 col-md-5 m-b-xs' },
 							(this.props.search || this.props.new) && _react2.default.createElement(
 								'div',
-								{ className: 'input-group' },
+								{ className: 'input-group', style: { position: 'relative' } },
+								this.props.search && this.state.search && _react2.default.createElement('i', { className: 'fas fa-times-circle', style: { position: 'absolute', color: '#bbbbbb', zIndex: 9, right: '140px', top: '5px', fontSize: '20px', cursor: 'pointer' }, onClick: function onClick() {
+										_this3.setState({ search: '' });
+									} }),
 								this.props.search && _react2.default.createElement('input', { name: 'search', placeholder: 'Search', type: 'text', className: 'form-control form-control-sm', value: this.state.search, onChange: this.handleChange.bind(this) }),
 								this.props.new && _react2.default.createElement(
 									'button',
-									{ type: 'button', className: 'btn btn-sm btn-primary ml-3', onClick: function onClick() {
-											_this3.props.history.push(_this3.props.click_url + '/0' + click_append);
-										} },
+									{ type: 'button', className: 'btn btn-sm btn-primary ml-3', onClick: this.handleNewButton.bind(this) },
 									this.props.new
 								)
 							)
@@ -36809,7 +36822,7 @@ function ValidateForm(record, form_builder_layout) {
 		}
 
 		/* numeric -----------------------------------------*/
-		if (field.valid && field.valid.includes('numeric') && !(0, _isNumeric2.default)(record[field.field])) {
+		if (field.valid && field.valid.includes('numeric') && record[field.field] && !(0, _isNumeric2.default)(record[field.field])) {
 			form_error.push({ field: field.field, type: 'numeric' });
 		}
 
