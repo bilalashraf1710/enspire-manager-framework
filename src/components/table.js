@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 
 var _ = require('lodash');
 var moment = require('moment'); 
+var sessionStorage = window.sessionStorage;
 
 export class Table extends React.Component {
 

@@ -1,6 +1,7 @@
 import React from 'react';
 
 export { Checkbox } from './components/checkbox';
+export { CloseX } from './components/closex';
 export { Dropzone } from './components/dropzone';
 export { FormBuilder } from './components/form_layout';
 export { Ibox } from './components/ibox';
