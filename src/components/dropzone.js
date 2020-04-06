@@ -50,7 +50,7 @@ export class Dropzone extends React.Component {
 	}
 	removeFile() {
 		ModalAlert({
-			callback: () => { this.props.onChange(null) },
+			callback: () => { this.props.onChange(this.props.field, null) },
 			text: 'The Existing Image will be Removed!',
 			title: 'Are you sure?',
 			type: 'warning',
@@ -74,7 +74,7 @@ export class Dropzone extends React.Component {
 			};
 
 			axios.put(result.data, file, options).then((result) => {
-				this.props.onChange('https://enspiremanager-uploads.s3.amazonaws.com/' + filename);
+				this.props.onChange(this.props.field, 'https://' + this.props.bin + '.s3.amazonaws.com/' + filename);
 				this.setState({ progress: 0, hover: false, uploading: false });
 			}).catch((error) => {
 				console.log(error);
@@ -91,7 +91,7 @@ export class Dropzone extends React.Component {
 
 		return (
 
-			<div>
+			<div style={{ width: '100%', marginLeft: '5px', marginRight: '5px' }}>
 				{ this.props.filename 
 
 					? 	<div style={{ position: 'relative', textAlign: 'center', border: '1px solid #e5e6e7', padding: '10px' }}>
@@ -108,16 +108,16 @@ export class Dropzone extends React.Component {
 								}}
 								onClick={ this.removeFile.bind(this) }
 							></i>
-							<img className={ this.props.className } src={ this.props.filename  } width={ this.props.width } style={{ maxWidth: this.props.maxWidth, maxHeight: this.props.maxHeight }} />
+							<img src={ this.props.filename  } width={ this.props.width } style={{ width: '100%', maxHeight: this.props.height }} />
 						</div>
 
 					:	<div id={ 'dropzone' } 
 							className={ this.props.className + (this.state.hover ? ' highlight' : '') } 
-							style={{ width: this.props.width, height: (this.props.height) ? this.props.height : '250px' }}
+							style={{ width: '100%', maxHeight: (this.props.height) ? this.props.height : '250px' }}
 						>
 						 	{ this.state.uploading
 
-								?	<div style={{ width: '60%' }}>
+								?	<div>
 										<h3>
 											{ this.state.progress > 0
 												?	<span>Uploading...</span>
@@ -125,14 +125,14 @@ export class Dropzone extends React.Component {
 											}
 										</h3>
 										{ this.state.progress > 0 &&
-											<div className="progress mt-3" style={{ backgroundColor: 'white' }}>
+											<div className="progress mt-3 mb-3" style={{ backgroundColor: 'white' }}>
 												<div className="progress-bar" style={{ width: this.state.progress+'%' }} role="progressbar"></div>
 											</div>
 										}
 									</div>
 
 								: 	<h3>
-										<i className="fa fa-upload fa-4x mb-3" style={{ color: '#888888' }}></i>
+										<i className="fa fa-upload fa-3x mb-3" style={{ color: '#cccccc', marginTop: '15px' }}></i>
 										<br/>
 										{ this.state.hover
 											? 	<span>

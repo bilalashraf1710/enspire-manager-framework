@@ -5,9 +5,11 @@ export function ValidateForm(record, form_builder_layout) {
 
 	var form_error = [];
 
-	form_builder_layout.forEach((section, section_index) => {
-		section.layout.forEach((field, field_index) => {
-			validate(field, record, form_error);
+	form_builder_layout.forEach((column, section_index) => {
+		column.body.forEach((section, section_index) => {
+			section.layout.forEach((field, field_index) => {
+				validate(field, record, form_error);
+			});
 		});
 	});
 
