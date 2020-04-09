@@ -36171,7 +36171,7 @@ var FormBuilder = exports.FormBuilder = function (_React$Component) {
 												{ className: 'form-row' },
 												section.layout.map(function (field, field_index) {
 
-													return _react2.default.createElement(_form_layout_comps2.default, { props: _this2.props, field: field });
+													return _react2.default.createElement(_form_layout_comps2.default, { key: 'component' + field_index, props: _this2.props, field: field });
 												})
 											)
 										);
@@ -36794,28 +36794,42 @@ function ValidateForm(record, form_builder_layout) {
 
 	var form_error = [];
 
-	form_builder_layout.forEach(function (column, section_index) {
-		column.body.forEach(function (section, section_index) {
-			section.layout.forEach(function (field, field_index) {
-				validate(field, record, form_error);
+	if (form_builder_layout[0].body) {
+
+		form_builder_layout.forEach(function (column, section_index) {
+			column.body.forEach(function (section, section_index) {
+				section.layout.forEach(function (field, field_index) {
+					validate(field, record, form_error);
+				});
 			});
 		});
-	});
+	} else if (form_builder_layout[0].block) {
+
+		form_builder_layout.forEach(function (block, block_index) {
+			block.block.forEach(function (column, section_index) {
+				column.body.forEach(function (section, section_index) {
+					section.layout.forEach(function (field, field_index) {
+						validate(field, record, form_error);
+					});
+				});
+			});
+		});
+	}
 
 	function validate(field, record) {
 
 		/* Required -----------------------------------------*/
-		if (field.valid && field.valid.includes('required') && !record[field.field]) {
+		if (field.valid && field.valid.includes('required') && !record[field.field].trim()) {
 			form_error.push({ field: field.field, type: 'required' });
 		}
 
 		/* numeric -----------------------------------------*/
-		if (field.valid && field.valid.includes('numeric') && record[field.field] && !(0, _isNumeric2.default)(record[field.field])) {
+		if (field.valid && field.valid.includes('numeric') && record[field.field].trim() && !(0, _isNumeric2.default)(record[field.field].trim())) {
 			form_error.push({ field: field.field, type: 'numeric' });
 		}
 
 		/* email -----------------------------------------*/
-		if (field.valid && field.valid.includes('email') && !(0, _isEmail2.default)(record[field.field])) {
+		if (field.valid && field.valid.includes('email') && record[field.field].trim() && !(0, _isEmail2.default)(record[field.field].trim())) {
 			form_error.push({ field: field.field, type: 'email' });
 		}
 
@@ -37666,6 +37680,8 @@ function FormBuilderComps(props) {
 					form_error: props.props.form_error,
 					label: label,
 					name: props.field.field,
+					prepend: props.field.prepend,
+					append: props.field.append,
 					onChange: props.props.callbacks.text,
 					required: required,
 					type: 'text',

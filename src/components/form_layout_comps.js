@@ -25,10 +25,12 @@ export default function FormBuilderComps(props) {
 				form_error={ props.props.form_error } 
 				label={ label } 
 				name={ props.field.field } 
+				prepend={ props.field.prepend }
+				append={ props.field.append }
 				onChange={ props.props.callbacks.text } 
 				required={ required }
 				type="text" 
-				value={ (props.props.record[props.field.field]) ? props.props.record[props.field.field] : '' } 
+				value={ (props.props.record[props.field.field]) ? props.props.record[props.field.field] : '' }
 			/>
 			break;
 		}

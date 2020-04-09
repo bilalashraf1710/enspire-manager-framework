@@ -5,28 +5,43 @@ export function ValidateForm(record, form_builder_layout) {
 
 	var form_error = [];
 
-	form_builder_layout.forEach((column, section_index) => {
-		column.body.forEach((section, section_index) => {
-			section.layout.forEach((field, field_index) => {
-				validate(field, record, form_error);
+	if (form_builder_layout[0].body) {
+
+		form_builder_layout.forEach((column, section_index) => {
+			column.body.forEach((section, section_index) => {
+				section.layout.forEach((field, field_index) => {
+					validate(field, record, form_error);
+				});
 			});
 		});
-	});
+
+	} else if (form_builder_layout[0].block) {
+
+		form_builder_layout.forEach((block, block_index) => {
+			block.block.forEach((column, section_index) => {
+				column.body.forEach((section, section_index) => {
+					section.layout.forEach((field, field_index) => {
+						validate(field, record, form_error);
+					});
+				});
+			});
+		});
+	}
 
 	function validate(field, record) {
 
 		/* Required -----------------------------------------*/
-		 if (field.valid && field.valid.includes('required') && !record[field.field]) {
+		 if (field.valid && field.valid.includes('required') && !record[field.field].trim()) {
 			form_error.push({ field: field.field, type: 'required' });
 		 }
 
 		/* numeric -----------------------------------------*/
-		 if (field.valid && field.valid.includes('numeric') && record[field.field] && !isNumeric(record[field.field])) {
+		 if (field.valid && field.valid.includes('numeric') && record[field.field].trim() && !isNumeric(record[field.field].trim())) {
 			form_error.push({ field: field.field, type: 'numeric' });
 		 }
 
 		/* email -----------------------------------------*/
-		 if (field.valid && field.valid.includes('email') && !isEmail(record[field.field])) {
+		 if (field.valid && field.valid.includes('email') && record[field.field].trim() && !isEmail(record[field.field].trim())) {
 			form_error.push({ field: field.field, type: 'email' });
 		 }
 
