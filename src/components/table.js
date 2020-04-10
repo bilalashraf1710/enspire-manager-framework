@@ -23,17 +23,20 @@ export class Table extends React.Component {
 	}
 
 	componentDidMount() {
-		if (_.get(this.props, 'filters.active', null)) {
-			this.setState({ filter_button: this.props.filters.active });
-		}
-		if (this.props.limit) this.setState({ limit: parseInt(this.props.limit), show_limit: true });
-		if (this.props.order) this.setState({ order: this.props.order });
-		this.updateTableFields();
-
 		var storagekey = this.props.history.location.pathname.replace (/\//g, "_");
 		if (sessionStorage['table'+storagekey]) {
 			this.setState(JSON.parse(sessionStorage['table'+storagekey]));
 		}
+		if (_.get(this.props, 'filters.active', null)) {
+			this.setState({ filter_button: this.props.filters.active });
+		}
+		if (this.props.limit) {
+			console.log('here');
+			this.setState({ limit: parseInt(this.props.limit), show_limit: true });
+		}
+		if (this.props.order) this.setState({ order: this.props.order });
+
+		this.updateTableFields();
 		this.updateSessionStorage();
 	}
 	componentDidUpdate() {
@@ -71,6 +74,7 @@ export class Table extends React.Component {
 		this.setState({ [event.target.name]: event.target.value, page: 0 });
 	}
 	handleFilter(button) {
+		if (this.state.filter_button === button) button = 0;
 		this.setState({ filter_button: button });
 	}
 	handlePage(page) {

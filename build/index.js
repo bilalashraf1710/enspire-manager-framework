@@ -36344,17 +36344,20 @@ var Table = exports.Table = function (_React$Component) {
 	_createClass(Table, [{
 		key: 'componentDidMount',
 		value: function componentDidMount() {
-			if (_.get(this.props, 'filters.active', null)) {
-				this.setState({ filter_button: this.props.filters.active });
-			}
-			if (this.props.limit) this.setState({ limit: parseInt(this.props.limit), show_limit: true });
-			if (this.props.order) this.setState({ order: this.props.order });
-			this.updateTableFields();
-
 			var storagekey = this.props.history.location.pathname.replace(/\//g, "_");
 			if (sessionStorage['table' + storagekey]) {
 				this.setState(JSON.parse(sessionStorage['table' + storagekey]));
 			}
+			if (_.get(this.props, 'filters.active', null)) {
+				this.setState({ filter_button: this.props.filters.active });
+			}
+			if (this.props.limit) {
+				console.log('here');
+				this.setState({ limit: parseInt(this.props.limit), show_limit: true });
+			}
+			if (this.props.order) this.setState({ order: this.props.order });
+
+			this.updateTableFields();
 			this.updateSessionStorage();
 		}
 	}, {
@@ -36406,6 +36409,7 @@ var Table = exports.Table = function (_React$Component) {
 	}, {
 		key: 'handleFilter',
 		value: function handleFilter(button) {
+			if (this.state.filter_button === button) button = 0;
 			this.setState({ filter_button: button });
 		}
 	}, {
@@ -36819,8 +36823,12 @@ function ValidateForm(record, form_builder_layout) {
 	function validate(field, record) {
 
 		/* Required -----------------------------------------*/
-		if (field.valid && field.valid.includes('required') && !record[field.field].trim()) {
-			form_error.push({ field: field.field, type: 'required' });
+		if (field.valid && field.valid.includes('required')) {
+			if (record[field.field]) {
+				if (!record[field.field].trim()) form_error.push({ field: field.field, type: 'required' });
+			} else {
+				form_error.push({ field: field.field, type: 'required' });
+			}
 		}
 
 		/* numeric -----------------------------------------*/
