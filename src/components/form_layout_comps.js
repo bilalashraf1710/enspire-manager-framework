@@ -17,7 +17,6 @@ export default function FormBuilderComps(props) {
 	switch (props.field.type) {
 
 		case 'email'	: 
-		case 'date'		: 
 		case 'text'		: {
 
 			component =	<Input
@@ -31,6 +30,22 @@ export default function FormBuilderComps(props) {
 				required={ required }
 				type="text" 
 				value={ (props.props.record[props.field.field]) ? props.props.record[props.field.field] : '' }
+			/>
+			break;
+		}
+		case 'date'		: {
+
+			component =	<Input
+				className={ props.field.grid } 
+				form_error={ props.props.form_error } 
+				label={ label } 
+				name={ props.field.field } 
+				prepend={ <i className="far fa-calendar-alt"></i> }
+				append={ props.field.append }
+				onChange={ props.props.callbacks.text } 
+				required={ required }
+				type="date" 
+				defaultValue={ (props.props.record[props.field.field]) ? props.props.record[props.field.field] : '' }
 			/>
 			break;
 		}

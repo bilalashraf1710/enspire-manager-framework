@@ -37679,7 +37679,6 @@ function FormBuilderComps(props) {
 	switch (props.field.type) {
 
 		case 'email':
-		case 'date':
 		case 'text':
 			{
 
@@ -37694,6 +37693,23 @@ function FormBuilderComps(props) {
 					required: required,
 					type: 'text',
 					value: props.props.record[props.field.field] ? props.props.record[props.field.field] : ''
+				});
+				break;
+			}
+		case 'date':
+			{
+
+				component = _react2.default.createElement(_input.Input, {
+					className: props.field.grid,
+					form_error: props.props.form_error,
+					label: label,
+					name: props.field.field,
+					prepend: _react2.default.createElement('i', { className: 'far fa-calendar-alt' }),
+					append: props.field.append,
+					onChange: props.props.callbacks.text,
+					required: required,
+					type: 'date',
+					defaultValue: props.props.record[props.field.field] ? props.props.record[props.field.field] : ''
 				});
 				break;
 			}
