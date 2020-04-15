@@ -12,3 +12,4 @@ export { Spinner } from './components/spinner';
 export { Table } from './components/table';
 export { Textarea } from './components/textarea';
 export { ValidateForm } from './components/validate_form';
+export { Widget } from './components/widget';
