@@ -36522,7 +36522,7 @@ var Table = exports.Table = function (_React$Component) {
 					_react2.default.createElement(
 						'a',
 						{ style: { cursor: 'pointer' }, onClick: _this3.columnSort.bind(_this3, column) },
-						column.name,
+						column.name.toUpperCase(),
 						_react2.default.createElement('i', { className: 'fa fa-' + sort, style: { color: '#aaaaaa', marginLeft: '7px' } })
 					)
 				);

@@ -169,7 +169,7 @@ export class Table extends React.Component {
 			var sort = (sortindex > -1) ? ((this.state.order.direction[sortindex] === 'asc') ? 'sort-up' : 'sort-down' ) : null;
 			return ( 
 				<th key={ 'th'+index } style={{ whiteSpace: 'nowrap' }}><a style={{ cursor: 'pointer' }} onClick={ this.columnSort.bind(this, column) }>
-					{ column.name }<i className={ 'fa fa-'+sort } style={{ color: '#aaaaaa', marginLeft: '7px' }} />
+					{ column.name.toUpperCase() }<i className={ 'fa fa-'+sort } style={{ color: '#aaaaaa', marginLeft: '7px' }} />
 				</a></th>
 			);
 		}) : null;
