@@ -47,7 +47,7 @@ export class FormBuilder extends React.Component {
 
 																	return (
 
-																		<FormBuilderComps props={ this.props } field={ field } />
+																		<FormBuilderComps key={ 'component'+field_index } props={ this.props } field={ field } />
 
 																	)
 																})

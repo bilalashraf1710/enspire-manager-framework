@@ -17,13 +17,15 @@ export class Dropzone extends React.Component {
 	componentDidMount() {
 		var dropzone = document.getElementById('dropzone');
 
-		['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-			dropzone.addEventListener(eventName, preventDefaults, false);
-		});
-		
-		dropzone.addEventListener('dragenter', this.dragenter.bind(this), false);
-		dropzone.addEventListener('dragleave', this.dragleave.bind(this), false);
-		dropzone.addEventListener('drop', this.dropped.bind(this), false);
+		if (dropzone) {
+			['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+				dropzone.addEventListener(eventName, preventDefaults, false);
+			});
+			
+			dropzone.addEventListener('dragenter', this.dragenter.bind(this), false);
+			dropzone.addEventListener('dragleave', this.dragleave.bind(this), false);
+			dropzone.addEventListener('drop', this.dropped.bind(this), false);
+		}
 
 		function preventDefaults(e) {
 			e.preventDefault();
@@ -95,7 +97,7 @@ export class Dropzone extends React.Component {
 				{ this.props.filename 
 
 					? 	<div style={{ position: 'relative', textAlign: 'center', border: '1px solid #e5e6e7', padding: '10px' }}>
-							<i className="fa fa-times-circle-o fa-3x" 
+							<i className="far fa-times-circle fa-3x" 
 								style={{ 
 									color: 'white', 
 									cursor: 'pointer',
@@ -108,12 +110,12 @@ export class Dropzone extends React.Component {
 								}}
 								onClick={ this.removeFile.bind(this) }
 							></i>
-							<img src={ this.props.filename  } width={ this.props.width } style={{ width: '100%', maxHeight: this.props.height }} />
+							<img src={ this.props.filename  } width={ this.props.width } style={{ width: '100%', maxHeight: this.props.maxHeight }} />
 						</div>
 
 					:	<div id={ 'dropzone' } 
 							className={ this.props.className + (this.state.hover ? ' highlight' : '') } 
-							style={{ width: '100%', maxHeight: (this.props.height) ? this.props.height : '250px' }}
+							style={{ width: '100%', height: (this.props.maxHeight) ? this.props.maxHeight : '250px' }}
 						>
 						 	{ this.state.uploading
 

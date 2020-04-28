@@ -1,5 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import DatePicker from "react-datepicker";
+// import "react-datepicker/dist/react-datepicker.css";
 
 var _ = require('lodash');
 var moment = require('moment'); 
@@ -18,34 +20,42 @@ export class Table extends React.Component {
 			order: {
 				fields: [],
 				direction: []
-			}
+			},
+			storagekey: null,
 		};
 	}
 
 	componentDidMount() {
-		var storagekey = this.props.history.location.pathname.replace (/\//g, "_");
-		if (sessionStorage['table'+storagekey]) {
-			this.setState(JSON.parse(sessionStorage['table'+storagekey]));
-		}
+		this.loadSessionStorage();
 		if (_.get(this.props, 'filters.active', null)) {
 			this.setState({ filter_button: this.props.filters.active });
 		}
 		if (this.props.limit) {
-			console.log('here');
 			this.setState({ limit: parseInt(this.props.limit), show_limit: true });
 		}
 		if (this.props.order) this.setState({ order: this.props.order });
+		if (this.props.filters) this.setState({ filters: this.props.filters });
 
 		this.updateTableFields();
 		this.updateSessionStorage();
 	}
 	componentDidUpdate() {
+		var storagekey = this.props.history.location.pathname.replace (/\//g, "_");
+		if (storagekey !== this.state.storagekey) {
+			this.loadSessionStorage();
+		}
 		this.updateSessionStorage();
+	}
+	loadSessionStorage() {
+		var storagekey = this.props.history.location.pathname.replace (/\//g, "_");
+		this.setState({ storagekey });
+		if (sessionStorage['table'+storagekey]) {
+			this.setState(JSON.parse(sessionStorage['table'+storagekey]));
+		}
 	}
 	updateSessionStorage() {
 		if (this.props.savestate) {
-			var storagekey = this.props.history.location.pathname.replace (/\//g, "_");
-			sessionStorage['table'+storagekey] = JSON.stringify(this.state);
+			sessionStorage['table'+this.state.storagekey] = JSON.stringify(this.state);
 		}
 	}
 	updateTableFields() {
@@ -151,7 +161,7 @@ export class Table extends React.Component {
 
 		/* Filtered --------------------------------*/
 
-		if (this.state.filter_button && this.props.filters.buttons[this.state.filter_button-1].value !== null) {
+		if (this.state.filter_button && _.get(this.props.filters, 'buttons.'+(this.state.filter_button-1)+'.value', null) !== null) {
 			filtered_data = _.filter(filtered_data, { [this.props.filters.field]: this.props.filters.buttons[this.state.filter_button-1].value }); 
 		}
 
@@ -202,14 +212,23 @@ export class Table extends React.Component {
 
 			var inputProps = {};
 			if (this.props.click) {
-				var link = this.props.click_url+'/'+item[this.props.id]+click_append;
-				inputProps.onClick = () => this.props.history.push(link);
+				var hyperlink = this.props.click_url+'/'+item[this.props.id]+click_append;
+				inputProps.onClick = () => this.props.history.push(hyperlink);
 			}
 
 			var fields = (this.props.columns.length) ? this.props.columns.map((column, column_index) => {
 				if (column.data) {
+
+					if (Array.isArray(column.link)) {
+						var link_data_field = column.link[0];
+						var link_field = column.link[1];
+					} else {
+						var link_data_field = column.link;
+						var link_field = column.link;
+					}
+
 					var items = [];
-					var linked = _.filter(column.data, { [column.link]: item[column.link] });
+					var linked = _.filter(column.data, { [link_field]: item[link_data_field] });
 
 					if (column.filter){
 						column.filter.forEach((element, element_index) => {
@@ -220,9 +239,52 @@ export class Table extends React.Component {
 						items = linked;
 					}
 
-					return ( <td key={ 'td'+column_index } { ...inputProps }>{ (items.length) ? this.formatItem(items[0], column) : '' }</td> ); // TODO check for multiple
+					if (column.type == 'select') {
+
+						var select_options = column.data.map((option, select_index) => {
+							return (
+								<option key={ 'select'+select_index } value={ option[link_field] }>{ option[column.field] }</option>
+							);
+						});
+
+						return (
+							<td>
+								<select 
+									className="form-control" 
+									name={ link_data_field } 
+									onChange={ this.props.select_callback.bind(this, item[this.props.id]) } 
+									value={ item[link_data_field] }
+								>
+									<option value="">Choose...</option>
+									{ select_options }
+								</select>
+							</td>
+						);
+
+					} else {
+						return ( <td key={ 'td'+column_index } { ...inputProps }>{ (items.length) ? this.formatItem(items[0], column) : '' }</td> ); // TODO check for multiple
+					}
+
 				} else {
-					return ( <td key={ 'td'+column_index } { ...inputProps }>{ this.formatItem(item, column) }</td> );
+
+					if (column.type == 'datepicker') {
+
+						var selected = (item.schedule !== null) ? moment(item.schedule).toDate() : '';
+
+						return (
+							<td width="180">
+								<DatePicker
+									className="form-control" 
+									dateFormat="M-dd-yyyy"
+									selected={ selected }
+									onChange={ this.props.datepicker_callback.bind(this, item[this.props.id]) } 
+								/>
+							</td>
+						);
+						
+					} else {
+						return ( <td key={ 'td'+column_index } { ...inputProps }>{ this.formatItem(item, column) }</td> );
+					}
 				}
 			}) : null;
 
@@ -300,7 +362,7 @@ export class Table extends React.Component {
 						</div>
 					</form>
 
-					<div className="table-responsive">
+					<div className="table-responsive-sm">
 						<table className="table table-striped table-hover" >
 							<thead>
 								<tr>

@@ -68,7 +68,7 @@ export class Input extends React.Component {
 
 			<div className={ 'form-group '+this.props.className+' '+((this.state.error)?'has-error':'') }>
 				<label>{ this.props.label + ((this.props.required)?' *':'') }</label> 
-					<div className={ 'input-group ' + ((this.props.type === 'date') ? 'date '+this.props.name : '') }>
+				<div className={ 'input-group ' + ((this.props.type === 'date') ? 'date '+this.props.name : '') }>
 					{ this.props.prepend &&
 						<div className="input-group-prepend">
 							<span className="input-group-text input-group-addon">{ this.props.prepend }</span>
