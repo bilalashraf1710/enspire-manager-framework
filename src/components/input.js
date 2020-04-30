@@ -1,5 +1,6 @@
 import React from 'react';
 import { ValidateMessage } from './validate_message';
+import DatePicker from "react-datepicker";
 
 var _ = require('lodash');
 var moment = require('moment'); 
@@ -15,26 +16,6 @@ export class Input extends React.Component {
 		this.field_ref = React.createRef();
 	}
 
-	componentDidMount() {
-		$('.input-group.date.'+this.props.name).datepicker({
-			todayBtn: "linked",
-			keyboardNavigation: false,
-			forceParse: false,
-			calendarWeeks: true,
-			autoclose: true,
-			format: 'yyyy-mm-dd',
-			defaultViewDate: this.props.defaultValue,
-		}).on('changeDate', (event) => {
-			var e = {
-				target: { 
-					name: this.props.name,
-					value: moment(event.date).format('YYYY-MM-DD'), 
-				},
-			};
-			this.props.onChange(e);
-			// this.setState({ ...this.state, permit: { ...this.state.permit, [event.target.lastChild.name]: moment(event.date).format('YYYY-MM-DD') } });
-		});
-	}
 	componentDidUpdate() {
 		if (this.props.form_error !== undefined) {
 
@@ -64,6 +45,8 @@ export class Input extends React.Component {
 		if (this.props.defaultValue) inputProps.defaultValue = this.props.defaultValue;
 		else if (this.props.value !== undefined) inputProps.value = this.props.value;
 
+		var selected = (this.props.type === 'date' && this.props.defaultValue !== null) ? moment(this.props.defaultValue).toDate() : '';
+
 		return (
 
 			<div className={ 'form-group '+this.props.className+' '+((this.state.error)?'has-error':'') }>
@@ -74,16 +57,24 @@ export class Input extends React.Component {
 							<span className="input-group-text input-group-addon">{ this.props.prepend }</span>
 						</div>
 					}
-					<input 
-						autoComplete="off" 
-						className="form-control" 
-						name={ this.props.name } 
-						onChange={ this.props.onChange.bind(this) } 
-						placeholder={ this.props.placeholder } 
-						ref={ this.field_ref } 
-						type="text" 
-						{ ...inputProps }
-					/>
+					{ this.props.type !== 'date'
+						?	<input 
+								autoComplete="off" 
+								className="form-control" 
+								name={ this.props.name } 
+								onChange={ this.props.onChange.bind(this) } 
+								placeholder={ this.props.placeholder } 
+								ref={ this.field_ref } 
+								type="text" 
+								{ ...inputProps }
+							/>
+						:	<DatePicker
+								className="form-control" 
+								dateFormat="yyyy-MM-dd"
+								selected={ selected }
+								onChange={ this.props.onChange.bind(this, this.props.name) }
+							/>
+					}
 					{ this.props.append &&
 						<div className="input-group-append">
 							<span className="input-group-text input-group-addon">{ this.props.append }</span>

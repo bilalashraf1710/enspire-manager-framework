@@ -42,10 +42,10 @@ export default function FormBuilderComps(props) {
 				name={ props.field.field } 
 				prepend={ <i className="far fa-calendar-alt"></i> }
 				append={ props.field.append }
-				onChange={ props.props.callbacks.text } 
+				onChange={ props.props.callbacks.date } 
 				required={ required }
 				type="date" 
-				defaultValue={ (props.props.record[props.field.field]) ? props.props.record[props.field.field] : '' }
+				defaultValue={ (props.props.record[props.field.field]) ? props.props.record[props.field.field] : null }
 			/>
 			break;
 		}

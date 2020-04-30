@@ -272,13 +272,18 @@ export class Table extends React.Component {
 						var selected = (item.schedule !== null) ? moment(item.schedule).toDate() : '';
 
 						return (
-							<td width="180">
-								<DatePicker
-									className="form-control" 
-									dateFormat="M-dd-yyyy"
-									selected={ selected }
-									onChange={ this.props.datepicker_callback.bind(this, item[this.props.id]) } 
-								/>
+							<td width="200">
+								<div className="input-group">
+									<div className="input-group-prepend">
+										<span className="input-group-text input-group-addon"><i className="far fa-calendar-alt"></i></span>
+									</div>
+									<DatePicker
+										className="form-control" 
+										dateFormat="M-dd-yyyy"
+										selected={ selected }
+										onChange={ this.props.datepicker_callback.bind(this, item[this.props.id]) } 
+									/>
+								</div>
 							</td>
 						);
 						
