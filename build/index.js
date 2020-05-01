@@ -38641,7 +38641,7 @@ var Table = exports.Table = function (_React$Component) {
 						} else {
 							return _react2.default.createElement(
 								'td',
-								_extends({ key: 'td' + column_index }, inputProps),
+								_extends({ key: 'td' + column_index }, inputProps, { style: { textOverflow: 'ellipsis' } }),
 								_this3.formatItem(item, column)
 							);
 						}
@@ -38755,7 +38755,7 @@ var Table = exports.Table = function (_React$Component) {
 						{ className: 'table-responsive-sm' },
 						_react2.default.createElement(
 							'table',
-							{ className: 'table table-striped table-hover' },
+							{ className: 'table table-striped table-hover em' },
 							_react2.default.createElement(
 								'thead',
 								null,

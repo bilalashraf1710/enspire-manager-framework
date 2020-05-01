@@ -288,7 +288,7 @@ export class Table extends React.Component {
 						);
 						
 					} else {
-						return ( <td key={ 'td'+column_index } { ...inputProps }>{ this.formatItem(item, column) }</td> );
+						return ( <td key={ 'td'+column_index } { ...inputProps } style={{ textOverflow: 'ellipsis' }}>{ this.formatItem(item, column) }</td> );
 					}
 				}
 			}) : null;
@@ -368,7 +368,7 @@ export class Table extends React.Component {
 					</form>
 
 					<div className="table-responsive-sm">
-						<table className="table table-striped table-hover" >
+						<table className="table table-striped table-hover em" >
 							<thead>
 								<tr>
 									{ columns }
