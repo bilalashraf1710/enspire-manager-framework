@@ -110,7 +110,7 @@ export class Dropzone extends React.Component {
 								}}
 								onClick={ this.removeFile.bind(this) }
 							></i>
-							<img src={ this.props.filename  } width={ this.props.width } style={{ width: '100%', maxHeight: this.props.maxHeight }} />
+							<img src={ this.props.filename  } width={ this.props.width } style={{ width: '100%' }} />
 						</div>
 
 					:	<div id={ 'dropzone' } 

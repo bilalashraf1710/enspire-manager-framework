@@ -5893,7 +5893,7 @@ var Dropzone = exports.Dropzone = function (_React$Component) {
 						},
 						onClick: this.removeFile.bind(this)
 					}),
-					_react2.default.createElement('img', { src: this.props.filename, width: this.props.width, style: { width: '100%', maxHeight: this.props.maxHeight } })
+					_react2.default.createElement('img', { src: this.props.filename, width: this.props.width, style: { width: '100%' } })
 				) : _react2.default.createElement(
 					'div',
 					{ id: 'dropzone',
@@ -6046,7 +6046,7 @@ var Input = exports.Input = function (_React$Component) {
 			return _react2.default.createElement(
 				'div',
 				{ className: 'form-group ' + this.props.className + ' ' + (this.state.error ? 'has-error' : '') },
-				_react2.default.createElement(
+				this.props.label !== undefined && _react2.default.createElement(
 					'label',
 					null,
 					this.props.label + (this.props.required ? ' *' : '')
@@ -6803,7 +6803,7 @@ function ModalAlert(options) {
 		confirmButtonText: options.confirm_text !== undefined ? options.confirm_text : "Yes, delete it!",
 		closeOnConfirm: true
 	}, function () {
-		options.callback();
+		if (typeof options.callback === 'function') options.callback();
 	});
 
 	return null;

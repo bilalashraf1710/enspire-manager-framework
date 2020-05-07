@@ -9,7 +9,7 @@ export function ModalAlert(options) {
 		confirmButtonText: (options.confirm_text !== undefined) ? options.confirm_text : "Yes, delete it!",
 		closeOnConfirm: true,
 	}, () => {
-		options.callback();
+		if (typeof options.callback === 'function') options.callback();
 	});
 
 	return null;
