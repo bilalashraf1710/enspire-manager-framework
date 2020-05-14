@@ -38575,33 +38575,44 @@ var Table = exports.Table = function (_React$Component) {
 
 						if (column.type == 'select') {
 
-							var select_options = column.data.map(function (option, select_index) {
-								return _react2.default.createElement(
-									'option',
-									{ key: 'select' + select_index, value: option[link_field] },
-									option[column.field]
-								);
-							});
+							if (Array.isArray(column.static) && item[column.static[0]] == column.static[2]) {
 
-							return _react2.default.createElement(
-								'td',
-								null,
-								_react2.default.createElement(
-									'select',
-									{
-										className: 'form-control',
-										name: link_data_field,
-										onChange: _this3.props.select_callback.bind(_this3, item[_this3.props.id]),
-										value: item[link_data_field]
-									},
-									_react2.default.createElement(
+								var entry = _.find(column.data, _defineProperty({}, link_field, item[link_data_field]));
+								if (!entry) return _react2.default.createElement('td', null);else return _react2.default.createElement(
+									'td',
+									null,
+									entry[column.field]
+								);
+							} else {
+
+								var select_options = column.data.map(function (option, select_index) {
+									return _react2.default.createElement(
 										'option',
-										{ value: '' },
-										'Choose...'
-									),
-									select_options
-								)
-							);
+										{ key: 'select' + select_index, value: option[link_field] },
+										option[column.field]
+									);
+								});
+
+								return _react2.default.createElement(
+									'td',
+									null,
+									_react2.default.createElement(
+										'select',
+										{
+											className: 'form-control',
+											name: link_data_field,
+											onChange: _this3.props.select_callback.bind(_this3, item[_this3.props.id]),
+											value: item[link_data_field] ? item[link_data_field] : ''
+										},
+										_react2.default.createElement(
+											'option',
+											{ value: '' },
+											'Choose...'
+										),
+										select_options
+									)
+								);
+							}
 						} else {
 							return _react2.default.createElement(
 								'td',
@@ -38613,31 +38624,42 @@ var Table = exports.Table = function (_React$Component) {
 
 						if (column.type == 'datepicker') {
 
-							var selected = item.schedule !== null ? moment(item.schedule).toDate() : '';
+							var selected = item[item.field] !== null ? moment(item[item.field]).toDate() : '';
 
-							return _react2.default.createElement(
-								'td',
-								{ width: '200' },
-								_react2.default.createElement(
-									'div',
-									{ className: 'input-group' },
+							if (Array.isArray(column.static) && item[column.static[0]] == column.static[2]) {
+
+								var _entry = _.find(column.data, _defineProperty({}, link_field, item[link_data_field]));
+								return _react2.default.createElement(
+									'td',
+									null,
+									moment(selected).format('M-DD-YYYY')
+								);
+							} else {
+
+								return _react2.default.createElement(
+									'td',
+									{ width: '200' },
 									_react2.default.createElement(
 										'div',
-										{ className: 'input-group-prepend' },
+										{ className: 'input-group' },
 										_react2.default.createElement(
-											'span',
-											{ className: 'input-group-text input-group-addon' },
-											_react2.default.createElement('i', { className: 'far fa-calendar-alt' })
-										)
-									),
-									_react2.default.createElement(_reactDatepicker2.default, {
-										className: 'form-control',
-										dateFormat: 'M-dd-yyyy',
-										selected: selected,
-										onChange: _this3.props.datepicker_callback.bind(_this3, item[_this3.props.id])
-									})
-								)
-							);
+											'div',
+											{ className: 'input-group-prepend' },
+											_react2.default.createElement(
+												'span',
+												{ className: 'input-group-text input-group-addon' },
+												_react2.default.createElement('i', { className: 'far fa-calendar-alt' })
+											)
+										),
+										_react2.default.createElement(_reactDatepicker2.default, {
+											className: 'form-control',
+											dateFormat: 'M-dd-yyyy',
+											selected: selected,
+											onChange: _this3.props.datepicker_callback.bind(_this3, item[_this3.props.id])
+										})
+									)
+								);
+							}
 						} else {
 							return _react2.default.createElement(
 								'td',

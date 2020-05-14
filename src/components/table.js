@@ -241,25 +241,40 @@ export class Table extends React.Component {
 
 					if (column.type == 'select') {
 
-						var select_options = column.data.map((option, select_index) => {
-							return (
-								<option key={ 'select'+select_index } value={ option[link_field] }>{ option[column.field] }</option>
-							);
-						});
+						if (Array.isArray(column.static) && item[column.static[0]] == column.static[2]) {
 
-						return (
-							<td>
-								<select 
-									className="form-control" 
-									name={ link_data_field } 
-									onChange={ this.props.select_callback.bind(this, item[this.props.id]) } 
-									value={ item[link_data_field] }
-								>
-									<option value="">Choose...</option>
-									{ select_options }
-								</select>
-							</td>
-						);
+							let entry = _.find(column.data, { [link_field]: item[link_data_field] });
+							if (!entry) 
+								return (<td></td>);
+							else
+								return (
+								<td>
+									{ entry[column.field] }
+								</td>
+							);
+
+						} else {
+
+							var select_options = column.data.map((option, select_index) => {
+								return (
+									<option key={ 'select'+select_index } value={ option[link_field] }>{ option[column.field] }</option>
+								);
+							});
+
+							return (
+								<td>
+									<select 
+										className="form-control" 
+										name={ link_data_field } 
+										onChange={ this.props.select_callback.bind(this, item[this.props.id]) } 
+										value={ (item[link_data_field]) ? item[link_data_field] : ''  }
+									>
+										<option value="">Choose...</option>
+										{ select_options }
+									</select>
+								</td>
+							);
+						}
 
 					} else {
 						return ( <td key={ 'td'+column_index } { ...inputProps }>{ (items.length) ? this.formatItem(items[0], column) : '' }</td> ); // TODO check for multiple
@@ -269,23 +284,35 @@ export class Table extends React.Component {
 
 					if (column.type == 'datepicker') {
 
-						var selected = (item.schedule !== null) ? moment(item.schedule).toDate() : '';
+						var selected = (item[item.field] !== null) ? moment(item[item.field]).toDate() : '';
 
-						return (
-							<td width="200">
-								<div className="input-group">
-									<div className="input-group-prepend">
-										<span className="input-group-text input-group-addon"><i className="far fa-calendar-alt"></i></span>
+						if (Array.isArray(column.static) && item[column.static[0]] == column.static[2]) {
+
+							let entry = _.find(column.data, { [link_field]: item[link_data_field] })
+							return (
+								<td>
+									{ moment(selected).format('M-DD-YYYY') }
+								</td>
+							);
+
+						} else {
+
+							return (
+								<td width="200">
+									<div className="input-group">
+										<div className="input-group-prepend">
+											<span className="input-group-text input-group-addon"><i className="far fa-calendar-alt"></i></span>
+										</div>
+										<DatePicker
+											className="form-control" 
+											dateFormat="M-dd-yyyy"
+											selected={ selected }
+											onChange={ this.props.datepicker_callback.bind(this, item[this.props.id]) } 
+										/>
 									</div>
-									<DatePicker
-										className="form-control" 
-										dateFormat="M-dd-yyyy"
-										selected={ selected }
-										onChange={ this.props.datepicker_callback.bind(this, item[this.props.id]) } 
-									/>
-								</div>
-							</td>
-						);
+								</td>
+							);
+						}
 						
 					} else {
 						return ( <td key={ 'td'+column_index } { ...inputProps } style={{ textOverflow: 'ellipsis' }}>{ this.formatItem(item, column) }</td> );
