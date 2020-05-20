@@ -212,8 +212,14 @@ export class Table extends React.Component {
 
 			var inputProps = {};
 			if (this.props.click) {
-				var hyperlink = this.props.click_url+'/'+item[this.props.id]+click_append;
-				inputProps.onClick = () => this.props.history.push(hyperlink);
+				inputProps.onClick = () => {
+					if (typeof this.props.click_callback === 'function') {
+						this.props.click_callback(item[this.props.id]);
+					} else {
+						let hyperlink = this.props.click_url+'/'+item[this.props.id]+click_append;
+						this.props.history.push(hyperlink);
+					}
+				}
 			}
 
 			var fields = (this.props.columns.length) ? this.props.columns.map((column, column_index) => {
@@ -389,6 +395,7 @@ export class Table extends React.Component {
 									{ this.props.new && 
 										<button type="button" className="btn btn-sm btn-primary ml-3" onClick={ this.handleNewButton.bind(this) }>{ this.props.new }</button>
 									}
+									{ this.props.button }
 								</div>
 							}
 						</div>

@@ -38206,37 +38206,6 @@ function Ibox(props) {
 							null,
 							props.title,
 							' '
-						),
-						_react2.default.createElement(
-							'div',
-							{ className: 'ibox-tools' },
-							_react2.default.createElement(
-								'a',
-								{ className: 'dropdown-toggle', 'data-toggle': 'dropdown', href: '/' },
-								_react2.default.createElement('i', { className: 'fa fa-wrench' })
-							),
-							_react2.default.createElement(
-								'ul',
-								{ className: 'dropdown-menu dropdown-user' },
-								_react2.default.createElement(
-									'li',
-									null,
-									_react2.default.createElement(
-										'a',
-										{ href: '/', className: 'dropdown-item' },
-										'Config option 1'
-									)
-								),
-								_react2.default.createElement(
-									'li',
-									null,
-									_react2.default.createElement(
-										'a',
-										{ href: '/', className: 'dropdown-item' },
-										'Config option 2'
-									)
-								)
-							)
 						)
 					),
 					_react2.default.createElement(
@@ -38673,9 +38642,13 @@ var Table = exports.Table = function (_React$Component) {
 
 				var inputProps = {};
 				if (_this3.props.click) {
-					var hyperlink = _this3.props.click_url + '/' + item[_this3.props.id] + click_append;
 					inputProps.onClick = function () {
-						return _this3.props.history.push(hyperlink);
+						if (typeof _this3.props.click_callback === 'function') {
+							_this3.props.click_callback(item[_this3.props.id]);
+						} else {
+							var hyperlink = _this3.props.click_url + '/' + item[_this3.props.id] + click_append;
+							_this3.props.history.push(hyperlink);
+						}
 					};
 				}
 
@@ -38897,7 +38870,8 @@ var Table = exports.Table = function (_React$Component) {
 									'button',
 									{ type: 'button', className: 'btn btn-sm btn-primary ml-3', onClick: this.handleNewButton.bind(this) },
 									this.props.new
-								)
+								),
+								this.props.button
 							)
 						)
 					),

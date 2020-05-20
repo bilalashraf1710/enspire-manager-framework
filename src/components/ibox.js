@@ -11,7 +11,7 @@ export function Ibox(props) {
 					<div className="ibox ">
 						<div className="ibox-title">
 							<h5>{ props.title } </h5>
-							<div className="ibox-tools">
+							{/*<div className="ibox-tools">
 								<a className="dropdown-toggle" data-toggle="dropdown" href="/">
 									<i className="fa fa-wrench"></i>
 								</a>
@@ -21,7 +21,7 @@ export function Ibox(props) {
 									<li><a href="/" className="dropdown-item">Config option 2</a>
 									</li>
 								</ul>
-							</div>
+							</div>*/}
 						</div>
 						<div className={ 'ibox-content' + ((props.show_spinner) ? ' sk-loading' : '') }>
 
