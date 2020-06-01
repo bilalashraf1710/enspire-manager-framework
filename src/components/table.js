@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import DatePicker from "react-datepicker";
-// import "react-datepicker/dist/react-datepicker.css";
 
 var _ = require('lodash');
 var moment = require('moment'); 
@@ -36,7 +35,6 @@ export class Table extends React.Component {
 		if (this.props.order) this.setState({ order: this.props.order });
 		if (this.props.filters) this.setState({ filters: this.props.filters });
 
-		this.updateTableFields();
 		this.updateSessionStorage();
 	}
 	componentDidUpdate() {
@@ -44,6 +42,7 @@ export class Table extends React.Component {
 		if (storagekey !== this.state.storagekey) {
 			this.loadSessionStorage();
 		}
+		// this.updateTableFields();
 		this.updateSessionStorage();
 	}
 	loadSessionStorage() {
@@ -56,25 +55,6 @@ export class Table extends React.Component {
 	updateSessionStorage() {
 		if (this.props.savestate) {
 			sessionStorage['table'+this.state.storagekey] = JSON.stringify(this.state);
-		}
-	}
-	updateTableFields() {
-		if (this.props.columnDefs) {
-			var rows = document.querySelectorAll('tbody tr');
-			if (rows.length) {
-				rows.forEach((row, index_row) => {
-					var tds = row.querySelectorAll('td');
-					if (tds.length) {
-						tds.forEach((td, index_td) => {
-							this.props.columnDefs.forEach((columnDef) => {
-								if (index_td == columnDef.targets) {
-									columnDef.createdCell(td, td.innerHTML, index_td);
-								}
-							});
-						});
-					}
-				});
-			}
 		}
 	}
 
@@ -125,7 +105,14 @@ export class Table extends React.Component {
 					return '$ '+parseFloat(item[column.field]).toFixed(2);
 				} else console.error('EM Table: Unknown number format'); 
 			} else console.error('EM Table: Format required for Number field');
+		} else if (column.badge !== null && Array.isArray(column.badge)) {
+			var badgestyle = '';
+			if (item[column.field] == 1) badgestyle = 'badge-info';
+			if (item[column.field] == 2) badgestyle = 'badge-success';
+			if (item[column.field] == 3) badgestyle = 'badge-warning';
+			if (item[column.field] == 4) badgestyle = 'badge-danger';
 
+			return <span className={ 'badge ' + badgestyle }>{ column.badge[item[column.field]] }</span>
 		} else {
 			return item[column.field];
 		}
@@ -223,6 +210,12 @@ export class Table extends React.Component {
 			}
 
 			var fields = (this.props.columns.length) ? this.props.columns.map((column, column_index) => {
+
+				var styles = {};
+				if (column.nowrap) {
+					styles.whiteSpace = 'nowrap';
+				}
+
 				if (column.data) {
 
 					if (Array.isArray(column.link)) {
@@ -283,7 +276,7 @@ export class Table extends React.Component {
 						}
 
 					} else {
-						return ( <td key={ 'td'+column_index } { ...inputProps }>{ (items.length) ? this.formatItem(items[0], column) : '' }</td> ); // TODO check for multiple
+						return ( <td key={ 'td'+column_index } { ...inputProps } style={ styles }>{ (items.length) ? this.formatItem(items[0], column) : '' }</td> ); // TODO check for multiple
 					}
 
 				} else {
@@ -321,7 +314,7 @@ export class Table extends React.Component {
 						}
 						
 					} else {
-						return ( <td key={ 'td'+column_index } { ...inputProps } style={{ textOverflow: 'ellipsis' }}>{ this.formatItem(item, column) }</td> );
+						return ( <td key={ 'td'+column_index } { ...inputProps } style={ styles }>{ this.formatItem(item, column) }</td> );
 					}
 				}
 			}) : null;
@@ -402,7 +395,7 @@ export class Table extends React.Component {
 					</form>
 
 					<div className="table-responsive-sm">
-						<table className="table table-striped table-hover em" >
+						<table className="table table-striped table-hover em">
 							<thead>
 								<tr>
 									{ columns }

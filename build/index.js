@@ -38387,8 +38387,6 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-// import "react-datepicker/dist/react-datepicker.css";
-
 var _ = __webpack_require__(60);
 var moment = __webpack_require__(0);
 var sessionStorage = window.sessionStorage;
@@ -38429,7 +38427,6 @@ var Table = exports.Table = function (_React$Component) {
 			if (this.props.order) this.setState({ order: this.props.order });
 			if (this.props.filters) this.setState({ filters: this.props.filters });
 
-			this.updateTableFields();
 			this.updateSessionStorage();
 		}
 	}, {
@@ -38439,6 +38436,7 @@ var Table = exports.Table = function (_React$Component) {
 			if (storagekey !== this.state.storagekey) {
 				this.loadSessionStorage();
 			}
+			// this.updateTableFields();
 			this.updateSessionStorage();
 		}
 	}, {
@@ -38455,29 +38453,6 @@ var Table = exports.Table = function (_React$Component) {
 		value: function updateSessionStorage() {
 			if (this.props.savestate) {
 				sessionStorage['table' + this.state.storagekey] = JSON.stringify(this.state);
-			}
-		}
-	}, {
-		key: 'updateTableFields',
-		value: function updateTableFields() {
-			var _this2 = this;
-
-			if (this.props.columnDefs) {
-				var rows = document.querySelectorAll('tbody tr');
-				if (rows.length) {
-					rows.forEach(function (row, index_row) {
-						var tds = row.querySelectorAll('td');
-						if (tds.length) {
-							tds.forEach(function (td, index_td) {
-								_this2.props.columnDefs.forEach(function (columnDef) {
-									if (index_td == columnDef.targets) {
-										columnDef.createdCell(td, td.innerHTML, index_td);
-									}
-								});
-							});
-						}
-					});
-				}
 			}
 		}
 
@@ -38547,6 +38522,18 @@ var Table = exports.Table = function (_React$Component) {
 						return '$ ' + parseFloat(item[column.field]).toFixed(2);
 					} else console.error('EM Table: Unknown number format');
 				} else console.error('EM Table: Format required for Number field');
+			} else if (column.badge !== null && Array.isArray(column.badge)) {
+				var badgestyle = '';
+				if (item[column.field] == 1) badgestyle = 'badge-info';
+				if (item[column.field] == 2) badgestyle = 'badge-success';
+				if (item[column.field] == 3) badgestyle = 'badge-warning';
+				if (item[column.field] == 4) badgestyle = 'badge-danger';
+
+				return _react2.default.createElement(
+					'span',
+					{ className: 'badge ' + badgestyle },
+					column.badge[item[column.field]]
+				);
 			} else {
 				return item[column.field];
 			}
@@ -38565,7 +38552,7 @@ var Table = exports.Table = function (_React$Component) {
 	}, {
 		key: 'render',
 		value: function render() {
-			var _this3 = this;
+			var _this2 = this;
 
 			var click_append = this.props.click_append ? this.props.click_append : '';
 
@@ -38577,9 +38564,9 @@ var Table = exports.Table = function (_React$Component) {
 
 			var filtered_data = this.state.search ? _.filter(ordered_data, function (o) {
 				var result = false;
-				_this3.props.columns.forEach(function (k, index) {
-					if (typeof o[k.field] === 'string' && o[k.field].toLowerCase().includes(_this3.state.search.toLowerCase())) result = true;
-					if (typeof o[k.field] === 'number' && o[k.field].toString().startsWith(_this3.state.search.toLowerCase())) result = true;
+				_this2.props.columns.forEach(function (k, index) {
+					if (typeof o[k.field] === 'string' && o[k.field].toLowerCase().includes(_this2.state.search.toLowerCase())) result = true;
+					if (typeof o[k.field] === 'number' && o[k.field].toString().startsWith(_this2.state.search.toLowerCase())) result = true;
 				});
 				return result;
 			}) : ordered_data;
@@ -38598,14 +38585,14 @@ var Table = exports.Table = function (_React$Component) {
 			/* Columns ---------------------------------*/
 
 			var columns = this.props.columns.length ? this.props.columns.map(function (column, index) {
-				var sortindex = _this3.state.order ? _this3.state.order.fields.indexOf(column.field) : -1;
-				var sort = sortindex > -1 ? _this3.state.order.direction[sortindex] === 'asc' ? 'sort-up' : 'sort-down' : null;
+				var sortindex = _this2.state.order ? _this2.state.order.fields.indexOf(column.field) : -1;
+				var sort = sortindex > -1 ? _this2.state.order.direction[sortindex] === 'asc' ? 'sort-up' : 'sort-down' : null;
 				return _react2.default.createElement(
 					'th',
 					{ key: 'th' + index, style: { whiteSpace: 'nowrap' } },
 					_react2.default.createElement(
 						'a',
-						{ style: { cursor: 'pointer' }, onClick: _this3.columnSort.bind(_this3, column) },
+						{ style: { cursor: 'pointer' }, onClick: _this2.columnSort.bind(_this2, column) },
 						column.name.toUpperCase(),
 						_react2.default.createElement('i', { className: 'fa fa-' + sort, style: { color: '#aaaaaa', marginLeft: '7px' } })
 					)
@@ -38641,18 +38628,24 @@ var Table = exports.Table = function (_React$Component) {
 			var rows = display_data.length ? display_data.map(function (item, row_index) {
 
 				var inputProps = {};
-				if (_this3.props.click) {
+				if (_this2.props.click) {
 					inputProps.onClick = function () {
-						if (typeof _this3.props.click_callback === 'function') {
-							_this3.props.click_callback(item[_this3.props.id]);
+						if (typeof _this2.props.click_callback === 'function') {
+							_this2.props.click_callback(item[_this2.props.id]);
 						} else {
-							var hyperlink = _this3.props.click_url + '/' + item[_this3.props.id] + click_append;
-							_this3.props.history.push(hyperlink);
+							var hyperlink = _this2.props.click_url + '/' + item[_this2.props.id] + click_append;
+							_this2.props.history.push(hyperlink);
 						}
 					};
 				}
 
-				var fields = _this3.props.columns.length ? _this3.props.columns.map(function (column, column_index) {
+				var fields = _this2.props.columns.length ? _this2.props.columns.map(function (column, column_index) {
+
+					var styles = {};
+					if (column.nowrap) {
+						styles.whiteSpace = 'nowrap';
+					}
+
 					if (column.data) {
 
 						if (Array.isArray(column.link)) {
@@ -38703,7 +38696,7 @@ var Table = exports.Table = function (_React$Component) {
 										{
 											className: 'form-control',
 											name: link_data_field,
-											onChange: _this3.props.select_callback.bind(_this3, item[_this3.props.id]),
+											onChange: _this2.props.select_callback.bind(_this2, item[_this2.props.id]),
 											value: item[link_data_field] ? item[link_data_field] : ''
 										},
 										_react2.default.createElement(
@@ -38718,8 +38711,8 @@ var Table = exports.Table = function (_React$Component) {
 						} else {
 							return _react2.default.createElement(
 								'td',
-								_extends({ key: 'td' + column_index }, inputProps),
-								items.length ? _this3.formatItem(items[0], column) : ''
+								_extends({ key: 'td' + column_index }, inputProps, { style: styles }),
+								items.length ? _this2.formatItem(items[0], column) : ''
 							); // TODO check for multiple
 						}
 					} else {
@@ -38757,7 +38750,7 @@ var Table = exports.Table = function (_React$Component) {
 											className: 'form-control',
 											dateFormat: 'M-dd-yyyy',
 											selected: selected,
-											onChange: _this3.props.datepicker_callback.bind(_this3, item[_this3.props.id])
+											onChange: _this2.props.datepicker_callback.bind(_this2, item[_this2.props.id])
 										})
 									)
 								);
@@ -38765,16 +38758,16 @@ var Table = exports.Table = function (_React$Component) {
 						} else {
 							return _react2.default.createElement(
 								'td',
-								_extends({ key: 'td' + column_index }, inputProps, { style: { textOverflow: 'ellipsis' } }),
-								_this3.formatItem(item, column)
+								_extends({ key: 'td' + column_index }, inputProps, { style: styles }),
+								_this2.formatItem(item, column)
 							);
 						}
 					}
 				}) : null;
 
 				var highlight = null;
-				if (_this3.props.highlight) {
-					_this3.props.highlight.forEach(function (entry, index) {
+				if (_this2.props.highlight) {
+					_this2.props.highlight.forEach(function (entry, index) {
 						if (item[entry.field] == entry.value) {
 							highlight = { border: '2px solid ' + entry.border, backgroundColor: entry.color };
 						}
@@ -38783,11 +38776,11 @@ var Table = exports.Table = function (_React$Component) {
 
 				return _react2.default.createElement(
 					'tr',
-					{ key: 'tr' + row_index, style: _extends({ cursor: _this3.props.click ? 'pointer' : 'default' }, highlight) },
+					{ key: 'tr' + row_index, style: _extends({ cursor: _this2.props.click ? 'pointer' : 'default' }, highlight) },
 					fields,
-					_this3.props.delete && _react2.default.createElement(
+					_this2.props.delete && _react2.default.createElement(
 						'td',
-						{ key: 'delete' + row_index, style: { cursor: 'pointer' }, onClick: _this3.props.onDelete.bind(_this3, item) },
+						{ key: 'delete' + row_index, style: { cursor: 'pointer' }, onClick: _this2.props.onDelete.bind(_this2, item) },
 						_react2.default.createElement('i', { className: 'fa fa-times' })
 					)
 				);
@@ -38798,8 +38791,8 @@ var Table = exports.Table = function (_React$Component) {
 			var filters = this.props.filters ? this.props.filters.buttons.map(function (item, index) {
 				return _react2.default.createElement(
 					'label',
-					{ key: index, className: 'btn btn-sm' + (index == _this3.state.filter_button - 1 ? ' btn-primary active' : ' btn-white'), onClick: _this3.handleFilter.bind(_this3, index + 1) },
-					_react2.default.createElement('input', { type: 'radio', name: 'filters', value: _this3.state.filter_button }),
+					{ key: index, className: 'btn btn-sm' + (index == _this2.state.filter_button - 1 ? ' btn-primary active' : ' btn-white'), onClick: _this2.handleFilter.bind(_this2, index + 1) },
+					_react2.default.createElement('input', { type: 'radio', name: 'filters', value: _this2.state.filter_button }),
 					' ',
 					item.name
 				);
@@ -38863,7 +38856,7 @@ var Table = exports.Table = function (_React$Component) {
 								'div',
 								{ className: 'input-group', style: { position: 'relative' } },
 								this.props.search && this.state.search && _react2.default.createElement('i', { className: 'fas fa-times-circle', style: { position: 'absolute', color: '#bbbbbb', zIndex: 9, right: '140px', top: '5px', fontSize: '20px', cursor: 'pointer' }, onClick: function onClick() {
-										_this3.setState({ search: '' });
+										_this2.setState({ search: '' });
 									} }),
 								this.props.search && _react2.default.createElement('input', { name: 'search', placeholder: 'Search', type: 'text', className: 'form-control form-control-sm', value: this.state.search, onChange: this.handleChange.bind(this) }),
 								this.props.new && _react2.default.createElement(
