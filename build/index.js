@@ -38535,7 +38535,7 @@ var Table = exports.Table = function (_React$Component) {
 					column.badge[item[column.field]]
 				);
 			} else {
-				return item[column.field];
+				return (column.prefix ? column.prefix : '') + item[column.field] + (column.postfix ? column.postfix : '');
 			}
 		}
 	}, {
@@ -38673,9 +38673,9 @@ var Table = exports.Table = function (_React$Component) {
 							if (Array.isArray(column.static) && item[column.static[0]] == column.static[2]) {
 
 								var entry = _.find(column.data, _defineProperty({}, link_field, item[link_data_field]));
-								if (!entry) return _react2.default.createElement('td', null);else return _react2.default.createElement(
+								if (!entry) return _react2.default.createElement('td', { key: 'td' + column_index });else return _react2.default.createElement(
 									'td',
-									null,
+									{ key: 'td' + column_index },
 									entry[column.field]
 								);
 							} else {
@@ -38690,7 +38690,7 @@ var Table = exports.Table = function (_React$Component) {
 
 								return _react2.default.createElement(
 									'td',
-									null,
+									{ key: 'td' + column_index },
 									_react2.default.createElement(
 										'select',
 										{

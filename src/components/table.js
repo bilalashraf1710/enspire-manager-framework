@@ -114,7 +114,7 @@ export class Table extends React.Component {
 
 			return <span className={ 'badge ' + badgestyle }>{ column.badge[item[column.field]] }</span>
 		} else {
-			return item[column.field];
+			return ((column.prefix) ? column.prefix : '') + item[column.field] + ((column.postfix) ? column.postfix : '');
 		}
 	}
 	columnSort(column) {
@@ -244,10 +244,10 @@ export class Table extends React.Component {
 
 							let entry = _.find(column.data, { [link_field]: item[link_data_field] });
 							if (!entry) 
-								return (<td></td>);
+								return (<td key={ 'td'+column_index }></td>);
 							else
 								return (
-								<td>
+								<td key={ 'td'+column_index }>
 									{ entry[column.field] }
 								</td>
 							);
@@ -261,7 +261,7 @@ export class Table extends React.Component {
 							});
 
 							return (
-								<td>
+								<td key={ 'td'+column_index }>
 									<select 
 										className="form-control" 
 										name={ link_data_field } 
