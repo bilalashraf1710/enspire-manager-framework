@@ -6279,10 +6279,10 @@ var Textarea = exports.Textarea = function (_React$Component) {
 			return _react2.default.createElement(
 				'div',
 				{ className: 'form-group ' + this.props.className + ' ' + (this.state.error ? 'has-error' : '') },
-				_react2.default.createElement(
+				this.props.label !== undefined && _react2.default.createElement(
 					'label',
 					null,
-					this.props.label
+					this.props.label + (this.props.required ? ' *' : '')
 				),
 				_react2.default.createElement('textarea', {
 					autoComplete: 'off',
@@ -38419,7 +38419,11 @@ var Table = exports.Table = function (_React$Component) {
 		value: function componentDidMount() {
 			this.loadSessionStorage();
 			if (_.get(this.props, 'filters.active', null)) {
-				this.setState({ filter_button: this.props.filters.active });
+				if (this.props.filters.buttons.length <= 5) {
+					this.setState({ filter_button: this.props.filters.active });
+				} else {
+					if (this.props.filters.active > 0) this.setState({ filter_button: this.props.filters.buttons[this.props.filters.active - 1].value });
+				}
 			}
 			if (this.props.limit) {
 				this.setState({ limit: parseInt(this.props.limit), show_limit: true });
@@ -38442,10 +38446,12 @@ var Table = exports.Table = function (_React$Component) {
 	}, {
 		key: 'loadSessionStorage',
 		value: function loadSessionStorage() {
-			var storagekey = this.props.history.location.pathname.replace(/\//g, "_");
-			this.setState({ storagekey: storagekey });
-			if (sessionStorage['table' + storagekey]) {
-				this.setState(JSON.parse(sessionStorage['table' + storagekey]));
+			if (this.props.savestate) {
+				var storagekey = this.props.history.location.pathname.replace(/\//g, "_");
+				this.setState({ storagekey: storagekey });
+				if (sessionStorage['table' + storagekey]) {
+					this.setState(JSON.parse(sessionStorage['table' + storagekey]));
+				}
 			}
 		}
 	}, {
@@ -38470,6 +38476,11 @@ var Table = exports.Table = function (_React$Component) {
 		value: function handleFilter(button) {
 			if (this.state.filter_button === button) button = 0;
 			this.setState({ filter_button: button });
+		}
+	}, {
+		key: 'handleFilterDropdown',
+		value: function handleFilterDropdown(event) {
+			this.setState({ filter_button: event.target.value });
 		}
 	}, {
 		key: 'handlePage',
@@ -38573,9 +38584,25 @@ var Table = exports.Table = function (_React$Component) {
 
 			/* Filtered --------------------------------*/
 
-			if (this.state.filter_button && _.get(this.props.filters, 'buttons.' + (this.state.filter_button - 1) + '.value', null) !== null) {
-				filtered_data = _.filter(filtered_data, _defineProperty({}, this.props.filters.field, this.props.filters.buttons[this.state.filter_button - 1].value));
+			if (_.get(this.props.filters, 'buttons', null)) {
+				// has buttons?
+				if (this.props.filters.buttons.length <= 5) {
+					if (this.state.filter_button && _.get(this.props.filters, 'buttons.' + (this.state.filter_button - 1) + '.value', null) !== null) {
+						filtered_data = _.filter(filtered_data, _defineProperty({}, this.props.filters.field, this.props.filters.buttons[this.state.filter_button - 1].value));
+					}
+				} else {
+					if (this.state.filter_button !== 0 && this.state.filter_button !== "0") filtered_data = _.filter(filtered_data, _defineProperty({}, this.props.filters.field, this.state.filter_button));
+				}
 			}
+
+			// if (this.state.filter_button && _.get(this.props.filters, 'buttons.'+(this.state.filter_button-1)+'.value', null) !== null) {
+			// 	if (this.props.filters.buttons.length <= 5 ) {
+			// 		filtered_data = _.filter(filtered_data, { [this.props.filters.field]: this.props.filters.buttons[this.state.filter_button-1].value }); 
+			// 	} else {
+			// 		console.error(this.state.filter_button);
+			// 		filtered_data = _.filter(filtered_data, { [this.props.filters.field]: this.state.filter_button }); 
+			// 	}
+			// }
 
 			/* Display ---------------------------------*/
 
@@ -38786,17 +38813,28 @@ var Table = exports.Table = function (_React$Component) {
 				);
 			}) : null;
 
-			/* Filter Buttons --------------------------*/
+			/* Filter Buttons / Dropdown --------------------------*/
 
-			var filters = this.props.filters ? this.props.filters.buttons.map(function (item, index) {
-				return _react2.default.createElement(
-					'label',
-					{ key: index, className: 'btn btn-sm' + (index == _this2.state.filter_button - 1 ? ' btn-primary active' : ' btn-white'), onClick: _this2.handleFilter.bind(_this2, index + 1) },
-					_react2.default.createElement('input', { type: 'radio', name: 'filters', value: _this2.state.filter_button }),
-					' ',
-					item.name
-				);
-			}) : null;
+			var filters;
+			if (this.props.filters && this.props.filters.buttons.length <= 5) {
+				filters = this.props.filters ? this.props.filters.buttons.map(function (item, index) {
+					return _react2.default.createElement(
+						'label',
+						{ key: 'filter' + index, className: 'btn btn-sm' + (index == _this2.state.filter_button - 1 ? ' btn-primary active' : ' btn-white'), onClick: _this2.handleFilter.bind(_this2, index + 1) },
+						_react2.default.createElement('input', { type: 'radio', name: 'filters', value: _this2.state.filter_button }),
+						' ',
+						item.name
+					);
+				}) : null;
+			} else {
+				filters = this.props.filters ? this.props.filters.buttons.map(function (item, index) {
+					return _react2.default.createElement(
+						'option',
+						{ key: 'filter' + index, value: item.value },
+						item.name
+					);
+				}) : null;
+			}
 
 			return _react2.default.createElement(
 				'div',
@@ -38843,9 +38881,18 @@ var Table = exports.Table = function (_React$Component) {
 						_react2.default.createElement(
 							'div',
 							{ className: 'col-sm-5 m-b-xs' },
-							filters && _react2.default.createElement(
+							filters && filters.length <= 5 ? _react2.default.createElement(
 								'div',
 								{ className: 'btn-group btn-group-toggle', 'data-toggle': 'buttons' },
+								filters
+							) : _react2.default.createElement(
+								'select',
+								{ className: 'form-control-sm form-control input-s-sm inline', name: 'limit', value: this.state.filter_button, onChange: this.handleFilterDropdown.bind(this) },
+								_react2.default.createElement(
+									'option',
+									{ value: '0' },
+									'- Category Filter -'
+								),
 								filters
 							)
 						),

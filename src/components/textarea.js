@@ -41,7 +41,11 @@ export class Textarea extends React.Component {
 
 		return (
 
-			<div className={ 'form-group '+this.props.className+' '+((this.state.error)?'has-error':'') }><label>{ this.props.label }</label> 
+			<div className={ 'form-group '+this.props.className+' '+((this.state.error)?'has-error':'') }>
+				{ this.props.label !== undefined &&
+					<label>{ this.props.label + ((this.props.required)?' *':'') }</label> 
+				}
+
 				<textarea 
 					autoComplete="off" 
 					className="form-control" 
