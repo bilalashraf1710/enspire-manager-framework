@@ -66,7 +66,10 @@ export class Table extends React.Component {
 
 	/* HANDLERS --------------------------------------------------------------------*/
 
-	handleChange(event) {
+	handleLimit(event) {
+		this.setState({ [event.target.name]: parseInt(event.target.value), page: 0 });
+	}
+	handleSearch(event) {
 		this.setState({ [event.target.name]: event.target.value, page: 0 });
 	}
 	handleFilter(button) {
@@ -199,7 +202,7 @@ export class Table extends React.Component {
 
 		var gap_low = false;
 		var gap_high = false;
-		var max_page = Math.round(filtered_data.length / this.props.limit);
+		var max_page = Math.floor(filtered_data.length / this.props.limit);
 
 		var pagination = [];
 		if (this.state.limit > 0 && filtered_data.length > this.state.limit) {
@@ -390,7 +393,7 @@ export class Table extends React.Component {
 
 						<div className="col-sm-3 col-md-2 m-b-xs">
 							{ this.state.show_limit &&
-								<select className="form-control-sm form-control input-s-sm inline" name="limit" value={ this.state.limit } onChange={ this.handleChange.bind(this) }>
+								<select className="form-control-sm form-control input-s-sm inline" name="limit" value={ this.state.limit } onChange={ this.handleLimit.bind(this) }>
 									<option value="10">10</option>
 									<option value="25">25</option>
 									<option value="50">50</option>
@@ -419,7 +422,7 @@ export class Table extends React.Component {
 										<i className="fas fa-times-circle" style={{ position: 'absolute', color: '#bbbbbb', zIndex: 9, right: '140px', top: '5px', fontSize: '20px', cursor: 'pointer' }} onClick={ () => { this.setState({ search: '' }); } }></i>
 									}
 									{ this.props.search && 
-										<input name="search" placeholder="Search" type="text" className="form-control form-control-sm" value={ this.state.search } onChange={ this.handleChange.bind(this) }/>
+										<input name="search" placeholder="Search" type="text" className="form-control form-control-sm" value={ this.state.search } onChange={ this.handleSearch.bind(this) }/>
 									}
 									{ this.props.new && 
 										<button type="button" className="btn btn-sm btn-primary ml-3" onClick={ this.handleNewButton.bind(this) }>{ this.props.new }</button>

@@ -38470,11 +38470,18 @@ var Table = exports.Table = function (_React$Component) {
 		/* HANDLERS --------------------------------------------------------------------*/
 
 	}, {
-		key: 'handleChange',
-		value: function handleChange(event) {
+		key: 'handleLimit',
+		value: function handleLimit(event) {
 			var _setState;
 
-			this.setState((_setState = {}, _defineProperty(_setState, event.target.name, event.target.value), _defineProperty(_setState, 'page', 0), _setState));
+			this.setState((_setState = {}, _defineProperty(_setState, event.target.name, parseInt(event.target.value)), _defineProperty(_setState, 'page', 0), _setState));
+		}
+	}, {
+		key: 'handleSearch',
+		value: function handleSearch(event) {
+			var _setState2;
+
+			this.setState((_setState2 = {}, _defineProperty(_setState2, event.target.name, event.target.value), _defineProperty(_setState2, 'page', 0), _setState2));
 		}
 	}, {
 		key: 'handleFilter',
@@ -38635,7 +38642,7 @@ var Table = exports.Table = function (_React$Component) {
 
 			var gap_low = false;
 			var gap_high = false;
-			var max_page = Math.round(filtered_data.length / this.props.limit);
+			var max_page = Math.floor(filtered_data.length / this.props.limit);
 
 			var pagination = [];
 			if (this.state.limit > 0 && filtered_data.length > this.state.limit) {
@@ -38855,7 +38862,7 @@ var Table = exports.Table = function (_React$Component) {
 							{ className: 'col-sm-3 col-md-2 m-b-xs' },
 							this.state.show_limit && _react2.default.createElement(
 								'select',
-								{ className: 'form-control-sm form-control input-s-sm inline', name: 'limit', value: this.state.limit, onChange: this.handleChange.bind(this) },
+								{ className: 'form-control-sm form-control input-s-sm inline', name: 'limit', value: this.state.limit, onChange: this.handleLimit.bind(this) },
 								_react2.default.createElement(
 									'option',
 									{ value: '10' },
@@ -38910,7 +38917,7 @@ var Table = exports.Table = function (_React$Component) {
 								this.props.search && this.state.search && _react2.default.createElement('i', { className: 'fas fa-times-circle', style: { position: 'absolute', color: '#bbbbbb', zIndex: 9, right: '140px', top: '5px', fontSize: '20px', cursor: 'pointer' }, onClick: function onClick() {
 										_this2.setState({ search: '' });
 									} }),
-								this.props.search && _react2.default.createElement('input', { name: 'search', placeholder: 'Search', type: 'text', className: 'form-control form-control-sm', value: this.state.search, onChange: this.handleChange.bind(this) }),
+								this.props.search && _react2.default.createElement('input', { name: 'search', placeholder: 'Search', type: 'text', className: 'form-control form-control-sm', value: this.state.search, onChange: this.handleSearch.bind(this) }),
 								this.props.new && _react2.default.createElement(
 									'button',
 									{ type: 'button', className: 'btn btn-sm btn-primary ml-3', onClick: this.handleNewButton.bind(this) },
@@ -39048,22 +39055,27 @@ function ValidateForm(record, form_builder_layout) {
 
 	function validate(field, record) {
 
+		var value = null;
+		if (record[field.field]) {
+			value = isNaN(record[field.field]) ? record[field.field].trim() : parseInt(record[field.field]);
+		}
+
 		/* Required -----------------------------------------*/
 		if (field.valid && field.valid.includes('required')) {
 			if (record[field.field]) {
-				if (!record[field.field].trim()) form_error.push({ field: field.field, type: 'required' });
+				if (!value) form_error.push({ field: field.field, type: 'required' });
 			} else {
 				form_error.push({ field: field.field, type: 'required' });
 			}
 		}
 
 		/* numeric -----------------------------------------*/
-		if (field.valid && field.valid.includes('numeric') && record[field.field].trim() && !(0, _isNumeric2.default)(record[field.field].trim())) {
+		if (field.valid && field.valid.includes('numeric') && value && isNaN(value)) {
 			form_error.push({ field: field.field, type: 'numeric' });
 		}
 
 		/* email -----------------------------------------*/
-		if (field.valid && field.valid.includes('email') && record[field.field].trim() && !(0, _isEmail2.default)(record[field.field].trim())) {
+		if (field.valid && field.valid.includes('email') && value && !(0, _isEmail2.default)(value)) {
 			form_error.push({ field: field.field, type: 'email' });
 		}
 

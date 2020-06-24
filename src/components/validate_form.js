@@ -30,22 +30,27 @@ export function ValidateForm(record, form_builder_layout) {
 
 	function validate(field, record) {
 
+		var value = null;
+		if (record[field.field]) {
+			value = (isNaN(record[field.field])) ? record[field.field].trim() : parseInt(record[field.field]);
+		}
+
 		/* Required -----------------------------------------*/
 		if (field.valid && field.valid.includes('required')) {
 			if (record[field.field]) {
-				if (!record[field.field].trim()) form_error.push({ field: field.field, type: 'required' });
+				if (!value) form_error.push({ field: field.field, type: 'required' });
 			} else {
 				form_error.push({ field: field.field, type: 'required' });
 			}
 		}
 
 		/* numeric -----------------------------------------*/
-		if (field.valid && field.valid.includes('numeric') && record[field.field].trim() && !isNumeric(record[field.field].trim())) {
+		if (field.valid && field.valid.includes('numeric') && value && isNaN(value)) {
 			form_error.push({ field: field.field, type: 'numeric' });
 		}
 
 		/* email -----------------------------------------*/
-		if (field.valid && field.valid.includes('email') && record[field.field].trim() && !isEmail(record[field.field].trim())) {
+		if (field.valid && field.valid.includes('email') && value && !isEmail(value)) {
 			form_error.push({ field: field.field, type: 'email' });
 		}
 
