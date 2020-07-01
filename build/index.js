@@ -6027,7 +6027,7 @@ var Input = exports.Input = function (_React$Component) {
 					var error_message = (0, _validate_message.ValidateMessage)(error);
 
 					if (this.props.form_error[0].field === this.props.name) {
-						this.field_ref.current.focus();
+						if (this.field_ref.current) this.field_ref.current.focus();
 						window.toastr.error('Please update your value for <em>' + this.props.label + '</em>', error_message);
 					}
 
@@ -39068,24 +39068,17 @@ function ValidateForm(record, form_builder_layout) {
 	function validate(field, record) {
 
 		var value = null;
-		// if (record[field.field]) {
-		// 	value = (isNaN(record[field.field])) ? record[field.field].trim() : parseInt(record[field.field]);
-		// }
 
 		/* Required -----------------------------------------*/
 		if (field.valid && field.valid.includes('required')) {
-			value = record[field.field].trim();
-			if (record[field.field]) {
-				if (!value) form_error.push({ field: field.field, type: 'required' });
-			} else {
-				form_error.push({ field: field.field, type: 'required' });
-			}
+			value = record[field.field];
+			if (typeof value == 'string') value = value.trim();
+			if (!value) form_error.push({ field: field.field, type: 'required' });
 		}
 
 		/* numeric -----------------------------------------*/
 		if (field.valid && field.valid.includes('numeric')) {
 			value = record[field.field].trim();
-			// value = (isNaN(record[field.field])) ? record[field.field].trim() : parseInt(record[field.field]);
 			if (value && isNaN(value)) {
 				form_error.push({ field: field.field, type: 'numeric' });
 			}

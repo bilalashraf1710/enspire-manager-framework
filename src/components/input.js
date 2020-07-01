@@ -26,7 +26,7 @@ export class Input extends React.Component {
 				var error_message = ValidateMessage(error);
 
 				if (this.props.form_error[0].field === this.props.name) {
-					this.field_ref.current.focus();
+					if (this.field_ref.current) this.field_ref.current.focus();
 					window.toastr.error('Please update your value for <em>'+this.props.label+'</em>', error_message);
 				}
 				

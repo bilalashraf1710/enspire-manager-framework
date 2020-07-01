@@ -31,24 +31,17 @@ export function ValidateForm(record, form_builder_layout) {
 	function validate(field, record) {
 
 		var value = null;
-		// if (record[field.field]) {
-		// 	value = (isNaN(record[field.field])) ? record[field.field].trim() : parseInt(record[field.field]);
-		// }
 
 		/* Required -----------------------------------------*/
 		if (field.valid && field.valid.includes('required')) {
-			value = record[field.field].trim();
-			if (record[field.field]) {
-				if (!value) form_error.push({ field: field.field, type: 'required' });
-			} else {
-				form_error.push({ field: field.field, type: 'required' });
-			}
+			value = record[field.field];
+			if (typeof value == 'string') value = value.trim();
+			if (!value) form_error.push({ field: field.field, type: 'required' });
 		}
 
 		/* numeric -----------------------------------------*/
 		if (field.valid && field.valid.includes('numeric')) {
 			value = record[field.field].trim();
-			// value = (isNaN(record[field.field])) ? record[field.field].trim() : parseInt(record[field.field]);
 			if (value && isNaN(value)) {
 				form_error.push({ field: field.field, type: 'numeric' });
 			}
