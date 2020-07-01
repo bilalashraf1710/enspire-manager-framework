@@ -14,6 +14,9 @@ export function ValidateMessage(error) {
 		
 	} else if (error.type == 'exists') {
 		error_message = "A record already exists with this value";
+
+	} else if (error.type == 'leading_zeros') {
+		error_message = "Leading zeros cannot be preserved.  Consider prepending with a character such as #";
 	}
 
 	return error_message;

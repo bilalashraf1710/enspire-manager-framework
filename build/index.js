@@ -5526,6 +5526,8 @@ function ValidateMessage(error) {
 		error_message = "Email Expected";
 	} else if (error.type == 'exists') {
 		error_message = "A record already exists with this value";
+	} else if (error.type == 'leading_zeros') {
+		error_message = "Leading zeros cannot be preserved.  Consider prepending with a character such as #";
 	}
 
 	return error_message;
@@ -39066,12 +39068,13 @@ function ValidateForm(record, form_builder_layout) {
 	function validate(field, record) {
 
 		var value = null;
-		if (record[field.field]) {
-			value = isNaN(record[field.field]) ? record[field.field].trim() : parseInt(record[field.field]);
-		}
+		// if (record[field.field]) {
+		// 	value = (isNaN(record[field.field])) ? record[field.field].trim() : parseInt(record[field.field]);
+		// }
 
 		/* Required -----------------------------------------*/
 		if (field.valid && field.valid.includes('required')) {
+			value = record[field.field].trim();
 			if (record[field.field]) {
 				if (!value) form_error.push({ field: field.field, type: 'required' });
 			} else {
@@ -39080,13 +39083,32 @@ function ValidateForm(record, form_builder_layout) {
 		}
 
 		/* numeric -----------------------------------------*/
-		if (field.valid && field.valid.includes('numeric') && value && isNaN(value)) {
-			form_error.push({ field: field.field, type: 'numeric' });
+		if (field.valid && field.valid.includes('numeric')) {
+			value = record[field.field].trim();
+			// value = (isNaN(record[field.field])) ? record[field.field].trim() : parseInt(record[field.field]);
+			if (value && isNaN(value)) {
+				form_error.push({ field: field.field, type: 'numeric' });
+			}
 		}
 
 		/* email -----------------------------------------*/
-		if (field.valid && field.valid.includes('email') && value && !(0, _isEmail2.default)(value)) {
-			form_error.push({ field: field.field, type: 'email' });
+		if (field.valid && field.valid.includes('email')) {
+			value = record[field.field].trim();
+			if (value && !(0, _isEmail2.default)(value)) {
+				form_error.push({ field: field.field, type: 'email' });
+			}
+		}
+
+		/* leading_zeros -----------------------------------------*/
+		if (field.valid && field.valid.includes('leading_zeros')) {
+			value = record[field.field].trim();
+			if (field.type == 'text' || field.type == 'textarea') {
+				if (value.toString().startsWith('0')) {
+					form_error.push({ field: field.field, type: 'leading_zeros' });
+				}
+			} else {
+				console.error('EM Validation: leading_zeros validation applies only to text or textarea fields');
+			}
 		}
 
 		/* Additional Validations here ----------------------*/
