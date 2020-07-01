@@ -11,6 +11,9 @@ export function ValidateMessage(error) {
 	
 	} else if (error.type == 'email') {
 		error_message = "Email Expected";
+		
+	} else if (error.type == 'exists') {
+		error_message = "A record already exists with this value";
 	}
 
 	return error_message;

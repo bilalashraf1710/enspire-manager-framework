@@ -5524,6 +5524,8 @@ function ValidateMessage(error) {
 		error_message = "Number Expected";
 	} else if (error.type == 'email') {
 		error_message = "Email Expected";
+	} else if (error.type == 'exists') {
+		error_message = "A record already exists with this value";
 	}
 
 	return error_message;
@@ -38407,6 +38409,7 @@ var Table = exports.Table = function (_React$Component) {
 		_this.state = {
 			search: '',
 			filter_button: 0,
+			disable_filter: false,
 			page: 0,
 			limit: 0,
 			show_limit: false,
@@ -38481,7 +38484,7 @@ var Table = exports.Table = function (_React$Component) {
 		value: function handleSearch(event) {
 			var _setState2;
 
-			this.setState((_setState2 = {}, _defineProperty(_setState2, event.target.name, event.target.value), _defineProperty(_setState2, 'page', 0), _setState2));
+			this.setState((_setState2 = {}, _defineProperty(_setState2, event.target.name, event.target.value), _defineProperty(_setState2, 'page', 0), _defineProperty(_setState2, 'disable_filter', event.target.value != ''), _setState2));
 		}
 	}, {
 		key: 'handleFilter',
@@ -38558,7 +38561,7 @@ var Table = exports.Table = function (_React$Component) {
 					column.badge[item[column.field]]
 				);
 			} else {
-				return (column.prefix ? column.prefix : '') + item[column.field] + (column.postfix ? column.postfix : '');
+				return (column.prefix ? column.prefix : '') + (item[column.field] ? item[column.field] : '') + (column.postfix ? column.postfix : '');
 			}
 		}
 	}, {
@@ -38596,7 +38599,7 @@ var Table = exports.Table = function (_React$Component) {
 
 			/* Filtered --------------------------------*/
 
-			if (_.get(this.props.filters, 'buttons', null)) {
+			if (_.get(this.props.filters, 'buttons', null) && !this.state.disable_filter) {
 				// has buttons?
 				if (this.props.filters.buttons.length <= 5) {
 					if (this.state.filter_button && _.get(this.props.filters, 'buttons.' + (this.state.filter_button - 1) + '.value', null) !== null) {
@@ -38828,24 +38831,26 @@ var Table = exports.Table = function (_React$Component) {
 			/* Filter Buttons / Dropdown --------------------------*/
 
 			var filters;
-			if (this.props.filters && this.props.filters.buttons.length <= 5) {
-				filters = this.props.filters ? this.props.filters.buttons.map(function (item, index) {
-					return _react2.default.createElement(
-						'label',
-						{ key: 'filter' + index, className: 'btn btn-sm' + (index == _this2.state.filter_button - 1 ? ' btn-primary active' : ' btn-white'), onClick: _this2.handleFilter.bind(_this2, index + 1) },
-						_react2.default.createElement('input', { type: 'radio', name: 'filters', value: _this2.state.filter_button }),
-						' ',
-						item.name
-					);
-				}) : null;
-			} else {
-				filters = this.props.filters ? this.props.filters.buttons.map(function (item, index) {
-					return _react2.default.createElement(
-						'option',
-						{ key: 'filter' + index, value: item.value },
-						item.name
-					);
-				}) : null;
+			if (!this.state.disable_filter) {
+				if (this.props.filters && this.props.filters.buttons.length <= 5) {
+					filters = this.props.filters ? this.props.filters.buttons.map(function (item, index) {
+						return _react2.default.createElement(
+							'label',
+							{ key: 'filter' + index, className: 'btn btn-sm' + (index == _this2.state.filter_button - 1 ? ' btn-primary active' : ' btn-white'), onClick: _this2.handleFilter.bind(_this2, index + 1) },
+							_react2.default.createElement('input', { type: 'radio', name: 'filters', value: _this2.state.filter_button }),
+							' ',
+							item.name
+						);
+					}) : null;
+				} else {
+					filters = this.props.filters ? this.props.filters.buttons.map(function (item, index) {
+						return _react2.default.createElement(
+							'option',
+							{ key: 'filter' + index, value: item.value },
+							item.name
+						);
+					}) : null;
+				}
 			}
 
 			return _react2.default.createElement(
@@ -38893,11 +38898,12 @@ var Table = exports.Table = function (_React$Component) {
 						_react2.default.createElement(
 							'div',
 							{ className: 'col-sm-5 m-b-xs' },
-							filters && filters.length <= 5 ? _react2.default.createElement(
+							filters && filters.length <= 5 && !this.state.disable_filter && _react2.default.createElement(
 								'div',
 								{ className: 'btn-group btn-group-toggle', 'data-toggle': 'buttons' },
 								filters
-							) : _react2.default.createElement(
+							),
+							filters && filters.length > 5 && !this.state.disable_filter && _react2.default.createElement(
 								'select',
 								{ className: 'form-control-sm form-control input-s-sm inline', name: 'limit', value: this.state.filter_button, onChange: this.handleFilterDropdown.bind(this) },
 								_react2.default.createElement(
@@ -38913,11 +38919,15 @@ var Table = exports.Table = function (_React$Component) {
 							{ className: 'col-sm-4 col-md-5 m-b-xs' },
 							(this.props.search || this.props.new) && _react2.default.createElement(
 								'div',
-								{ className: 'input-group', style: { position: 'relative' } },
-								this.props.search && this.state.search && _react2.default.createElement('i', { className: 'fas fa-times-circle', style: { position: 'absolute', color: '#bbbbbb', zIndex: 9, right: '140px', top: '5px', fontSize: '20px', cursor: 'pointer' }, onClick: function onClick() {
-										_this2.setState({ search: '' });
-									} }),
-								this.props.search && _react2.default.createElement('input', { name: 'search', placeholder: 'Search', type: 'text', className: 'form-control form-control-sm', value: this.state.search, onChange: this.handleSearch.bind(this) }),
+								{ className: 'input-group' },
+								_react2.default.createElement(
+									'span',
+									{ style: { position: 'relative' } },
+									this.props.search && this.state.search && _react2.default.createElement('i', { className: 'fas fa-times-circle', style: { position: 'absolute', color: '#bbbbbb', zIndex: 9, right: '5px', top: '5px', fontSize: '20px', cursor: 'pointer' }, onClick: function onClick() {
+											_this2.setState({ search: '', disable_filter: false });
+										} }),
+									this.props.search && _react2.default.createElement('input', { name: 'search', placeholder: 'Search', type: 'text', className: 'form-control form-control-sm', value: this.state.search, onChange: this.handleSearch.bind(this) })
+								),
 								this.props.new && _react2.default.createElement(
 									'button',
 									{ type: 'button', className: 'btn btn-sm btn-primary ml-3', onClick: this.handleNewButton.bind(this) },

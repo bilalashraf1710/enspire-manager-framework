@@ -13,6 +13,7 @@ export class Table extends React.Component {
 		this.state = {
 			search: '',
 			filter_button: 0,
+			disable_filter: false,
 			page: 0,
 			limit: 0,
 			show_limit: false,
@@ -70,7 +71,7 @@ export class Table extends React.Component {
 		this.setState({ [event.target.name]: parseInt(event.target.value), page: 0 });
 	}
 	handleSearch(event) {
-		this.setState({ [event.target.name]: event.target.value, page: 0 });
+		this.setState({ [event.target.name]: event.target.value, page: 0, disable_filter: (event.target.value != '') });
 	}
 	handleFilter(button) {
 		if (this.state.filter_button === button) button = 0;
@@ -117,6 +118,7 @@ export class Table extends React.Component {
 					return '$ '+parseFloat(item[column.field]).toFixed(2);
 				} else console.error('EM Table: Unknown number format'); 
 			} else console.error('EM Table: Format required for Number field');
+
 		} else if (column.badge !== null && Array.isArray(column.badge)) {
 			var badgestyle = '';
 			if (item[column.field] == 1) badgestyle = 'badge-info';
@@ -125,8 +127,11 @@ export class Table extends React.Component {
 			if (item[column.field] == 4) badgestyle = 'badge-danger';
 
 			return <span className={ 'badge ' + badgestyle }>{ column.badge[item[column.field]] }</span>
+
 		} else {
-			return ((column.prefix) ? column.prefix : '') + item[column.field] + ((column.postfix) ? column.postfix : '');
+			return ((column.prefix) ? column.prefix : '') + 
+				((item[column.field]) ? item[column.field] : '') + 
+				((column.postfix) ? column.postfix : '');
 		}
 	}
 	columnSort(column) {
@@ -160,7 +165,7 @@ export class Table extends React.Component {
 
 		/* Filtered --------------------------------*/
 
-		if (_.get(this.props.filters, 'buttons', null)) { // has buttons?
+		if (_.get(this.props.filters, 'buttons', null) && !this.state.disable_filter) { // has buttons?
 			if (this.props.filters.buttons.length <= 5 ) {
 				if (this.state.filter_button && _.get(this.props.filters, 'buttons.'+(this.state.filter_button-1)+'.value', null) !== null) {
 					filtered_data = _.filter(filtered_data, { [this.props.filters.field]: this.props.filters.buttons[this.state.filter_button-1].value });
@@ -368,20 +373,22 @@ export class Table extends React.Component {
 		/* Filter Buttons / Dropdown --------------------------*/
 
 		var filters;
-		if (this.props.filters && this.props.filters.buttons.length <= 5) {
-			filters = (this.props.filters) ? this.props.filters.buttons.map((item, index) => {
-				return (
-					<label key={ 'filter'+index } className={'btn btn-sm' + ((index == this.state.filter_button - 1) ? ' btn-primary active' : ' btn-white')} onClick={this.handleFilter.bind(this, index + 1)}>
-						<input type="radio" name="filters" value={this.state.filter_button} /> {item.name}
-					</label>
-				)
-			}) : null;
-		} else {
-			filters = (this.props.filters) ? this.props.filters.buttons.map((item, index) => {
-				return (
-					<option key={'filter' + index} value={ item.value }>{ item.name }</option>
-				)
-			}) : null;
+		if (!this.state.disable_filter) {
+			if (this.props.filters && this.props.filters.buttons.length <= 5) {
+				filters = (this.props.filters) ? this.props.filters.buttons.map((item, index) => {
+					return (
+						<label key={ 'filter'+index } className={'btn btn-sm' + ((index == this.state.filter_button - 1) ? ' btn-primary active' : ' btn-white')} onClick={this.handleFilter.bind(this, index + 1)}>
+							<input type="radio" name="filters" value={this.state.filter_button} /> {item.name}
+						</label>
+					)
+				}) : null;
+			} else {
+				filters = (this.props.filters) ? this.props.filters.buttons.map((item, index) => {
+					return (
+						<option key={'filter' + index} value={ item.value }>{ item.name }</option>
+					)
+				}) : null;
+			}
 		}
 
 		return (
@@ -404,26 +411,30 @@ export class Table extends React.Component {
 						</div>
 
 						<div className="col-sm-5 m-b-xs">
-							{ filters && filters.length <= 5
-								?	<div className="btn-group btn-group-toggle" data-toggle="buttons">
-										{ filters }
-									</div>
-								:	<select className="form-control-sm form-control input-s-sm inline" name="limit" value={ this.state.filter_button } onChange={ this.handleFilterDropdown.bind(this) }>
-										<option value="0">- Category Filter -</option>
-										{ filters  }
-									</select>
+							{ filters && filters.length <= 5 && !this.state.disable_filter && 
+								<div className="btn-group btn-group-toggle" data-toggle="buttons">
+									{ filters }
+								</div>
+							}
+							{ filters && filters.length > 5 && !this.state.disable_filter && 
+								<select className="form-control-sm form-control input-s-sm inline" name="limit" value={ this.state.filter_button } onChange={ this.handleFilterDropdown.bind(this) }>
+									<option value="0">- Category Filter -</option>
+									{ filters  }
+								</select>
 							}
 						</div>
 
 						<div className="col-sm-4 col-md-5 m-b-xs">
 							{ (this.props.search || this.props.new) && 
-								<div className="input-group" style={{ position: 'relative' }}>
-									{ this.props.search && this.state.search &&
-										<i className="fas fa-times-circle" style={{ position: 'absolute', color: '#bbbbbb', zIndex: 9, right: '140px', top: '5px', fontSize: '20px', cursor: 'pointer' }} onClick={ () => { this.setState({ search: '' }); } }></i>
-									}
-									{ this.props.search && 
-										<input name="search" placeholder="Search" type="text" className="form-control form-control-sm" value={ this.state.search } onChange={ this.handleSearch.bind(this) }/>
-									}
+								<div className="input-group">
+									<span style={{ position: 'relative' }}>
+										{ this.props.search && this.state.search &&
+											<i className="fas fa-times-circle" style={{ position: 'absolute', color: '#bbbbbb', zIndex: 9, right: '5px', top: '5px', fontSize: '20px', cursor: 'pointer' }} onClick={ () => { this.setState({ search: '', disable_filter: false }); } }></i>
+										}
+										{ this.props.search && 
+											<input name="search" placeholder="Search" type="text" className="form-control form-control-sm" value={ this.state.search } onChange={ this.handleSearch.bind(this) }/>
+										}
+									</span>
 									{ this.props.new && 
 										<button type="button" className="btn btn-sm btn-primary ml-3" onClick={ this.handleNewButton.bind(this) }>{ this.props.new }</button>
 									}
