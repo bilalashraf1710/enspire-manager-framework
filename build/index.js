@@ -6073,6 +6073,7 @@ var Input = exports.Input = function (_React$Component) {
 						name: this.props.name,
 						onChange: this.props.onChange.bind(this),
 						placeholder: this.props.placeholder,
+						readOnly: this.props.readOnly,
 						ref: this.field_ref,
 						type: 'text'
 					}, inputProps)) : _react2.default.createElement(_reactDatepicker2.default, {
@@ -40061,6 +40062,7 @@ function FormBuilderComps(props) {
 					append: props.field.append,
 					onChange: props.props.callbacks.text,
 					required: required,
+					readOnly: props.field.readOnly,
 					type: 'text',
 					value: props.props.record[props.field.field] ? props.props.record[props.field.field] : ''
 				});

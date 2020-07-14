@@ -68,8 +68,9 @@ export class Input extends React.Component {
 								name={ this.props.name } 
 								onChange={ this.props.onChange.bind(this) } 
 								placeholder={ this.props.placeholder } 
+								readOnly={ this.props.readOnly }
 								ref={ this.field_ref } 
-								type="text" 
+								type="text"
 								{ ...inputProps }
 							/>
 						:	<DatePicker

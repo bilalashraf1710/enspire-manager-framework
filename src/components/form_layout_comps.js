@@ -28,6 +28,7 @@ export default function FormBuilderComps(props) {
 				append={ props.field.append }
 				onChange={ props.props.callbacks.text } 
 				required={ required }
+				readOnly={ props.field.readOnly }
 				type="text" 
 				value={ (props.props.record[props.field.field]) ? props.props.record[props.field.field] : '' }
 			/>
