@@ -297,7 +297,7 @@ export class Table extends React.Component {
 									<select 
 										className="form-control" 
 										name={ link_data_field } 
-										onChange={ this.props.select_callback.bind(this, item[this.props.id]) } 
+										onChange={ column.callback.bind(this, item[this.props.id]) } 
 										value={ (item[link_data_field]) ? item[link_data_field] : ''  }
 									>
 										<option value="">Choose...</option>
@@ -306,7 +306,10 @@ export class Table extends React.Component {
 								</td>
 							);
 						}
-
+					} else if (column.type == 'datepicker') {
+						console.error('EM Table: Field of type Datepicker cannot have a Data Link'); 
+					} else if (column.type == 'button') {
+						console.error('EM Table: Field of type Button cannot have a Data Link'); 
 					} else {
 						return ( <td key={ 'td'+column_index } { ...inputProps } style={ styles }>{ (items.length) ? this.formatItem(items[0], column) : '' }</td> ); // TODO check for multiple
 					}
@@ -338,13 +341,38 @@ export class Table extends React.Component {
 											className="form-control" 
 											dateFormat="M-dd-yyyy"
 											selected={ selected }
-											onChange={ this.props.datepicker_callback.bind(this, item[this.props.id]) } 
+											onChange={ column.callback.bind(this, item[this.props.id]) } 
 										/>
 									</div>
 								</td>
 							);
 						}
-						
+
+					} else if (column.type == 'button') {
+						if (!column.callback) return ( <td key={ 'td'+column_index } { ...inputProps } style={ styles }><button className={ 'btn '+column.button.className }>{ column.button.name }</button></td> );
+						return ( <td key={ 'td'+column_index } { ...inputProps } style={ styles }><button className={ 'btn '+column.button.className } onClick={ column.callback.bind(this, item[column.field]) }>{ column.button.name }</button></td> );
+
+					} else if (column.type == 'actions') {
+						return (
+							<td key={ 'td'+column_index }>
+								<div { ...inputProps } style={ styles } className="btn-group">
+									<button data-toggle="dropdown" className={ 'dropdown-toggle btn '+column.button.className } aria-expanded="false" onClick={ (e) => e.stopPropagation() }>{ column.button.name }</button>
+									<ul className="dropdown-menu" x-placement="bottom-start" style={{ position: 'absolute',  top: '33px', left: '0px', willChange: 'top, left' }}>
+										{
+											column.button.links.map((link, link_index) => {
+												if (link.name == 'divider') return ( <li key={ 'dropdown' + link_index } className="dropdown-divider"></li> );
+												return (
+													<li key={ 'dropdown' + link_index }><a className="dropdown-item" onClick={ link.callback.bind(this, item[column.field]) }>{ link.name }</a></li>
+												);
+											})
+										}
+									</ul>
+								</div>
+							</td>
+						);
+
+					} else if (column.type == 'select') {
+						console.error('EM Table: field of type Select must have a Data Link'); 
 					} else {
 						return ( <td key={ 'td'+column_index } { ...inputProps } style={ styles }>{ this.formatItem(item, column) }</td> );
 					}

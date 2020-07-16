@@ -38741,7 +38741,7 @@ var Table = exports.Table = function (_React$Component) {
 										{
 											className: 'form-control',
 											name: link_data_field,
-											onChange: _this2.props.select_callback.bind(_this2, item[_this2.props.id]),
+											onChange: column.callback.bind(_this2, item[_this2.props.id]),
 											value: item[link_data_field] ? item[link_data_field] : ''
 										},
 										_react2.default.createElement(
@@ -38753,6 +38753,10 @@ var Table = exports.Table = function (_React$Component) {
 									)
 								);
 							}
+						} else if (column.type == 'datepicker') {
+							console.error('EM Table: Field of type Datepicker cannot have a Data Link');
+						} else if (column.type == 'button') {
+							console.error('EM Table: Field of type Button cannot have a Data Link');
 						} else {
 							return _react2.default.createElement(
 								'td',
@@ -38795,11 +38799,64 @@ var Table = exports.Table = function (_React$Component) {
 											className: 'form-control',
 											dateFormat: 'M-dd-yyyy',
 											selected: selected,
-											onChange: _this2.props.datepicker_callback.bind(_this2, item[_this2.props.id])
+											onChange: column.callback.bind(_this2, item[_this2.props.id])
 										})
 									)
 								);
 							}
+						} else if (column.type == 'button') {
+							if (!column.callback) return _react2.default.createElement(
+								'td',
+								_extends({ key: 'td' + column_index }, inputProps, { style: styles }),
+								_react2.default.createElement(
+									'button',
+									{ className: 'btn ' + column.button.className },
+									column.button.name
+								)
+							);
+							return _react2.default.createElement(
+								'td',
+								_extends({ key: 'td' + column_index }, inputProps, { style: styles }),
+								_react2.default.createElement(
+									'button',
+									{ className: 'btn ' + column.button.className, onClick: column.callback.bind(_this2, item[column.field]) },
+									column.button.name
+								)
+							);
+						} else if (column.type == 'actions') {
+							return _react2.default.createElement(
+								'td',
+								{ key: 'td' + column_index },
+								_react2.default.createElement(
+									'div',
+									_extends({}, inputProps, { style: styles, className: 'btn-group' }),
+									_react2.default.createElement(
+										'button',
+										{ 'data-toggle': 'dropdown', className: 'dropdown-toggle btn ' + column.button.className, 'aria-expanded': 'false', onClick: function onClick(e) {
+												return e.stopPropagation();
+											} },
+										column.button.name
+									),
+									_react2.default.createElement(
+										'ul',
+										{ className: 'dropdown-menu', 'x-placement': 'bottom-start', style: { position: 'absolute', top: '33px', left: '0px', willChange: 'top, left' } },
+										column.button.links.map(function (link, link_index) {
+											if (link.name == 'divider') return _react2.default.createElement('li', { key: 'dropdown' + link_index, className: 'dropdown-divider' });
+											return _react2.default.createElement(
+												'li',
+												{ key: 'dropdown' + link_index },
+												_react2.default.createElement(
+													'a',
+													{ className: 'dropdown-item', onClick: link.callback.bind(_this2, item[column.field]) },
+													link.name
+												)
+											);
+										})
+									)
+								)
+							);
+						} else if (column.type == 'select') {
+							console.error('EM Table: field of type Select must have a Data Link');
 						} else {
 							return _react2.default.createElement(
 								'td',
