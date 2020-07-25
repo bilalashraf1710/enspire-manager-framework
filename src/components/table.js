@@ -22,6 +22,8 @@ export class Table extends React.Component {
 				direction: []
 			},
 			storagekey: null,
+			container_height: 0,
+			container_width: 0,
 		};
 	}
 
@@ -34,13 +36,14 @@ export class Table extends React.Component {
 				if (this.props.filters.active > 0) this.setState({ filter_button: this.props.filters.buttons[this.props.filters.active - 1].value });
 			}
 		}
-		if (this.props.limit) {
-			this.setState({ limit: parseInt(this.props.limit), show_limit: true });
-		}
+		if (this.props.show_limit) this.setState({ limit: 25, show_limit: true });
+		if (this.props.limit) this.setState({ limit: parseInt(this.props.limit), show_limit: true });
 		if (this.props.order) this.setState({ order: this.props.order });
 		if (this.props.filters) this.setState({ filters: this.props.filters });
 
 		this.updateSessionStorage();
+		this.handleResize();
+		window.addEventListener("resize", this.handleResize.bind(this));
 	}
 	componentDidUpdate() {
 		var storagekey = this.props.history.location.pathname.replace (/\//g, "_");
@@ -50,6 +53,12 @@ export class Table extends React.Component {
 		// this.updateTableFields();
 		this.updateSessionStorage();
 	}
+
+	componentWillUnmount() {
+		window.removeEventListener("resize", this.handleResize.bind(this));
+	}
+
+
 	loadSessionStorage() {
 		if (this.props.savestate) {
 			var storagekey = this.props.history.location.pathname.replace (/\//g, "_");
@@ -67,6 +76,13 @@ export class Table extends React.Component {
 
 	/* HANDLERS --------------------------------------------------------------------*/
 
+	handleResize() {
+		if (this.props.container_id) {
+			var container_height = (document.getElementById(this.props.container_id)) ? document.getElementById(this.props.container_id).clientHeight : 0;
+			var container_width = (document.getElementById(this.props.container_id)) ? (document.getElementById(this.props.container_id).querySelectorAll('tbody')[0]).clientWidth : 0;
+			this.setState({ container_height, container_width });
+		}
+	}
 	handleLimit(event) {
 		this.setState({ [event.target.name]: parseInt(event.target.value), page: 0 });
 	}
@@ -197,7 +213,7 @@ export class Table extends React.Component {
 			var sortindex = (this.state.order) ? this.state.order.fields.indexOf(column.field) : -1;
 			var sort = (sortindex > -1) ? ((this.state.order.direction[sortindex] === 'asc') ? 'sort-up' : 'sort-down' ) : null;
 			return ( 
-				<th key={ 'th'+index } style={{ whiteSpace: 'nowrap' }}><a style={{ cursor: 'pointer' }} onClick={ this.columnSort.bind(this, column) }>
+				<th key={ 'th'+index } style={{ whiteSpace: 'nowrap', width: ((column.max) ? '100%': 'auto') }}><a style={{ cursor: 'pointer' }} onClick={ this.columnSort.bind(this, column) }>
 					{ column.name.toUpperCase() }<i className={ 'fa fa-'+sort } style={{ color: '#aaaaaa', marginLeft: '7px' }} />
 				</a></th>
 			);
@@ -246,6 +262,9 @@ export class Table extends React.Component {
 				var styles = {};
 				if (column.nowrap) {
 					styles.whiteSpace = 'nowrap';
+				}
+				if (column.max) {
+					styles.width = '100%';
 				}
 
 				if (column.data) {
@@ -389,7 +408,10 @@ export class Table extends React.Component {
 				
 			}
 
-			return <tr key={ 'tr'+row_index } style={{ cursor: ((this.props.click) ? 'pointer' : 'default'), ...highlight }}>
+			var tr_style = { cursor: ((this.props.click) ? 'pointer' : 'default'), ...highlight };
+			if (this.state.container_width > 0) tr_style.width = this.state.container_width;
+
+			return <tr key={ 'tr'+row_index } style={ tr_style }>
 				{ fields }
 				{ this.props.delete &&
 					<td key={ 'delete'+row_index } style={{ cursor: 'pointer' }} onClick={ this.props.onDelete.bind(this, item) }><i className="fa fa-times"></i></td>
@@ -401,33 +423,40 @@ export class Table extends React.Component {
 		/* Filter Buttons / Dropdown --------------------------*/
 
 		var filters;
-		if (!this.state.disable_filter) {
-			if (this.props.filters && this.props.filters.buttons.length <= 5) {
-				filters = (this.props.filters) ? this.props.filters.buttons.map((item, index) => {
-					return (
-						<label key={ 'filter'+index } className={'btn btn-sm' + ((index == this.state.filter_button - 1) ? ' btn-primary active' : ' btn-white')} onClick={this.handleFilter.bind(this, index + 1)}>
-							<input type="radio" name="filters" value={this.state.filter_button} /> {item.name}
-						</label>
-					)
-				}) : null;
-			} else {
-				filters = (this.props.filters) ? this.props.filters.buttons.map((item, index) => {
-					return (
-						<option key={'filter' + index} value={ item.value }>{ item.name }</option>
-					)
-				}) : null;
-			}
+		if (this.props.filters && this.props.filters.buttons.length <= 5) {
+			filters = (this.props.filters) ? this.props.filters.buttons.map((item, index) => {
+				return (
+					<label key={ 'filter'+index } className={'btn btn-sm' + ((index == this.state.filter_button - 1) ? ' btn-primary active' : ' btn-white')} onClick={this.handleFilter.bind(this, index + 1)}>
+						<input type="radio" name="filters" value={this.state.filter_button} disabled={ this.state.disable_filter } /> {item.name}
+					</label>
+				)
+			}) : null;
+		} else {
+			filters = (this.props.filters) ? this.props.filters.buttons.map((item, index) => {
+				return (
+					<option key={'filter' + index} value={ item.value }>{ item.name }</option>
+				)
+			}) : null;
 		}
+
+		var buttonStyle = {};
+		if (this.props.new_in_ibox) buttonStyle = { position: 'absolute', right: '0px', top: '-52px' };
+
+		/* Fixed height scrollable ---------------------------*/
+
+		var header_style = (this.state.container_height > 0 && this.props.container_margin > 0) ? { display: 'block' } : {};
+		var tbody_style = (this.state.container_height > 0 && this.props.container_margin > 0) ? { display: 'block', height: (this.state.container_height - this.props.container_margin), overflowY: 'scroll' } : {};
+		var tr_style = (this.state.container_width > 0) ? { width: this.state.container_width } : {};
 
 		return (
 
 			<div className="row">
 				<div className="col-lg-12">
 
-					<form className="row" autoComplete="off">
+					<form className="row mb-2" autoComplete="off">
 
-						<div className="col-sm-3 col-md-2 m-b-xs">
-							{ this.state.show_limit &&
+						{ this.state.show_limit &&
+							<div className="col m-b-xs">
 								<select className="form-control-sm form-control input-s-sm inline" name="limit" value={ this.state.limit } onChange={ this.handleLimit.bind(this) }>
 									<option value="10">10</option>
 									<option value="25">25</option>
@@ -435,24 +464,24 @@ export class Table extends React.Component {
 									<option value="100">100</option>
 									<option value="0">All</option>
 								</select>
-							}
-						</div>
+							</div>
+						}
 
-						<div className="col-sm-5 m-b-xs">
-							{ filters && filters.length <= 5 && !this.state.disable_filter && 
+						<div className="col m-b-xs">
+							{ filters && filters.length <= 2 &&
 								<div className="btn-group btn-group-toggle" data-toggle="buttons">
 									{ filters }
 								</div>
 							}
-							{ filters && filters.length > 5 && !this.state.disable_filter && 
-								<select className="form-control-sm form-control input-s-sm inline" name="limit" value={ this.state.filter_button } onChange={ this.handleFilterDropdown.bind(this) }>
+							{ filters && filters.length > 2 && 
+								<select className="form-control input-s-sm inline" name="limit" value={ this.state.filter_button } onChange={ this.handleFilterDropdown.bind(this) } disabled={ this.state.disable_filter }>
 									<option value="0">- Category Filter -</option>
 									{ filters  }
 								</select>
 							}
 						</div>
 
-						<div className="col-sm-4 col-md-5 m-b-xs">
+						<div className="col m-b-xs">
 							{ (this.props.search || this.props.new) && 
 								<div className="input-group">
 									<span style={{ position: 'relative' }}>
@@ -460,11 +489,11 @@ export class Table extends React.Component {
 											<i className="fas fa-times-circle" style={{ position: 'absolute', color: '#bbbbbb', zIndex: 9, right: '5px', top: '5px', fontSize: '20px', cursor: 'pointer' }} onClick={ () => { this.setState({ search: '', disable_filter: false }); } }></i>
 										}
 										{ this.props.search && 
-											<input name="search" placeholder="Search" type="text" className="form-control form-control-sm" value={ this.state.search } onChange={ this.handleSearch.bind(this) }/>
+											<input name="search" placeholder="Search" type="text" className="form-control" value={ this.state.search } onChange={ this.handleSearch.bind(this) }/>
 										}
 									</span>
 									{ this.props.new && 
-										<button type="button" className="btn btn-sm btn-primary ml-3" onClick={ this.handleNewButton.bind(this) }>{ this.props.new }</button>
+										<button type="button" className="btn btn-sm btn-primary ml-3" onClick={ this.handleNewButton.bind(this) } style={ buttonStyle }>{ this.props.new }</button>
 									}
 									{ this.props.button }
 								</div>
@@ -474,15 +503,17 @@ export class Table extends React.Component {
 
 					<div className="table-responsive-sm">
 						<table className="table table-striped table-hover em">
-							<thead>
-								<tr>
-									{ columns }
-									{ this.props.delete &&
-										<th key={ 'delete' }></th>
-									}
-								</tr>
-							</thead>
-							<tbody>
+							{ !this.props.hide_header &&
+								<thead style={ header_style }>
+									<tr style={ tr_style }>
+										{ columns }
+										{ this.props.delete &&
+											<th key={ 'delete' }></th>
+										}
+									</tr>
+								</thead>
+							}
+							<tbody style={ tbody_style }>
 								{ rows
 									?	rows
 									: 	<tr style={{ backgroundColor: 'transparent' }}><td colSpan={ this.props.columns.length }><h2 className="text-center" style={{ marginTop: '40px' }}>No Records Found</h2></td></tr>

@@ -38198,7 +38198,7 @@ function Ibox(props) {
 
 	return _react2.default.createElement(
 		'div',
-		{ className: 'wrapper wrapper-content animated fadeInRight p-0 py', style: props.style },
+		{ className: 'animated fadeInRight p-0 py', style: props.style },
 		_react2.default.createElement(
 			'div',
 			{ className: 'row' },
@@ -38420,7 +38420,9 @@ var Table = exports.Table = function (_React$Component) {
 				fields: [],
 				direction: []
 			},
-			storagekey: null
+			storagekey: null,
+			container_height: 0,
+			container_width: 0
 		};
 		return _this;
 	}
@@ -38436,13 +38438,14 @@ var Table = exports.Table = function (_React$Component) {
 					if (this.props.filters.active > 0) this.setState({ filter_button: this.props.filters.buttons[this.props.filters.active - 1].value });
 				}
 			}
-			if (this.props.limit) {
-				this.setState({ limit: parseInt(this.props.limit), show_limit: true });
-			}
+			if (this.props.show_limit) this.setState({ limit: 25, show_limit: true });
+			if (this.props.limit) this.setState({ limit: parseInt(this.props.limit), show_limit: true });
 			if (this.props.order) this.setState({ order: this.props.order });
 			if (this.props.filters) this.setState({ filters: this.props.filters });
 
 			this.updateSessionStorage();
+			this.handleResize();
+			window.addEventListener("resize", this.handleResize.bind(this));
 		}
 	}, {
 		key: 'componentDidUpdate',
@@ -38453,6 +38456,11 @@ var Table = exports.Table = function (_React$Component) {
 			}
 			// this.updateTableFields();
 			this.updateSessionStorage();
+		}
+	}, {
+		key: 'componentWillUnmount',
+		value: function componentWillUnmount() {
+			window.removeEventListener("resize", this.handleResize.bind(this));
 		}
 	}, {
 		key: 'loadSessionStorage',
@@ -38475,6 +38483,15 @@ var Table = exports.Table = function (_React$Component) {
 
 		/* HANDLERS --------------------------------------------------------------------*/
 
+	}, {
+		key: 'handleResize',
+		value: function handleResize() {
+			if (this.props.container_id) {
+				var container_height = document.getElementById(this.props.container_id) ? document.getElementById(this.props.container_id).clientHeight : 0;
+				var container_width = document.getElementById(this.props.container_id) ? document.getElementById(this.props.container_id).querySelectorAll('tbody')[0].clientWidth : 0;
+				this.setState({ container_height: container_height, container_width: container_width });
+			}
+		}
 	}, {
 		key: 'handleLimit',
 		value: function handleLimit(event) {
@@ -38634,7 +38651,7 @@ var Table = exports.Table = function (_React$Component) {
 				var sort = sortindex > -1 ? _this2.state.order.direction[sortindex] === 'asc' ? 'sort-up' : 'sort-down' : null;
 				return _react2.default.createElement(
 					'th',
-					{ key: 'th' + index, style: { whiteSpace: 'nowrap' } },
+					{ key: 'th' + index, style: { whiteSpace: 'nowrap', width: column.max ? '100%' : 'auto' } },
 					_react2.default.createElement(
 						'a',
 						{ style: { cursor: 'pointer' }, onClick: _this2.columnSort.bind(_this2, column) },
@@ -38689,6 +38706,9 @@ var Table = exports.Table = function (_React$Component) {
 					var styles = {};
 					if (column.nowrap) {
 						styles.whiteSpace = 'nowrap';
+					}
+					if (column.max) {
+						styles.width = '100%';
 					}
 
 					if (column.data) {
@@ -38876,9 +38896,12 @@ var Table = exports.Table = function (_React$Component) {
 					});
 				}
 
+				var tr_style = _extends({ cursor: _this2.props.click ? 'pointer' : 'default' }, highlight);
+				if (_this2.state.container_width > 0) tr_style.width = _this2.state.container_width;
+
 				return _react2.default.createElement(
 					'tr',
-					{ key: 'tr' + row_index, style: _extends({ cursor: _this2.props.click ? 'pointer' : 'default' }, highlight) },
+					{ key: 'tr' + row_index, style: tr_style },
 					fields,
 					_this2.props.delete && _react2.default.createElement(
 						'td',
@@ -38891,27 +38914,34 @@ var Table = exports.Table = function (_React$Component) {
 			/* Filter Buttons / Dropdown --------------------------*/
 
 			var filters;
-			if (!this.state.disable_filter) {
-				if (this.props.filters && this.props.filters.buttons.length <= 5) {
-					filters = this.props.filters ? this.props.filters.buttons.map(function (item, index) {
-						return _react2.default.createElement(
-							'label',
-							{ key: 'filter' + index, className: 'btn btn-sm' + (index == _this2.state.filter_button - 1 ? ' btn-primary active' : ' btn-white'), onClick: _this2.handleFilter.bind(_this2, index + 1) },
-							_react2.default.createElement('input', { type: 'radio', name: 'filters', value: _this2.state.filter_button }),
-							' ',
-							item.name
-						);
-					}) : null;
-				} else {
-					filters = this.props.filters ? this.props.filters.buttons.map(function (item, index) {
-						return _react2.default.createElement(
-							'option',
-							{ key: 'filter' + index, value: item.value },
-							item.name
-						);
-					}) : null;
-				}
+			if (this.props.filters && this.props.filters.buttons.length <= 5) {
+				filters = this.props.filters ? this.props.filters.buttons.map(function (item, index) {
+					return _react2.default.createElement(
+						'label',
+						{ key: 'filter' + index, className: 'btn btn-sm' + (index == _this2.state.filter_button - 1 ? ' btn-primary active' : ' btn-white'), onClick: _this2.handleFilter.bind(_this2, index + 1) },
+						_react2.default.createElement('input', { type: 'radio', name: 'filters', value: _this2.state.filter_button, disabled: _this2.state.disable_filter }),
+						' ',
+						item.name
+					);
+				}) : null;
+			} else {
+				filters = this.props.filters ? this.props.filters.buttons.map(function (item, index) {
+					return _react2.default.createElement(
+						'option',
+						{ key: 'filter' + index, value: item.value },
+						item.name
+					);
+				}) : null;
 			}
+
+			var buttonStyle = {};
+			if (this.props.new_in_ibox) buttonStyle = { position: 'absolute', right: '0px', top: '-52px' };
+
+			/* Fixed height scrollable ---------------------------*/
+
+			var header_style = this.state.container_height > 0 && this.props.container_margin > 0 ? { display: 'block' } : {};
+			var tbody_style = this.state.container_height > 0 && this.props.container_margin > 0 ? { display: 'block', height: this.state.container_height - this.props.container_margin, overflowY: 'scroll' } : {};
+			var tr_style = this.state.container_width > 0 ? { width: this.state.container_width } : {};
 
 			return _react2.default.createElement(
 				'div',
@@ -38921,11 +38951,11 @@ var Table = exports.Table = function (_React$Component) {
 					{ className: 'col-lg-12' },
 					_react2.default.createElement(
 						'form',
-						{ className: 'row', autoComplete: 'off' },
-						_react2.default.createElement(
+						{ className: 'row mb-2', autoComplete: 'off' },
+						this.state.show_limit && _react2.default.createElement(
 							'div',
-							{ className: 'col-sm-3 col-md-2 m-b-xs' },
-							this.state.show_limit && _react2.default.createElement(
+							{ className: 'col m-b-xs' },
+							_react2.default.createElement(
 								'select',
 								{ className: 'form-control-sm form-control input-s-sm inline', name: 'limit', value: this.state.limit, onChange: this.handleLimit.bind(this) },
 								_react2.default.createElement(
@@ -38957,15 +38987,15 @@ var Table = exports.Table = function (_React$Component) {
 						),
 						_react2.default.createElement(
 							'div',
-							{ className: 'col-sm-5 m-b-xs' },
-							filters && filters.length <= 5 && !this.state.disable_filter && _react2.default.createElement(
+							{ className: 'col m-b-xs' },
+							filters && filters.length <= 2 && _react2.default.createElement(
 								'div',
 								{ className: 'btn-group btn-group-toggle', 'data-toggle': 'buttons' },
 								filters
 							),
-							filters && filters.length > 5 && !this.state.disable_filter && _react2.default.createElement(
+							filters && filters.length > 2 && _react2.default.createElement(
 								'select',
-								{ className: 'form-control-sm form-control input-s-sm inline', name: 'limit', value: this.state.filter_button, onChange: this.handleFilterDropdown.bind(this) },
+								{ className: 'form-control input-s-sm inline', name: 'limit', value: this.state.filter_button, onChange: this.handleFilterDropdown.bind(this), disabled: this.state.disable_filter },
 								_react2.default.createElement(
 									'option',
 									{ value: '0' },
@@ -38976,7 +39006,7 @@ var Table = exports.Table = function (_React$Component) {
 						),
 						_react2.default.createElement(
 							'div',
-							{ className: 'col-sm-4 col-md-5 m-b-xs' },
+							{ className: 'col m-b-xs' },
 							(this.props.search || this.props.new) && _react2.default.createElement(
 								'div',
 								{ className: 'input-group' },
@@ -38986,11 +39016,11 @@ var Table = exports.Table = function (_React$Component) {
 									this.props.search && this.state.search && _react2.default.createElement('i', { className: 'fas fa-times-circle', style: { position: 'absolute', color: '#bbbbbb', zIndex: 9, right: '5px', top: '5px', fontSize: '20px', cursor: 'pointer' }, onClick: function onClick() {
 											_this2.setState({ search: '', disable_filter: false });
 										} }),
-									this.props.search && _react2.default.createElement('input', { name: 'search', placeholder: 'Search', type: 'text', className: 'form-control form-control-sm', value: this.state.search, onChange: this.handleSearch.bind(this) })
+									this.props.search && _react2.default.createElement('input', { name: 'search', placeholder: 'Search', type: 'text', className: 'form-control', value: this.state.search, onChange: this.handleSearch.bind(this) })
 								),
 								this.props.new && _react2.default.createElement(
 									'button',
-									{ type: 'button', className: 'btn btn-sm btn-primary ml-3', onClick: this.handleNewButton.bind(this) },
+									{ type: 'button', className: 'btn btn-sm btn-primary ml-3', onClick: this.handleNewButton.bind(this), style: buttonStyle },
 									this.props.new
 								),
 								this.props.button
@@ -39003,19 +39033,19 @@ var Table = exports.Table = function (_React$Component) {
 						_react2.default.createElement(
 							'table',
 							{ className: 'table table-striped table-hover em' },
-							_react2.default.createElement(
+							!this.props.hide_header && _react2.default.createElement(
 								'thead',
-								null,
+								{ style: header_style },
 								_react2.default.createElement(
 									'tr',
-									null,
+									{ style: tr_style },
 									columns,
 									this.props.delete && _react2.default.createElement('th', { key: 'delete' })
 								)
 							),
 							_react2.default.createElement(
 								'tbody',
-								null,
+								{ style: tbody_style },
 								rows ? rows : _react2.default.createElement(
 									'tr',
 									{ style: { backgroundColor: 'transparent' } },
