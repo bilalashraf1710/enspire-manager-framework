@@ -52,10 +52,10 @@ export class Dropzone extends React.Component {
 	}
 	removeFile() {
 		ModalAlert({
-			callback: () => { this.props.onChange(this.props.field, null) },
 			text: 'The Existing Image will be Removed!',
 			title: 'Are you sure?',
 			type: 'warning',
+			callback_success: () => { this.props.onChange(this.props.field, null) },
 		});
 	}
 	chooseFile(e) {

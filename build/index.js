@@ -5831,12 +5831,12 @@ var Dropzone = exports.Dropzone = function (_React$Component) {
 			var _this2 = this;
 
 			(0, _modal_alert.ModalAlert)({
-				callback: function callback() {
-					_this2.props.onChange(_this2.props.field, null);
-				},
 				text: 'The Existing Image will be Removed!',
 				title: 'Are you sure?',
-				type: 'warning'
+				type: 'warning',
+				callback_success: function callback_success() {
+					_this2.props.onChange(_this2.props.field, null);
+				}
 			});
 		}
 	}, {
