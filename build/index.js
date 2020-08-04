@@ -38551,8 +38551,12 @@ var Table = exports.Table = function (_React$Component) {
 	}, {
 		key: 'handleNewButton',
 		value: function handleNewButton() {
-			var new_append = this.props.new_append ? this.props.new_append : '';
-			this.props.history.push(this.props.click_url + '/0' + new_append);
+			if (this.props.new_callback) {
+				this.props.new_callback();
+			} else {
+				var new_append = this.props.new_append ? this.props.new_append : '';
+				this.props.history.push(this.props.click_url + '/0' + new_append);
+			}
 		}
 
 		/* ACTIONS --------------------------------------------------------------------*/
