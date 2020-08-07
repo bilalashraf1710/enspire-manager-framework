@@ -38411,19 +38411,25 @@ var Table = exports.Table = function (_React$Component) {
 
 		_this.state = {
 			search: '',
+
 			filter_button: 0,
 			filter_limit: 4,
 			disable_filter: false,
+
 			page: 0,
 			limit: 0,
 			show_limit: false,
+
 			order: {
 				fields: [],
 				direction: []
 			},
-			storagekey: null,
+
 			container_height: 0,
-			container_width: 0
+			container_width: 0,
+
+			selected: [],
+			storagekey: null
 		};
 		return _this;
 	}
@@ -38471,7 +38477,7 @@ var Table = exports.Table = function (_React$Component) {
 				var storagekey = this.props.history.location.pathname.replace(/\//g, "_");
 				this.setState({ storagekey: storagekey });
 				if (sessionStorage['table' + storagekey]) {
-					this.setState(JSON.parse(sessionStorage['table' + storagekey]));
+					this.setState(_extends({}, this.state, JSON.parse(sessionStorage['table' + storagekey])));
 				}
 			}
 		}
@@ -38479,7 +38485,9 @@ var Table = exports.Table = function (_React$Component) {
 		key: 'updateSessionStorage',
 		value: function updateSessionStorage() {
 			if (this.props.savestate) {
-				sessionStorage['table' + this.state.storagekey] = JSON.stringify(this.state);
+				var savestate = _.clone(this.state);
+				delete savestate.selected;
+				sessionStorage['table' + this.state.storagekey] = JSON.stringify(savestate);
 			}
 		}
 
@@ -38557,6 +38565,20 @@ var Table = exports.Table = function (_React$Component) {
 				var new_append = this.props.new_append ? this.props.new_append : '';
 				this.props.history.push(this.props.click_url + '/0' + new_append);
 			}
+		}
+	}, {
+		key: 'handleToggleMultiple',
+		value: function handleToggleMultiple(id, e) {
+			e.stopPropagation();
+			var selected = this.state.selected;
+			if (selected.includes(id)) {
+				_.remove(selected, function (n) {
+					return n == id;
+				});
+			} else {
+				selected.push(id);
+			}
+			this.setState({ selected: selected });
 		}
 
 		/* ACTIONS --------------------------------------------------------------------*/
@@ -38710,7 +38732,7 @@ var Table = exports.Table = function (_React$Component) {
 				var fields = _this2.props.columns.length ? _this2.props.columns.map(function (column, column_index) {
 
 					var styles = {};
-					if (column.nowrap) {
+					if (column.nowrap || column.checkbox) {
 						styles.whiteSpace = 'nowrap';
 					}
 					if (column.max) {
@@ -38738,6 +38760,8 @@ var Table = exports.Table = function (_React$Component) {
 						} else {
 							items = linked;
 						}
+
+						{/* SELECT --------------------------------------------------------------------------------------------*/}
 
 						if (column.type == 'select') {
 
@@ -38792,105 +38816,125 @@ var Table = exports.Table = function (_React$Component) {
 						}
 					} else {
 
-						if (column.type == 'datepicker') {
+							{/* DATE PICKER -----------------------------------------------------------------------------------------*/}
 
-							var selected = item[item.field] !== null ? moment(item[item.field]).toDate() : '';
+							if (column.type == 'datepicker') {
 
-							if (Array.isArray(column.static) && item[column.static[0]] == column.static[2]) {
+								var selected = item[item.field] !== null ? moment(item[item.field]).toDate() : '';
 
-								var _entry = _.find(column.data, _defineProperty({}, link_field, item[link_data_field]));
-								return _react2.default.createElement(
-									'td',
-									null,
-									moment(selected).format('M-DD-YYYY')
-								);
-							} else {
+								if (Array.isArray(column.static) && item[column.static[0]] == column.static[2]) {
 
-								return _react2.default.createElement(
-									'td',
-									{ width: '200' },
-									_react2.default.createElement(
-										'div',
-										{ className: 'input-group' },
+									var _entry = _.find(column.data, _defineProperty({}, link_field, item[link_data_field]));
+									return _react2.default.createElement(
+										'td',
+										null,
+										moment(selected).format('M-DD-YYYY')
+									);
+								} else {
+
+									return _react2.default.createElement(
+										'td',
+										{ width: '200' },
 										_react2.default.createElement(
 											'div',
-											{ className: 'input-group-prepend' },
+											{ className: 'input-group' },
 											_react2.default.createElement(
-												'span',
-												{ className: 'input-group-text input-group-addon' },
-												_react2.default.createElement('i', { className: 'far fa-calendar-alt' })
-											)
-										),
-										_react2.default.createElement(_reactDatepicker2.default, {
-											className: 'form-control',
-											dateFormat: 'M-dd-yyyy',
-											selected: selected,
-											onChange: column.callback.bind(_this2, item[_this2.props.id])
-										})
-									)
-								);
-							}
-						} else if (column.type == 'button') {
-							if (!column.callback) return _react2.default.createElement(
-								'td',
-								_extends({ key: 'td' + column_index }, inputProps, { style: styles }),
-								_react2.default.createElement(
-									'button',
-									{ className: 'btn ' + column.button.className },
-									column.button.name
-								)
-							);
-							return _react2.default.createElement(
-								'td',
-								_extends({ key: 'td' + column_index }, inputProps, { style: styles }),
-								_react2.default.createElement(
-									'button',
-									{ className: 'btn ' + column.button.className, onClick: column.callback.bind(_this2, item[column.field]) },
-									column.button.name
-								)
-							);
-						} else if (column.type == 'actions') {
-							return _react2.default.createElement(
-								'td',
-								{ key: 'td' + column_index },
-								_react2.default.createElement(
-									'div',
-									_extends({}, inputProps, { style: styles, className: 'btn-group' }),
+												'div',
+												{ className: 'input-group-prepend' },
+												_react2.default.createElement(
+													'span',
+													{ className: 'input-group-text input-group-addon' },
+													_react2.default.createElement('i', { className: 'far fa-calendar-alt' })
+												)
+											),
+											_react2.default.createElement(_reactDatepicker2.default, {
+												className: 'form-control',
+												dateFormat: 'M-dd-yyyy',
+												selected: selected,
+												onChange: column.callback.bind(_this2, item[_this2.props.id])
+											})
+										)
+									);
+								}
+
+								{/* BUTTON ---------------------------------------------------------------------------------------------*/}
+							} else if (column.type == 'button') {
+								if (!column.callback) return _react2.default.createElement(
+									'td',
+									_extends({ key: 'td' + column_index }, inputProps, { style: styles }),
 									_react2.default.createElement(
 										'button',
-										{ 'data-toggle': 'dropdown', className: 'dropdown-toggle btn ' + column.button.className, 'aria-expanded': 'false', onClick: function onClick(e) {
-												return e.stopPropagation();
-											} },
+										{ className: 'btn ' + column.button.className },
 										column.button.name
-									),
+									)
+								);
+								return _react2.default.createElement(
+									'td',
+									_extends({ key: 'td' + column_index }, inputProps, { style: styles }),
 									_react2.default.createElement(
-										'ul',
-										{ className: 'dropdown-menu', 'x-placement': 'bottom-start', style: { position: 'absolute', top: '33px', left: '0px', willChange: 'top, left' } },
-										column.button.links.map(function (link, link_index) {
-											if (link.name == 'divider') return _react2.default.createElement('li', { key: 'dropdown' + link_index, className: 'dropdown-divider' });
-											return _react2.default.createElement(
+										'button',
+										{ className: 'btn ' + column.button.className, onClick: column.callback.bind(_this2, item[column.field]) },
+										column.button.name
+									)
+								);
+
+								{/* ACTIONS --------------------------------------------------------------------------------------------*/}
+							} else if (column.type == 'actions') {
+
+								var buttonClass = _this2.state.selected && _this2.state.selected.includes(item[column.field]) ? column.button.activeClass : column.button.className;
+								var row_results = _this2.state.selected && _this2.state.selected.length > 0 ? _this2.state.selected : item[column.field];
+
+								return _react2.default.createElement(
+									'td',
+									{ key: 'td' + column_index },
+									_react2.default.createElement(
+										'div',
+										_extends({}, inputProps, { style: styles, className: 'btn-group' }),
+										_react2.default.createElement(
+											'button',
+											{ 'data-toggle': 'dropdown', className: 'dropdown-toggle btn ' + buttonClass, 'aria-expanded': 'false', onClick: function onClick(e) {
+													return e.stopPropagation();
+												} },
+											column.button.name
+										),
+										_react2.default.createElement(
+											'ul',
+											{ className: 'dropdown-menu', 'x-placement': 'bottom-start', style: { position: 'absolute', top: '33px', left: '0px', willChange: 'top, left' } },
+											column.multiple && _react2.default.createElement(
 												'li',
-												{ key: 'dropdown' + link_index },
+												null,
 												_react2.default.createElement(
 													'a',
-													{ className: 'dropdown-item', onClick: link.callback.bind(_this2, item[column.field]) },
-													link.name
+													{ className: 'dropdown-item', onClick: _this2.handleToggleMultiple.bind(_this2, item[column.field]) },
+													'Toggle Multiple'
 												)
-											);
-										})
+											),
+											column.multiple && _react2.default.createElement('li', { className: 'dropdown-divider' }),
+											column.button.links.map(function (link, link_index) {
+												if (link.name == 'divider') return _react2.default.createElement('li', { key: 'dropdown' + link_index, className: 'dropdown-divider' });
+												return _react2.default.createElement(
+													'li',
+													{ key: 'dropdown' + link_index },
+													_react2.default.createElement(
+														'a',
+														{ className: 'dropdown-item', onClick: link.callback.bind(_this2, row_results) },
+														link.name
+													)
+												);
+											})
+										)
 									)
-								)
-							);
-						} else if (column.type == 'select') {
-							console.error('EM Table: field of type Select must have a Data Link');
-						} else {
-							return _react2.default.createElement(
-								'td',
-								_extends({ key: 'td' + column_index }, inputProps, { style: styles }),
-								_this2.formatItem(item, column)
-							);
+								);
+							} else if (column.type == 'select') {
+								console.error('EM Table: field of type Select must have a Data Link');
+							} else {
+								return _react2.default.createElement(
+									'td',
+									_extends({ key: 'td' + column_index }, inputProps, { style: styles }),
+									_this2.formatItem(item, column)
+								);
+							}
 						}
-					}
 				}) : null;
 
 				var highlight = null;

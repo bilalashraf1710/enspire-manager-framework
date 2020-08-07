@@ -12,19 +12,25 @@ export class Table extends React.Component {
 		super(props);
 		this.state = {
 			search: '',
+
 			filter_button: 0,
 			filter_limit: 4,
 			disable_filter: false,
+
 			page: 0,
 			limit: 0,
 			show_limit: false,
+
 			order: {
 				fields: [],
 				direction: []
 			},
-			storagekey: null,
+
 			container_height: 0,
 			container_width: 0,
+			
+			selected: [],
+			storagekey: null,
 		};
 	}
 
@@ -66,13 +72,15 @@ export class Table extends React.Component {
 			var storagekey = this.props.history.location.pathname.replace (/\//g, "_");
 			this.setState({ storagekey });
 			if (sessionStorage['table'+storagekey]) {
-				this.setState(JSON.parse(sessionStorage['table'+storagekey]));
+				this.setState({ ...this.state, ...JSON.parse(sessionStorage['table'+storagekey])});
 			}
 		}
 	}
 	updateSessionStorage() {
 		if (this.props.savestate) {
-			sessionStorage['table'+this.state.storagekey] = JSON.stringify(this.state);
+			var savestate = _.clone(this.state);
+			delete(savestate.selected);
+			sessionStorage['table'+this.state.storagekey] = JSON.stringify(savestate);
 		}
 	}
 
@@ -124,6 +132,16 @@ export class Table extends React.Component {
 			var new_append = (this.props.new_append) ? this.props.new_append : '';
 			this.props.history.push(this.props.click_url+'/0'+new_append);
 		}
+	}
+	handleToggleMultiple(id, e) {
+		e.stopPropagation();
+		var selected = this.state.selected;
+		if (selected.includes(id)) {
+			_.remove(selected, (n) => { return n == id; });
+		} else {
+			selected.push(id);
+		}
+		this.setState({ selected });
 	}
 
 	/* ACTIONS --------------------------------------------------------------------*/
@@ -266,7 +284,7 @@ export class Table extends React.Component {
 			var fields = (this.props.columns.length) ? this.props.columns.map((column, column_index) => {
 
 				var styles = {};
-				if (column.nowrap) {
+				if (column.nowrap || column.checkbox) {
 					styles.whiteSpace = 'nowrap';
 				}
 				if (column.max) {
@@ -294,6 +312,8 @@ export class Table extends React.Component {
 					} else {
 						items = linked;
 					}
+
+					{/* SELECT --------------------------------------------------------------------------------------------*/}
 
 					if (column.type == 'select') {
 
@@ -341,6 +361,8 @@ export class Table extends React.Component {
 
 				} else {
 
+					{/* DATE PICKER -----------------------------------------------------------------------------------------*/}
+
 					if (column.type == 'datepicker') {
 
 						var selected = (item[item.field] !== null) ? moment(item[item.field]).toDate() : '';
@@ -373,21 +395,32 @@ export class Table extends React.Component {
 							);
 						}
 
+					{/* BUTTON ---------------------------------------------------------------------------------------------*/}
+
 					} else if (column.type == 'button') {
 						if (!column.callback) return ( <td key={ 'td'+column_index } { ...inputProps } style={ styles }><button className={ 'btn '+column.button.className }>{ column.button.name }</button></td> );
 						return ( <td key={ 'td'+column_index } { ...inputProps } style={ styles }><button className={ 'btn '+column.button.className } onClick={ column.callback.bind(this, item[column.field]) }>{ column.button.name }</button></td> );
 
+					{/* ACTIONS --------------------------------------------------------------------------------------------*/}
+
 					} else if (column.type == 'actions') {
+
+						var buttonClass = (this.state.selected && this.state.selected.includes(item[column.field])) ? column.button.activeClass : column.button.className;
+						var row_results = (this.state.selected && this.state.selected.length > 0) ? this.state.selected : item[column.field];
+
 						return (
 							<td key={ 'td'+column_index }>
+
 								<div { ...inputProps } style={ styles } className="btn-group">
-									<button data-toggle="dropdown" className={ 'dropdown-toggle btn '+column.button.className } aria-expanded="false" onClick={ (e) => e.stopPropagation() }>{ column.button.name }</button>
+									<button data-toggle="dropdown" className={ 'dropdown-toggle btn ' + buttonClass } aria-expanded="false" onClick={ (e) => e.stopPropagation() }>{ column.button.name }</button>
 									<ul className="dropdown-menu" x-placement="bottom-start" style={{ position: 'absolute',  top: '33px', left: '0px', willChange: 'top, left' }}>
+										{ column.multiple && <li><a className="dropdown-item" onClick={ this.handleToggleMultiple.bind(this, item[column.field]) }>Toggle Multiple</a></li> }
+										{ column.multiple && <li className="dropdown-divider"></li> }
 										{
 											column.button.links.map((link, link_index) => {
 												if (link.name == 'divider') return ( <li key={ 'dropdown' + link_index } className="dropdown-divider"></li> );
 												return (
-													<li key={ 'dropdown' + link_index }><a className="dropdown-item" onClick={ link.callback.bind(this, item[column.field]) }>{ link.name }</a></li>
+													<li key={ 'dropdown' + link_index }><a className="dropdown-item" onClick={ link.callback.bind(this, row_results) }>{ link.name }</a></li>
 												);
 											})
 										}
