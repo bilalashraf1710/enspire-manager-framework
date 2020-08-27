@@ -38608,7 +38608,8 @@ var Table = exports.Table = function (_React$Component) {
 					column.badge[item[column.field]]
 				);
 			} else {
-				return (column.prefix ? column.prefix : '') + (item[column.field] ? item[column.field] : '') + (column.postfix ? column.postfix : '');
+				var result = item[column.field] ? item[column.field].toString().replace(/_/g, " ") : ''; // replace _ with space 
+				return (column.prefix ? column.prefix : '') + result + (column.postfix ? column.postfix : '');
 			}
 		}
 	}, {
@@ -38731,7 +38732,7 @@ var Table = exports.Table = function (_React$Component) {
 
 				var fields = _this2.props.columns.length ? _this2.props.columns.map(function (column, column_index) {
 
-					var styles = {};
+					var styles = { textTransform: 'capitalize' };
 
 					/* NoWrap & Width ------------------------------------*/
 
@@ -38979,10 +38980,11 @@ var Table = exports.Table = function (_React$Component) {
 				}) : null;
 			} else {
 				filters = this.props.filters ? this.props.filters.buttons.map(function (item, index) {
+					var result = item.name ? item.name.toString().replace(/_/g, " ") : ''; // replace _ with space 
 					return _react2.default.createElement(
 						'option',
-						{ key: 'filter' + index, value: item.value },
-						item.name
+						{ key: 'filter' + index, style: { textTransform: 'capitalize' }, value: item.value },
+						result
 					);
 				}) : null;
 			}
@@ -39065,7 +39067,7 @@ var Table = exports.Table = function (_React$Component) {
 								{ className: 'input-group' },
 								_react2.default.createElement(
 									'span',
-									{ style: { position: 'relative' } },
+									{ style: { position: 'relative', width: '100%' } },
 									this.props.search && this.state.search && _react2.default.createElement('i', { className: 'fas fa-times-circle', style: { position: 'absolute', color: '#bbbbbb', zIndex: 9, right: '5px', top: '5px', fontSize: '20px', cursor: 'pointer' }, onClick: function onClick() {
 											_this2.setState({ search: '' });
 										} }),

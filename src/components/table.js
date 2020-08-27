@@ -167,8 +167,8 @@ export class Table extends React.Component {
 			return <span className={ 'badge ' + badgestyle }>{ column.badge[item[column.field]] }</span>
 
 		} else {
-			return ((column.prefix) ? column.prefix : '') + 
-				((item[column.field]) ? item[column.field] : '') + 
+			let result = (item[column.field]) ? item[column.field].toString().replace(/_/g, " ") : ''; // replace _ with space 
+			return ((column.prefix) ? column.prefix : '') + result + 
 				((column.postfix) ? column.postfix : '');
 		}
 	}
@@ -282,7 +282,7 @@ export class Table extends React.Component {
 
 			var fields = (this.props.columns.length) ? this.props.columns.map((column, column_index) => {
 
-				var styles = {};
+				var styles = { textTransform: 'capitalize' };
 
 				/* NoWrap & Width ------------------------------------*/
 				
@@ -475,8 +475,9 @@ export class Table extends React.Component {
 			}) : null;
 		} else {
 			filters = (this.props.filters) ? this.props.filters.buttons.map((item, index) => {
+				let result = (item.name) ? item.name.toString().replace(/_/g, " ") : ''; // replace _ with space 
 				return (
-					<option key={'filter' + index} value={ item.value }>{ item.name }</option>
+					<option key={ 'filter' + index } style={ { textTransform: 'capitalize' } } value={ item.value }>{ result }</option>
 				)
 			}) : null;
 		}
@@ -526,7 +527,7 @@ export class Table extends React.Component {
 						<div className="col m-b-xs">
 							{ (this.props.search || this.props.new) && 
 								<div className="input-group">
-									<span style={{ position: 'relative' }}>
+									<span style={{ position: 'relative', width: '100%' }}>
 										{ this.props.search && this.state.search &&
 											<i className="fas fa-times-circle" style={{ position: 'absolute', color: '#bbbbbb', zIndex: 9, right: '5px', top: '5px', fontSize: '20px', cursor: 'pointer' }} onClick={ () => { this.setState({ search: '' }); } }></i>
 										}
