@@ -15,7 +15,6 @@ export class Table extends React.Component {
 
 			filter_button: 0,
 			filter_limit: 4,
-			disable_filter: false,
 
 			page: 0,
 			limit: 0,
@@ -66,7 +65,6 @@ export class Table extends React.Component {
 		window.removeEventListener("resize", this.handleResize.bind(this));
 	}
 
-
 	loadSessionStorage() {
 		if (this.props.savestate) {
 			var storagekey = this.props.history.location.pathname.replace (/\//g, "_");
@@ -97,14 +95,14 @@ export class Table extends React.Component {
 		this.setState({ [event.target.name]: parseInt(event.target.value), page: 0 });
 	}
 	handleSearch(event) {
-		this.setState({ [event.target.name]: event.target.value, page: 0, disable_filter: (event.target.value != '') });
+		this.setState({ [event.target.name]: event.target.value, page: 0 });
 	}
 	handleFilter(button) {
 		if (this.state.filter_button === button) button = 0;
-		this.setState({ filter_button: button });
+		this.setState({ filter_button: button, page: 0 });
 	}
 	handleFilterDropdown(event) {
-		this.setState({ filter_button: event.target.value });
+		this.setState({ filter_button: event.target.value, page: 0 });
 	}
 	handlePage(page) {
 		this.setState({ page });
@@ -186,6 +184,8 @@ export class Table extends React.Component {
 
 	render() {
 
+		/* Click Append ------------------------------------*/
+
 		var click_append = (this.props.click_append) ? this.props.click_append : '';
 
 		/* Sort ------------------------------------*/
@@ -203,9 +203,9 @@ export class Table extends React.Component {
 			return result;
 		}) : ordered_data;
 
-		/* Filtered --------------------------------*/
+		/* Filtered -----------------------------------*/
 
-		if (_.get(this.props.filters, 'buttons', null) && !this.state.disable_filter) { // has buttons?
+		if (_.get(this.props.filters, 'buttons', null)) { // has buttons?
 			if (this.props.filters.buttons.length <= 5 ) {
 				if (this.state.filter_button && _.get(this.props.filters, 'buttons.'+(this.state.filter_button-1)+'.value', null) !== null) {
 					filtered_data = _.filter(filtered_data, { [this.props.filters.field]: this.props.filters.buttons[this.state.filter_button-1].value });
@@ -215,33 +215,12 @@ export class Table extends React.Component {
 			}
 		}
 
-		// if (this.state.filter_button && _.get(this.props.filters, 'buttons.'+(this.state.filter_button-1)+'.value', null) !== null) {
-		// 	if (this.props.filters.buttons.length <= 5 ) {
-		// 		filtered_data = _.filter(filtered_data, { [this.props.filters.field]: this.props.filters.buttons[this.state.filter_button-1].value }); 
-		// 	} else {
-		// 		console.error(this.state.filter_button);
-		// 		filtered_data = _.filter(filtered_data, { [this.props.filters.field]: this.state.filter_button }); 
-		// 	}
-		// }
-
-		/* Display ---------------------------------*/
+		/* Limit --------------------------------------*/
 
 		var page = this.state.page;
 		var display_data = (this.state.limit > 0)
 			? filtered_data.slice(page * this.state.limit, page * this.state.limit + this.state.limit)
 			: filtered_data;
-
-		/* Columns ---------------------------------*/
-
-		var columns = (this.props.columns.length) ? this.props.columns.map((column, index) => {
-			var sortindex = (this.state.order) ? this.state.order.fields.indexOf(column.field) : -1;
-			var sort = (sortindex > -1) ? ((this.state.order.direction[sortindex] === 'asc') ? 'sort-up' : 'sort-down' ) : null;
-			return ( 
-				<th key={ 'th'+index } style={{ whiteSpace: 'nowrap', width: ((column.max) ? '100%': 'auto') }}><a style={{ cursor: 'pointer' }} onClick={ this.columnSort.bind(this, column) }>
-					{ column.name.toUpperCase() }<i className={ 'fa fa-'+sort } style={{ color: '#aaaaaa', marginLeft: '7px' }} />
-				</a></th>
-			);
-		}) : null;
 
 		/* Pagination ---------------------------------*/
 
@@ -265,11 +244,31 @@ export class Table extends React.Component {
 			}
 		}
 
+		/* Columns Headings ---------------------------------*/	
+
+		var columns = (this.props.columns.length) ? this.props.columns.map((column, index) => {
+
+			var sortindex = (this.state.order) ? this.state.order.fields.indexOf(column.field) : -1;
+			var sort = (sortindex > -1) ? ((this.state.order.direction[sortindex] === 'asc') ? 'sort-up' : 'sort-down' ) : null;
+			
+			var styles = { lineHeight: 1 };
+			if (column.width) styles.width = ((this.state.container_width - 10) * column.width / 100).toString() + 'px';
+
+			return ( 
+				<th key={ 'th'+index } style={ styles }><a style={{ cursor: 'pointer' }} onClick={ this.columnSort.bind(this, column) }>
+					{ column.name.toUpperCase() }<i className={ 'fa fa-'+sort } style={{ color: '#aaaaaa', marginLeft: '7px' }} />
+				</a></th>		
+			);
+		}) : null;	
+
 		/* Rows ------------------------------------*/
 
 		var rows = (display_data.length) ? display_data.map((item, row_index) => {
 
 			var inputProps = {};
+
+			/* Click ------------------------------------*/
+
 			if (this.props.click) {
 				inputProps.onClick = () => {
 					if (typeof this.props.click_callback === 'function') {
@@ -284,12 +283,13 @@ export class Table extends React.Component {
 			var fields = (this.props.columns.length) ? this.props.columns.map((column, column_index) => {
 
 				var styles = {};
-				if (column.nowrap || column.checkbox) {
-					styles.whiteSpace = 'nowrap';
-				}
-				if (column.max) {
-					styles.width = '100%';
-				}
+
+				/* NoWrap & Width ------------------------------------*/
+				
+				if (column.nowrap || column.checkbox) styles.whiteSpace = 'nowrap';
+				if (column.width) styles.width = ((this.state.container_width - 10) * column.width / 100).toString() + 'px';
+				
+				/* Data ------------------------------------*/
 
 				if (column.data) {
 
@@ -351,6 +351,7 @@ export class Table extends React.Component {
 								</td>
 							);
 						}
+
 					} else if (column.type == 'datepicker') {
 						console.error('EM Table: Field of type Datepicker cannot have a Data Link'); 
 					} else if (column.type == 'button') {
@@ -447,6 +448,8 @@ export class Table extends React.Component {
 				
 			}
 
+			/* Table Rows TR -------------------------------------*/
+
 			var tr_style = { cursor: ((this.props.click) ? 'pointer' : 'default'), ...highlight };
 			if (this.state.container_width > 0) tr_style.width = this.state.container_width;
 
@@ -465,8 +468,8 @@ export class Table extends React.Component {
 		if (this.props.filters && this.props.filters.buttons.length <= this.state.filter_limit) {
 			filters = (this.props.filters) ? this.props.filters.buttons.map((item, index) => {
 				return (
-					<label key={ 'filter'+index } className={'btn' + ((index == this.state.filter_button - 1) ? ' btn-primary active' : ' btn-white')} onClick={this.handleFilter.bind(this, index + 1)}>
-						<input type="radio" name="filters" value={this.state.filter_button} disabled={ this.state.disable_filter } /> {item.name}
+					<label key={ 'filter' + index } className={ 'btn' + ((index == this.state.filter_button - 1) ? ' btn-primary active' : ' btn-white')} onClick={this.handleFilter.bind(this, index + 1)}>
+						<input type="radio" name="filters" value={this.state.filter_button} /> {item.name}
 					</label>
 				)
 			}) : null;
@@ -513,8 +516,8 @@ export class Table extends React.Component {
 								</div>
 							}
 							{ filters && filters.length > this.state.filter_limit && 
-								<select className="form-control input-s-sm inline" name="limit" value={ this.state.filter_button } onChange={ this.handleFilterDropdown.bind(this) } disabled={ this.state.disable_filter }>
-									<option value="0">- Category Filter -</option>
+								<select className="form-control input-s-sm inline" name="limit" value={ this.state.filter_button } onChange={ this.handleFilterDropdown.bind(this) } >
+									<option value="0">- No Category Filter -</option>
 									{ filters  }
 								</select>
 							}
@@ -525,7 +528,7 @@ export class Table extends React.Component {
 								<div className="input-group">
 									<span style={{ position: 'relative' }}>
 										{ this.props.search && this.state.search &&
-											<i className="fas fa-times-circle" style={{ position: 'absolute', color: '#bbbbbb', zIndex: 9, right: '5px', top: '5px', fontSize: '20px', cursor: 'pointer' }} onClick={ () => { this.setState({ search: '', disable_filter: false }); } }></i>
+											<i className="fas fa-times-circle" style={{ position: 'absolute', color: '#bbbbbb', zIndex: 9, right: '5px', top: '5px', fontSize: '20px', cursor: 'pointer' }} onClick={ () => { this.setState({ search: '' }); } }></i>
 										}
 										{ this.props.search && 
 											<input name="search" placeholder="Search" type="text" className="form-control" value={ this.state.search } onChange={ this.handleSearch.bind(this) }/>

@@ -38414,7 +38414,6 @@ var Table = exports.Table = function (_React$Component) {
 
 			filter_button: 0,
 			filter_limit: 4,
-			disable_filter: false,
 
 			page: 0,
 			limit: 0,
@@ -38514,18 +38513,18 @@ var Table = exports.Table = function (_React$Component) {
 		value: function handleSearch(event) {
 			var _setState2;
 
-			this.setState((_setState2 = {}, _defineProperty(_setState2, event.target.name, event.target.value), _defineProperty(_setState2, 'page', 0), _defineProperty(_setState2, 'disable_filter', event.target.value != ''), _setState2));
+			this.setState((_setState2 = {}, _defineProperty(_setState2, event.target.name, event.target.value), _defineProperty(_setState2, 'page', 0), _setState2));
 		}
 	}, {
 		key: 'handleFilter',
 		value: function handleFilter(button) {
 			if (this.state.filter_button === button) button = 0;
-			this.setState({ filter_button: button });
+			this.setState({ filter_button: button, page: 0 });
 		}
 	}, {
 		key: 'handleFilterDropdown',
 		value: function handleFilterDropdown(event) {
-			this.setState({ filter_button: event.target.value });
+			this.setState({ filter_button: event.target.value, page: 0 });
 		}
 	}, {
 		key: 'handlePage',
@@ -38628,6 +38627,8 @@ var Table = exports.Table = function (_React$Component) {
 		value: function render() {
 			var _this2 = this;
 
+			/* Click Append ------------------------------------*/
+
 			var click_append = this.props.click_append ? this.props.click_append : '';
 
 			/* Sort ------------------------------------*/
@@ -38645,9 +38646,9 @@ var Table = exports.Table = function (_React$Component) {
 				return result;
 			}) : ordered_data;
 
-			/* Filtered --------------------------------*/
+			/* Filtered -----------------------------------*/
 
-			if (_.get(this.props.filters, 'buttons', null) && !this.state.disable_filter) {
+			if (_.get(this.props.filters, 'buttons', null)) {
 				// has buttons?
 				if (this.props.filters.buttons.length <= 5) {
 					if (this.state.filter_button && _.get(this.props.filters, 'buttons.' + (this.state.filter_button - 1) + '.value', null) !== null) {
@@ -38658,36 +38659,10 @@ var Table = exports.Table = function (_React$Component) {
 				}
 			}
 
-			// if (this.state.filter_button && _.get(this.props.filters, 'buttons.'+(this.state.filter_button-1)+'.value', null) !== null) {
-			// 	if (this.props.filters.buttons.length <= 5 ) {
-			// 		filtered_data = _.filter(filtered_data, { [this.props.filters.field]: this.props.filters.buttons[this.state.filter_button-1].value }); 
-			// 	} else {
-			// 		console.error(this.state.filter_button);
-			// 		filtered_data = _.filter(filtered_data, { [this.props.filters.field]: this.state.filter_button }); 
-			// 	}
-			// }
-
-			/* Display ---------------------------------*/
+			/* Limit --------------------------------------*/
 
 			var page = this.state.page;
 			var display_data = this.state.limit > 0 ? filtered_data.slice(page * this.state.limit, page * this.state.limit + this.state.limit) : filtered_data;
-
-			/* Columns ---------------------------------*/
-
-			var columns = this.props.columns.length ? this.props.columns.map(function (column, index) {
-				var sortindex = _this2.state.order ? _this2.state.order.fields.indexOf(column.field) : -1;
-				var sort = sortindex > -1 ? _this2.state.order.direction[sortindex] === 'asc' ? 'sort-up' : 'sort-down' : null;
-				return _react2.default.createElement(
-					'th',
-					{ key: 'th' + index, style: { whiteSpace: 'nowrap', width: column.max ? '100%' : 'auto' } },
-					_react2.default.createElement(
-						'a',
-						{ style: { cursor: 'pointer' }, onClick: _this2.columnSort.bind(_this2, column) },
-						column.name.toUpperCase(),
-						_react2.default.createElement('i', { className: 'fa fa-' + sort, style: { color: '#aaaaaa', marginLeft: '7px' } })
-					)
-				);
-			}) : null;
 
 			/* Pagination ---------------------------------*/
 
@@ -38713,11 +38688,36 @@ var Table = exports.Table = function (_React$Component) {
 				}
 			}
 
+			/* Columns Headings ---------------------------------*/
+
+			var columns = this.props.columns.length ? this.props.columns.map(function (column, index) {
+
+				var sortindex = _this2.state.order ? _this2.state.order.fields.indexOf(column.field) : -1;
+				var sort = sortindex > -1 ? _this2.state.order.direction[sortindex] === 'asc' ? 'sort-up' : 'sort-down' : null;
+
+				var styles = { lineHeight: 1 };
+				if (column.width) styles.width = ((_this2.state.container_width - 10) * column.width / 100).toString() + 'px';
+
+				return _react2.default.createElement(
+					'th',
+					{ key: 'th' + index, style: styles },
+					_react2.default.createElement(
+						'a',
+						{ style: { cursor: 'pointer' }, onClick: _this2.columnSort.bind(_this2, column) },
+						column.name.toUpperCase(),
+						_react2.default.createElement('i', { className: 'fa fa-' + sort, style: { color: '#aaaaaa', marginLeft: '7px' } })
+					)
+				);
+			}) : null;
+
 			/* Rows ------------------------------------*/
 
 			var rows = display_data.length ? display_data.map(function (item, row_index) {
 
 				var inputProps = {};
+
+				/* Click ------------------------------------*/
+
 				if (_this2.props.click) {
 					inputProps.onClick = function () {
 						if (typeof _this2.props.click_callback === 'function') {
@@ -38732,12 +38732,13 @@ var Table = exports.Table = function (_React$Component) {
 				var fields = _this2.props.columns.length ? _this2.props.columns.map(function (column, column_index) {
 
 					var styles = {};
-					if (column.nowrap || column.checkbox) {
-						styles.whiteSpace = 'nowrap';
-					}
-					if (column.max) {
-						styles.width = '100%';
-					}
+
+					/* NoWrap & Width ------------------------------------*/
+
+					if (column.nowrap || column.checkbox) styles.whiteSpace = 'nowrap';
+					if (column.width) styles.width = ((_this2.state.container_width - 10) * column.width / 100).toString() + 'px';
+
+					/* Data ------------------------------------*/
 
 					if (column.data) {
 
@@ -38946,6 +38947,8 @@ var Table = exports.Table = function (_React$Component) {
 					});
 				}
 
+				/* Table Rows TR -------------------------------------*/
+
 				var tr_style = _extends({ cursor: _this2.props.click ? 'pointer' : 'default' }, highlight);
 				if (_this2.state.container_width > 0) tr_style.width = _this2.state.container_width;
 
@@ -38969,7 +38972,7 @@ var Table = exports.Table = function (_React$Component) {
 					return _react2.default.createElement(
 						'label',
 						{ key: 'filter' + index, className: 'btn' + (index == _this2.state.filter_button - 1 ? ' btn-primary active' : ' btn-white'), onClick: _this2.handleFilter.bind(_this2, index + 1) },
-						_react2.default.createElement('input', { type: 'radio', name: 'filters', value: _this2.state.filter_button, disabled: _this2.state.disable_filter }),
+						_react2.default.createElement('input', { type: 'radio', name: 'filters', value: _this2.state.filter_button }),
 						' ',
 						item.name
 					);
@@ -39045,11 +39048,11 @@ var Table = exports.Table = function (_React$Component) {
 							),
 							filters && filters.length > this.state.filter_limit && _react2.default.createElement(
 								'select',
-								{ className: 'form-control input-s-sm inline', name: 'limit', value: this.state.filter_button, onChange: this.handleFilterDropdown.bind(this), disabled: this.state.disable_filter },
+								{ className: 'form-control input-s-sm inline', name: 'limit', value: this.state.filter_button, onChange: this.handleFilterDropdown.bind(this) },
 								_react2.default.createElement(
 									'option',
 									{ value: '0' },
-									'- Category Filter -'
+									'- No Category Filter -'
 								),
 								filters
 							)
@@ -39064,7 +39067,7 @@ var Table = exports.Table = function (_React$Component) {
 									'span',
 									{ style: { position: 'relative' } },
 									this.props.search && this.state.search && _react2.default.createElement('i', { className: 'fas fa-times-circle', style: { position: 'absolute', color: '#bbbbbb', zIndex: 9, right: '5px', top: '5px', fontSize: '20px', cursor: 'pointer' }, onClick: function onClick() {
-											_this2.setState({ search: '', disable_filter: false });
+											_this2.setState({ search: '' });
 										} }),
 									this.props.search && _react2.default.createElement('input', { name: 'search', placeholder: 'Search', type: 'text', className: 'form-control', value: this.state.search, onChange: this.handleSearch.bind(this) })
 								),
