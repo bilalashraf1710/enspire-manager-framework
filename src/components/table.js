@@ -53,12 +53,15 @@ export class Table extends React.Component {
 		window.addEventListener("resize", this.handleResize.bind(this));
 	}
 	componentDidUpdate() {
-		var storagekey = this.props.history.location.pathname.replace (/\//g, "_");
-		if (storagekey !== this.state.storagekey) {
-			this.loadSessionStorage();
+		if (this.props.savestate) {
+			if (this.props.pathname) {
+				var storagekey = this.props.pathname.replace (/\//g, "_");
+				if (storagekey !== this.state.storagekey) {
+					this.loadSessionStorage();
+				}
+				this.updateSessionStorage();
+			} else console.error('EM Table: page Pathname required for savestate');
 		}
-		// this.updateTableFields();
-		this.updateSessionStorage();
 	}
 
 	componentWillUnmount() {
@@ -67,11 +70,13 @@ export class Table extends React.Component {
 
 	loadSessionStorage() {
 		if (this.props.savestate) {
-			var storagekey = this.props.history.location.pathname.replace (/\//g, "_");
-			this.setState({ storagekey });
-			if (sessionStorage['table'+storagekey]) {
-				this.setState({ ...this.state, ...JSON.parse(sessionStorage['table'+storagekey])});
-			}
+			if (this.props.pathname) {
+				var storagekey = this.props.pathname.replace (/\//g, "_");
+				this.setState({ storagekey });
+				if (sessionStorage['table'+storagekey]) {
+					this.setState({ ...this.state, ...JSON.parse(sessionStorage['table'+storagekey])});
+				}
+			} else console.error('EM Table: page Pathname required for savestate');
 		}
 	}
 	updateSessionStorage() {
@@ -123,12 +128,9 @@ export class Table extends React.Component {
 	handleLast(max_page) {
 		this.setState({ page: max_page });
 	}
-	handleNewButton() {
-		if (this.props.new_callback) {
-			this.props.new_callback();
-		} else {
-			var new_append = (this.props.new_append) ? this.props.new_append : '';
-			this.props.history.push(this.props.click_url+'/0'+new_append);
+	handleButton() {
+		if (this.props.button_callback && typeof this.props.button_callback === 'function') {
+			this.props.button_callback();
 		}
 	}
 	handleToggleMultiple(id, e) {
@@ -183,10 +185,6 @@ export class Table extends React.Component {
 	}
 
 	render() {
-
-		/* Click Append ------------------------------------*/
-
-		var click_append = (this.props.click_append) ? this.props.click_append : '';
 
 		/* Sort ------------------------------------*/
 
@@ -269,14 +267,9 @@ export class Table extends React.Component {
 
 			/* Click ------------------------------------*/
 
-			if (this.props.click) {
+			if (this.props.click_callback && typeof this.props.click_callback === 'function') {
 				inputProps.onClick = () => {
-					if (typeof this.props.click_callback === 'function') {
-						this.props.click_callback(item[this.props.id]);
-					} else {
-						let hyperlink = this.props.click_url+'/'+item[this.props.id]+click_append;
-						this.props.history.push(hyperlink);
-					}
+					this.props.click_callback(item[this.props.id]);
 				}
 			}
 
@@ -448,9 +441,9 @@ export class Table extends React.Component {
 				
 			}
 
-			/* Table Rows TR -------------------------------------*/
+			/* Table Rows TR & Delete column-------------------------------------*/
 
-			var tr_style = { cursor: ((this.props.click) ? 'pointer' : 'default'), ...highlight };
+			var tr_style = { cursor: ((this.props.click_callback) ? 'pointer' : 'default'), ...highlight };
 			if (this.state.container_width > 0) tr_style.width = this.state.container_width;
 
 			return <tr key={ 'tr'+row_index } style={ tr_style }>
@@ -483,7 +476,7 @@ export class Table extends React.Component {
 		}
 
 		var buttonStyle = {};
-		if (this.props.new_in_ibox) buttonStyle = { position: 'absolute', right: '0px', top: '-52px' };
+		if (this.props.button_in_ibox) buttonStyle = { position: 'absolute', right: '0px', top: '-52px' };
 
 		/* Fixed height scrollable ---------------------------*/
 
@@ -525,7 +518,7 @@ export class Table extends React.Component {
 						</div>
 
 						<div className="col m-b-xs">
-							{ (this.props.search || this.props.new) && 
+							{ (this.props.search || this.props.button) && 
 								<div className="input-group">
 									<span style={{ position: 'relative', width: '100%' }}>
 										{ this.props.search && this.state.search &&
@@ -535,8 +528,8 @@ export class Table extends React.Component {
 											<input name="search" placeholder="Search" type="text" className="form-control" value={ this.state.search } onChange={ this.handleSearch.bind(this) }/>
 										}
 									</span>
-									{ this.props.new && 
-										<button type="button" className="btn btn-sm btn-primary ml-3" onClick={ this.handleNewButton.bind(this) } style={ buttonStyle }>{ this.props.new }</button>
+									{ this.props.button && 
+										<button type="button" className="btn btn-sm btn-primary ml-3" onClick={ this.handleButton.bind(this) } style={ buttonStyle }>{ this.props.button }</button>
 									}
 									{ this.props.button }
 								</div>

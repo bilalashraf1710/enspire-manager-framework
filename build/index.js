@@ -38457,12 +38457,15 @@ var Table = exports.Table = function (_React$Component) {
 	}, {
 		key: 'componentDidUpdate',
 		value: function componentDidUpdate() {
-			var storagekey = this.props.history.location.pathname.replace(/\//g, "_");
-			if (storagekey !== this.state.storagekey) {
-				this.loadSessionStorage();
+			if (this.props.savestate) {
+				if (this.props.pathname) {
+					var storagekey = this.props.pathname.replace(/\//g, "_");
+					if (storagekey !== this.state.storagekey) {
+						this.loadSessionStorage();
+					}
+					this.updateSessionStorage();
+				} else console.error('EM Table: page Pathname required for savestate');
 			}
-			// this.updateTableFields();
-			this.updateSessionStorage();
 		}
 	}, {
 		key: 'componentWillUnmount',
@@ -38473,11 +38476,13 @@ var Table = exports.Table = function (_React$Component) {
 		key: 'loadSessionStorage',
 		value: function loadSessionStorage() {
 			if (this.props.savestate) {
-				var storagekey = this.props.history.location.pathname.replace(/\//g, "_");
-				this.setState({ storagekey: storagekey });
-				if (sessionStorage['table' + storagekey]) {
-					this.setState(_extends({}, this.state, JSON.parse(sessionStorage['table' + storagekey])));
-				}
+				if (this.props.pathname) {
+					var storagekey = this.props.pathname.replace(/\//g, "_");
+					this.setState({ storagekey: storagekey });
+					if (sessionStorage['table' + storagekey]) {
+						this.setState(_extends({}, this.state, JSON.parse(sessionStorage['table' + storagekey])));
+					}
+				} else console.error('EM Table: page Pathname required for savestate');
 			}
 		}
 	}, {
@@ -38556,13 +38561,10 @@ var Table = exports.Table = function (_React$Component) {
 			this.setState({ page: max_page });
 		}
 	}, {
-		key: 'handleNewButton',
-		value: function handleNewButton() {
-			if (this.props.new_callback) {
-				this.props.new_callback();
-			} else {
-				var new_append = this.props.new_append ? this.props.new_append : '';
-				this.props.history.push(this.props.click_url + '/0' + new_append);
+		key: 'handleButton',
+		value: function handleButton() {
+			if (this.props.button_callback && typeof this.props.button_callback === 'function') {
+				this.props.button_callback();
 			}
 		}
 	}, {
@@ -38627,10 +38629,6 @@ var Table = exports.Table = function (_React$Component) {
 		key: 'render',
 		value: function render() {
 			var _this2 = this;
-
-			/* Click Append ------------------------------------*/
-
-			var click_append = this.props.click_append ? this.props.click_append : '';
 
 			/* Sort ------------------------------------*/
 
@@ -38719,14 +38717,9 @@ var Table = exports.Table = function (_React$Component) {
 
 				/* Click ------------------------------------*/
 
-				if (_this2.props.click) {
+				if (_this2.props.click_callback && typeof _this2.props.click_callback === 'function') {
 					inputProps.onClick = function () {
-						if (typeof _this2.props.click_callback === 'function') {
-							_this2.props.click_callback(item[_this2.props.id]);
-						} else {
-							var hyperlink = _this2.props.click_url + '/' + item[_this2.props.id] + click_append;
-							_this2.props.history.push(hyperlink);
-						}
+						_this2.props.click_callback(item[_this2.props.id]);
 					};
 				}
 
@@ -38948,9 +38941,9 @@ var Table = exports.Table = function (_React$Component) {
 					});
 				}
 
-				/* Table Rows TR -------------------------------------*/
+				/* Table Rows TR & Delete column-------------------------------------*/
 
-				var tr_style = _extends({ cursor: _this2.props.click ? 'pointer' : 'default' }, highlight);
+				var tr_style = _extends({ cursor: _this2.props.click_callback ? 'pointer' : 'default' }, highlight);
 				if (_this2.state.container_width > 0) tr_style.width = _this2.state.container_width;
 
 				return _react2.default.createElement(
@@ -38990,7 +38983,7 @@ var Table = exports.Table = function (_React$Component) {
 			}
 
 			var buttonStyle = {};
-			if (this.props.new_in_ibox) buttonStyle = { position: 'absolute', right: '0px', top: '-52px' };
+			if (this.props.button_in_ibox) buttonStyle = { position: 'absolute', right: '0px', top: '-52px' };
 
 			/* Fixed height scrollable ---------------------------*/
 
@@ -39062,7 +39055,7 @@ var Table = exports.Table = function (_React$Component) {
 						_react2.default.createElement(
 							'div',
 							{ className: 'col m-b-xs' },
-							(this.props.search || this.props.new) && _react2.default.createElement(
+							(this.props.search || this.props.button) && _react2.default.createElement(
 								'div',
 								{ className: 'input-group' },
 								_react2.default.createElement(
@@ -39073,10 +39066,10 @@ var Table = exports.Table = function (_React$Component) {
 										} }),
 									this.props.search && _react2.default.createElement('input', { name: 'search', placeholder: 'Search', type: 'text', className: 'form-control', value: this.state.search, onChange: this.handleSearch.bind(this) })
 								),
-								this.props.new && _react2.default.createElement(
+								this.props.button && _react2.default.createElement(
 									'button',
-									{ type: 'button', className: 'btn btn-sm btn-primary ml-3', onClick: this.handleNewButton.bind(this), style: buttonStyle },
-									this.props.new
+									{ type: 'button', className: 'btn btn-sm btn-primary ml-3', onClick: this.handleButton.bind(this), style: buttonStyle },
+									this.props.button
 								),
 								this.props.button
 							)
