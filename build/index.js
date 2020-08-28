@@ -38702,7 +38702,7 @@ var Table = exports.Table = function (_React$Component) {
 					{ key: 'th' + index, style: styles },
 					_react2.default.createElement(
 						'a',
-						{ style: { cursor: 'pointer' }, onClick: _this2.columnSort.bind(_this2, column) },
+						{ style: { cursor: 'pointer', whiteSpace: 'nowrap' }, onClick: _this2.columnSort.bind(_this2, column) },
 						column.name.toUpperCase(),
 						_react2.default.createElement('i', { className: 'fa fa-' + sort, style: { color: '#aaaaaa', marginLeft: '7px' } })
 					)
@@ -39070,8 +39070,7 @@ var Table = exports.Table = function (_React$Component) {
 									'button',
 									{ type: 'button', className: 'btn btn-sm btn-primary ml-3', onClick: this.handleButton.bind(this), style: buttonStyle },
 									this.props.button
-								),
-								this.props.button
+								)
 							)
 						)
 					),

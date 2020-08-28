@@ -253,9 +253,11 @@ export class Table extends React.Component {
 			if (column.width) styles.width = ((this.state.container_width - 10) * column.width / 100).toString() + 'px';
 
 			return ( 
-				<th key={ 'th'+index } style={ styles }><a style={{ cursor: 'pointer' }} onClick={ this.columnSort.bind(this, column) }>
-					{ column.name.toUpperCase() }<i className={ 'fa fa-'+sort } style={{ color: '#aaaaaa', marginLeft: '7px' }} />
-				</a></th>		
+				<th key={ 'th'+index } style={ styles }>
+					<a style={{ cursor: 'pointer', whiteSpace: 'nowrap' }} onClick={ this.columnSort.bind(this, column) }>
+						{ column.name.toUpperCase() }<i className={ 'fa fa-'+sort } style={{ color: '#aaaaaa', marginLeft: '7px' }} />
+					</a>
+				</th>		
 			);
 		}) : null;	
 
@@ -531,7 +533,6 @@ export class Table extends React.Component {
 									{ this.props.button && 
 										<button type="button" className="btn btn-sm btn-primary ml-3" onClick={ this.handleButton.bind(this) } style={ buttonStyle }>{ this.props.button }</button>
 									}
-									{ this.props.button }
 								</div>
 							}
 						</div>
