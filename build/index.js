@@ -38026,7 +38026,7 @@ function CloseX(props) {
 
 	return _react2.default.createElement(
 		'div',
-		{ style: _extends({ position: 'absolute', right: '40px', cursor: 'pointer', zIndex: '100' }, props.style), onClick: props.onClick.bind(this) },
+		{ style: _extends({ position: 'absolute', right: '20px', marginTop: '5px', cursor: 'pointer', zIndex: '100' }, props.style), onClick: props.onClick.bind(this) },
 		_react2.default.createElement('i', { className: 'fas fa-times', style: { fontSize: '38px', color: '#bbbbbb' } })
 	);
 }
@@ -38264,46 +38264,12 @@ var Sparkline = exports.Sparkline = function (_React$Component) {
 	function Sparkline(props) {
 		_classCallCheck(this, Sparkline);
 
-		var _this = _possibleConstructorReturn(this, (Sparkline.__proto__ || Object.getPrototypeOf(Sparkline)).call(this, props));
-
-		_this.state = {};
-		_this.field_ref = _react2.default.createRef();
-		return _this;
+		return _possibleConstructorReturn(this, (Sparkline.__proto__ || Object.getPrototypeOf(Sparkline)).call(this, props));
 	}
 
 	_createClass(Sparkline, [{
-		key: 'toSparkline',
-		value: function toSparkline(start_date, end_date, graph_line) {
-
-			var result = [];
-			var curr_date = moment(start_date);
-
-			if (Array.isArray(graph_line)) {
-				if (graph_line.length > 0) {
-
-					while (curr_date.format('YYYY-MM-DD') < end_date) {
-
-						var next = _.find(graph_line, function (o) {
-							return moment(o, 'x').month() === curr_date.month();
-						});
-
-						if (next) {
-							result.push(next[1]);
-						} else {
-							result.push(0);
-						}
-						curr_date = curr_date.add(1, 'month');
-					}
-				}
-			}
-			return result;
-		}
-	}, {
 		key: 'loadGraph',
 		value: function loadGraph() {
-
-			var start_date = moment().subtract(1, 'year').format('YYYY-MM-DD');
-			var end_date = moment().format('YYYY-MM-DD');
 
 			var max = 0;
 			var min = 0;
@@ -38327,7 +38293,7 @@ var Sparkline = exports.Sparkline = function (_React$Component) {
 			if (max2) if (max2 > max) max = max2;
 			if (min2) if (min2 < min) min = min2;
 
-			$('#sparkline' + this.props.id).sparkline(this.toSparkline(start_date, end_date, this.props.line1), {
+			$('#sparkline' + this.props.key).sparkline(this.props.line1, {
 				type: 'line',
 				width: '100%',
 				height: '50',
@@ -38337,7 +38303,7 @@ var Sparkline = exports.Sparkline = function (_React$Component) {
 				fillColor: "transparent"
 			});
 
-			$('#sparkline' + this.props.id).sparkline(this.toSparkline(start_date, end_date, this.props.line2), {
+			$('#sparkline' + this.props.key).sparkline(this.props.line2, {
 				type: 'line',
 				width: '100%',
 				height: '50',
@@ -38352,7 +38318,7 @@ var Sparkline = exports.Sparkline = function (_React$Component) {
 		key: 'render',
 		value: function render() {
 
-			return _react2.default.createElement('div', { id: 'sparkline' + this.props.id, style: { width: '100%', height: '50px', borderTop: '1px solid #eeeeee', borderBottom: '1px solid #eeeeee' } });
+			return _react2.default.createElement('div', { id: 'sparkline' + this.props.key, style: { width: '100%', height: '50px', borderTop: '1px solid #eeeeee', borderBottom: '1px solid #eeeeee' } });
 		}
 	}]);
 
