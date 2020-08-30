@@ -1,7 +1,5 @@
 import React from 'react';
 
-var moment = require('moment'); 
-
 export class Sparkline extends React.Component {
 
 	constructor(props) {
@@ -24,23 +22,23 @@ export class Sparkline extends React.Component {
 		if (max2) if (max2 > max) max = max2;
 		if (min2) if (min2 < min) min = min2;
 
-		$('#sparkline'+this.props.key).sparkline(this.props.line1, {
+		$('#sparkline'+this.props.id).sparkline(this.props.line1, {
 			type: 'line',
 			width: '100%',
-			height: '50',
+			height: this.props.height,
 			chartRangeMin: min,
 			chartRangeMax: max,
-			lineColor: '#1ab394',
+			lineColor: this.props.color1,
 			fillColor: "transparent",
 		});
 
-		$('#sparkline'+this.props.key).sparkline(this.props.line2, {
+		$('#sparkline'+this.props.id).sparkline(this.props.line2, {
 			type: 'line',
 			width: '100%',
-			height: '50',
+			height: this.props.height,
 			chartRangeMin: min,
 			chartRangeMax: max,
-			lineColor: '#BBBBBB',
+			lineColor: this.props.color2,
 			fillColor: "transparent",
 			composite: true,
 		});
@@ -49,7 +47,7 @@ export class Sparkline extends React.Component {
 	render() {
 
 		return (
-			<div id={ 'sparkline'+this.props.key } style={{ width: '100%', height: '50px', borderTop: '1px solid #eeeeee', borderBottom: '1px solid #eeeeee' }}></div>
+			<div id={ 'sparkline'+this.props.id } style={{ width: '100%', height: this.props.height + 'px', borderTop: this.props.border, borderBottom: this.props.border, backgroundColor: this.props.bgcolor }}></div>
 		);
 	}
 }

@@ -149,7 +149,7 @@ export class Table extends React.Component {
 	formatItem(item, column) {
 		if (column.type === 'date') {
 			if (column.format) {
-				return moment(item[column.field]).format(column.format);
+				return moment(item[column.field].toDate()).format(column.format);
 			} else console.error('EM Table: Format required for Date field');
 
 		} else if (column.type === 'number') {
