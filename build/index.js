@@ -38226,6 +38226,8 @@ var Graph = exports.Graph = function (_React$Component) {
 	}, {
 		key: 'renderGraph',
 		value: function renderGraph() {
+			var _this2 = this;
+
 			var options = {
 				series: {
 					bars: {
@@ -38264,7 +38266,9 @@ var Graph = exports.Graph = function (_React$Component) {
 					min: 0,
 					ticks: 4,
 					tickFormatter: function tickFormatter(y) {
-						return '$ ' + y.toString().replace(/\B(?=(?:\d{3})+(?!\d))/g, ",");
+						if (_this2.props.units == 'dollars') return '$ ' + y.toString().replace(/\B(?=(?:\d{3})+(?!\d))/g, ",");
+						if (_this2.props.units == 'hours') return y.toString() + ' hrs';
+						return y.toString();
 					}
 				},
 				tooltip: {

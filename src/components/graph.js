@@ -53,7 +53,9 @@ export class Graph extends React.Component {
 				min: 0,
 				ticks: 4,
 				tickFormatter: (y) => {
-					return '$ ' + y.toString().replace(/\B(?=(?:\d{3})+(?!\d))/g, ",");
+					if (this.props.units == 'dollars') return '$ ' + y.toString().replace(/\B(?=(?:\d{3})+(?!\d))/g, ",");
+					if (this.props.units == 'hours') return y.toString() + ' hrs';
+					return y.toString();
 				}
 			},
 			tooltip: {
