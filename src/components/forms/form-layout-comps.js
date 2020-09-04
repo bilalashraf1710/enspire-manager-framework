@@ -1,9 +1,9 @@
 import React, { Fragment } from 'react';
-import { Input } from './input';
-import { Select } from './select';
-import { Checkbox } from './checkbox';
-import { Textarea } from './textarea';
-import { Dropzone } from './dropzone';
+import { Input } from '../form-elements/input';
+import { Select } from '../form-elements/select';
+import { Checkbox } from '../form-elements/checkbox';
+import { Textarea } from '../form-elements/textarea';
+import { Dropzone } from '../form-elements/dropzone';
 
 
 export default function FormBuilderComps(props) {
@@ -125,9 +125,12 @@ export default function FormBuilderComps(props) {
 				className={ props.field.grid }
 				label={ props.field.label }
 				field={ props.field.field }
+				storage={ props.field.dropzone.storage }
+				storageRef={ props.field.dropzone.storageRef }
 				bin={ props.field.dropzone.bin } 
 				directory={ props.field.dropzone.directory } 
-				filename={ (props.props.record[props.field.field]) ? props.props.record[props.field.field] : '' } 
+				filename={ props.field.dropzone.filename }
+				image={ (props.props.record[props.field.field]) ? props.props.record[props.field.field] : '' } 
 				multiple={ false }
 				onChange={ props.props.callbacks.dropzone.bind(this) } 
 				maxHeight={ props.field.dropzone.height }

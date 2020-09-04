@@ -1,5 +1,5 @@
 import React from 'react';
-import { ValidateMessage } from './validate_message';
+import { ValidateMessage } from './validate-message';
 import DatePicker from "react-datepicker";
 
 var _ = require('lodash');
