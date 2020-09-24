@@ -5,10 +5,12 @@ export function Avatar(props) {
 
 	var initials = '';
 
-	if (props.name) {
+	if (props.name && !props.image) {
 		var name_array = props.name.split(' ');
-		if (name_array.length >= 3) {
-			initials = name_array[0] + name_array[1] + name_array[2];
+		if (name_array.length == 2) {
+			initials = name_array[0].charAt(0) + name_array[1].charAt(0);
+		} else if (name_array.length >= 3) {
+			initials = name_array[0].charAt(0) + name_array[1].charAt(0) + name_array[2].charAt(0);
 		} else {
 			initials = props.name.substring(0, 3);
 		}
@@ -23,7 +25,7 @@ export function Avatar(props) {
 				display: 'flex', 
 				alignItems: 'center', 
 				justifyContent: 'center', 
-				fontSize: props.fontSize + 'px',
+				fontSize: (props.fontSize) ? props.fontSize + 'px' : '38px',
 				color: props.color,
 				backgroundColor: (props.bgColor) ? props.bgColor : 'none',
 				backgroundImage: (props.image) ? 'url(' + props.image + ')' : 'none',

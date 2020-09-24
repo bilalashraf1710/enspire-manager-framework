@@ -44,7 +44,7 @@ export class Select extends React.Component {
 			<div className={ 'form-group '+this.props.className+' '+((this.state.error)?'has-error':'') }>
 				<label>{ this.props.label + ((this.props.required)?' *':'') }</label> 
 				<select 
-					className="form-control" 
+					className="form-control form-control-sm" 
 					name={ this.props.name } 
 					onChange={ this.props.onChange.bind(this) } 
 					ref={ this.field_ref } 

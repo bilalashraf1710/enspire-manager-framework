@@ -48,7 +48,7 @@ export class Textarea extends React.Component {
 
 				<textarea 
 					autoComplete="off" 
-					className="form-control" 
+					className="form-control form-control-sm" 
 					name={ this.props.name } 
 					onChange={ this.props.onChange.bind(this) } 
 					placeholder={ this.props.placeholder } 

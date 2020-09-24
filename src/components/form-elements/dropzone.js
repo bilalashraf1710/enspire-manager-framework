@@ -9,7 +9,7 @@ export class Dropzone extends React.Component {
 		this.state = {
 			hover: false,
 			uploading: false,
-			progress: 0,
+			progress: 1, // Keeps screen from jumping when upload starts
 			counter: 0,
 		};
 	}
@@ -51,12 +51,8 @@ export class Dropzone extends React.Component {
 		if (file) this.uploadFile(file);
 	}
 	removeFile() {
-		ModalAlert({
-			text: 'The Existing Image will be Removed!',
-			title: 'Are you sure?',
-			type: 'warning',
-			callback_success: () => { this.props.onChange(this.props.field, null) },
-		});
+		this.props.onChange(this.props.field, null)
+		window.toastr.info('The image will be permanently removed or replaced only after Saving', 'Image Removed');
 	}
 	chooseFile(e) {
 		var file = e.target.files[0];
@@ -70,25 +66,24 @@ export class Dropzone extends React.Component {
 	}
 	uploadFirestore(file) {
 		
-		console.error(file);
 		var metadata = { contentType: file.type };
 		var filename = ((this.props.directory) ? this.props.directory + '/' : '') + ((this.props.filename) ? this.props.filename : (Date.now()));
-		var uploadTask = this.props.storageRef.child('companies/' + this.props.bin + '/' + filename).put(file, metadata);
+		var uploadTask = this.props.storageRef.child(this.props.bin + '/' + filename).put(file, metadata);
 
-		console.error(filename);
-		this.setState({ hover: true, uploading: true, progress: 3 });
+		this.setState({ hover: true, uploading: true, progress: 1 });
 
 		uploadTask.on('state_changed', (snapshot) => {
 			var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-			console.error(progress);
 			this.setState({ progress: progress });
 		}, (error) => {
-			console.log(error);
+			console.error(error);
 		}, () => {
-			this.setState({ progress: 0, hover: false, uploading: false });
 			uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
 				this.props.onChange(this.props.field, downloadURL);
 			});
+			setTimeout(() => {
+				this.setState({ progress: 1, hover: false, uploading: false });
+			}, 500);
 		});		
 	}
 	uploadS3(file) {

@@ -91,8 +91,13 @@ export class Table extends React.Component {
 
 	handleResize() {
 		if (this.props.container_id) {
-			var container_height = (document.getElementById(this.props.container_id)) ? document.getElementById(this.props.container_id).clientHeight : 0;
-			var container_width = (document.getElementById(this.props.container_id)) ? (document.getElementById(this.props.container_id).querySelectorAll('tbody')[0]).clientWidth : 0;
+			var container_height = 0;
+			var container_width = 0;
+
+			if (document.getElementById(this.props.container_id) && document.getElementById(this.props.container_id).querySelectorAll('tbody')[0]) {
+				container_height = document.getElementById(this.props.container_id).clientHeight;
+				container_width = (document.getElementById(this.props.container_id).querySelectorAll('tbody')[0]).clientWidth;
+			}
 			this.setState({ container_height, container_width });
 		}
 	}

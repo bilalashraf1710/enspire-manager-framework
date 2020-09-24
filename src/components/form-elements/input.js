@@ -64,7 +64,7 @@ export class Input extends React.Component {
 					{ this.props.type !== 'date'
 						?	<input 
 								autoComplete="off" 
-								className="form-control" 
+								className="form-control form-control-sm" 
 								name={ this.props.name } 
 								onChange={ this.props.onChange.bind(this) } 
 								placeholder={ this.props.placeholder } 
@@ -74,7 +74,7 @@ export class Input extends React.Component {
 								{ ...inputProps }
 							/>
 						:	<DatePicker
-								className="form-control" 
+								className="form-control form-control-sm" 
 								dateFormat="yyyy-MM-dd"
 								selected={ selected }
 								onChange={ this.props.onChange.bind(this, this.props.name) }
