@@ -14,7 +14,7 @@ export class PasswordReset extends React.Component {
 		};
 	}
 	componentDidMount() {
-		if (this.props.match.params.handle !== 'default' && !this.props.auth.company?.id) {
+		if (this.props.match.params.handle !== 'default' && !this.props.company.company?.id) {
 			this.setState({ loading: true });
 			this.props.dispatch(actions_authentication.getCompany(this.props.match.params.handle, this.props.firebase, () => {
 				this.setState({ loading: false });
@@ -47,10 +47,10 @@ export class PasswordReset extends React.Component {
 								<Spinner />
 							</div>
 						: 	<>
-								{ this.props.auth.company
+								{ this.props.company.company
 									? 	<div style={{ margin: '20px 0' }}>
-											<img src={this.props.auth.company.logo} width="100%" alt={this.props.auth.company.name + ' Logo'} />
-											<h3>{this.props.auth.company.name}</h3>
+											<img src={this.props.company.company.logo} width="100%" alt={this.props.company.company.name + ' Logo'} />
+											<h3>{this.props.company.company.name}</h3>
 										</div>
 									: 	<div style={{ margin: '20px 0' }}>
 											<img src={'images/logo.png'} width="100%" alt="Mobile Track Logo" />
@@ -68,7 +68,7 @@ export class PasswordReset extends React.Component {
 								<input type="text" name="email" className="form-control" placeholder="Email Address" value={ this.state.email } onChange={ this.handleChange.bind(this) } />
 							</div>
 							{ !this.state.authorizing
-								? <button type="submit" className="btn btn-primary block full-width m-b" disabled={ this.props.auth.company_pending }>Send Password Reset</button>
+								? <button type="submit" className="btn btn-primary block full-width m-b" disabled={ this.props.company.company_pending }>Send Password Reset</button>
 								: <div style={{ margin: '15px 0' }}><Spinner /></div>
 							}
 						</form>

@@ -22,6 +22,10 @@ export class VerifyHandle extends React.Component {
 			this.props.dispatch(actions_authentication.verifyHandle(this.state.handle, this.props.firebase, (exists) => {
 				this.setState({ verifying: false });
 				if (exists) {
+					this.setState({ loading: true });
+					this.props.dispatch(actions_authentication.getCompany(this.props.match.params.handle, this.props.firebase, () => {
+						this.setState({ loading: false });
+					}));
 					this.props.history.push('/' + this.state.handle + '/login');
 				} else {
 					window.toastr.error('This company handle cannot be found.  Please check for errors and try again.', 'Not Found');

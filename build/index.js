@@ -38187,14 +38187,14 @@ var Login = /*#__PURE__*/function (_React$Component) {
   _createClass(Login, [{
     key: "componentDidMount",
     value: function componentDidMount() {
-      var _this$props$auth$comp,
+      var _this$props$company$c,
           _this2 = this;
 
       var user = this.props.firebase.auth().currentUser;
 
       if (user) {
         this.props.history.push(this.props.landing);
-      } else if (this.props.match.params.handle !== 'default' && !((_this$props$auth$comp = this.props.auth.company) === null || _this$props$auth$comp === void 0 ? void 0 : _this$props$auth$comp.id)) {
+      } else if (this.props.match.params.handle !== 'default' && !((_this$props$company$c = this.props.company.company) === null || _this$props$company$c === void 0 ? void 0 : _this$props$company$c.id)) {
         this.setState({
           loading: true
         });
@@ -38242,15 +38242,15 @@ var Login = /*#__PURE__*/function (_React$Component) {
         style: {
           margin: '60px 0'
         }
-      }, /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__spinner__["a" /* Spinner */], null)) : /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1_react___default.a.Fragment, null, this.props.auth.company ? /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement("div", {
+      }, /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__spinner__["a" /* Spinner */], null)) : /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1_react___default.a.Fragment, null, this.props.company.company ? /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement("div", {
         style: {
           margin: '20px 0'
         }
       }, /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement("img", {
-        src: this.props.auth.company.logo,
+        src: this.props.company.company.logo,
         width: "100%",
-        alt: this.props.auth.company.name + ' Logo'
-      }), /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement("h3", null, this.props.auth.company.name)) : /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement("div", {
+        alt: this.props.company.company.name + ' Logo'
+      }), /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement("h3", null, this.props.company.company.name)) : /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement("div", {
         style: {
           margin: '20px 0'
         }
@@ -38285,7 +38285,7 @@ var Login = /*#__PURE__*/function (_React$Component) {
       })), !this.state.authorizing ? /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement("button", {
         type: "submit",
         className: "btn btn-primary block full-width m-b",
-        disabled: this.props.auth.company_pending
+        disabled: this.props.company.company_pending
       }, "Login") : /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement("div", {
         style: {
           margin: '15px 0'
@@ -38362,10 +38362,10 @@ var PasswordReset = /*#__PURE__*/function (_React$Component) {
   _createClass(PasswordReset, [{
     key: "componentDidMount",
     value: function componentDidMount() {
-      var _this$props$auth$comp,
+      var _this$props$company$c,
           _this2 = this;
 
-      if (this.props.match.params.handle !== 'default' && !((_this$props$auth$comp = this.props.auth.company) === null || _this$props$auth$comp === void 0 ? void 0 : _this$props$auth$comp.id)) {
+      if (this.props.match.params.handle !== 'default' && !((_this$props$company$c = this.props.company.company) === null || _this$props$company$c === void 0 ? void 0 : _this$props$company$c.id)) {
         this.setState({
           loading: true
         });
@@ -38413,15 +38413,15 @@ var PasswordReset = /*#__PURE__*/function (_React$Component) {
         style: {
           margin: '60px 0'
         }
-      }, /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__spinner__["a" /* Spinner */], null)) : /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1_react___default.a.Fragment, null, this.props.auth.company ? /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement("div", {
+      }, /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_2__spinner__["a" /* Spinner */], null)) : /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_1_react___default.a.Fragment, null, this.props.company.company ? /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement("div", {
         style: {
           margin: '20px 0'
         }
       }, /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement("img", {
-        src: this.props.auth.company.logo,
+        src: this.props.company.company.logo,
         width: "100%",
-        alt: this.props.auth.company.name + ' Logo'
-      }), /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement("h3", null, this.props.auth.company.name)) : /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement("div", {
+        alt: this.props.company.company.name + ' Logo'
+      }), /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement("h3", null, this.props.company.company.name)) : /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement("div", {
         style: {
           margin: '20px 0'
         }
@@ -38446,7 +38446,7 @@ var PasswordReset = /*#__PURE__*/function (_React$Component) {
       })), !this.state.authorizing ? /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement("button", {
         type: "submit",
         className: "btn btn-primary block full-width m-b",
-        disabled: this.props.auth.company_pending
+        disabled: this.props.company.company_pending
       }, "Send Password Reset") : /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement("div", {
         style: {
           margin: '15px 0'
@@ -38524,15 +38524,15 @@ var UserNotFound = /*#__PURE__*/function (_React$Component) {
         }
       }, /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement("div", {
         className: "middle-box text-center loginscreen animated fadeInDown"
-      }, /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement("div", null, this.props.auth.company ? /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement("div", {
+      }, /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement("div", null, this.props.company.company ? /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement("div", {
         style: {
           margin: '20px 0'
         }
       }, /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement("img", {
-        src: this.props.auth.company.logo,
+        src: this.props.company.company.logo,
         width: "100%",
-        alt: this.props.auth.company.name + ' Logo'
-      }), /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement("h3", null, this.props.auth.company.name)) : /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement("div", {
+        alt: this.props.company.company.name + ' Logo'
+      }), /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement("h3", null, this.props.company.company.name)) : /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement("div", {
         style: {
           margin: '20px 0'
         }
@@ -38635,6 +38635,16 @@ var VerifyHandle = /*#__PURE__*/function (_React$Component) {
           });
 
           if (exists) {
+            _this2.setState({
+              loading: true
+            });
+
+            _this2.props.dispatch(__WEBPACK_IMPORTED_MODULE_0__authentication_actions__["b" /* getCompany */](_this2.props.match.params.handle, _this2.props.firebase, function () {
+              _this2.setState({
+                loading: false
+              });
+            }));
+
             _this2.props.history.push('/' + _this2.state.handle + '/login');
           } else {
             window.toastr.error('This company handle cannot be found.  Please check for errors and try again.', 'Not Found');

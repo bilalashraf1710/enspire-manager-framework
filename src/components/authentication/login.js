@@ -18,7 +18,7 @@ export class Login extends React.Component {
 		var user = this.props.firebase.auth().currentUser;
 		if (user) {
 			this.props.history.push(this.props.landing);
-		} else if (this.props.match.params.handle !== 'default' && !this.props.auth.company?.id) {
+		} else if (this.props.match.params.handle !== 'default' && !this.props.company.company?.id) {
 			this.setState({ loading: true });
 			this.props.dispatch(actions_authentication.getCompany(this.props.match.params.handle, this.props.firebase, () => {
 				this.setState({ loading: false });
@@ -50,10 +50,10 @@ export class Login extends React.Component {
 								<Spinner />
 							</div>
 							: <>
-								{ this.props.auth.company
+								{ this.props.company.company
 									? <div style={ { margin: '20px 0' } }>
-										<img src={ this.props.auth.company.logo } width="100%" alt={ this.props.auth.company.name + ' Logo' } />
-										<h3>{ this.props.auth.company.name }</h3>
+										<img src={ this.props.company.company.logo } width="100%" alt={ this.props.company.company.name + ' Logo' } />
+										<h3>{ this.props.company.company.name }</h3>
 									</div>
 									: <div style={ { margin: '20px 0' } }>
 										<img src={ 'images/logo.png' } width="100%" alt="Mobile Track Logo" />
@@ -70,7 +70,7 @@ export class Login extends React.Component {
 								<input type="password" name="password" className="form-control" placeholder="Password" value={ this.state.password } onChange={ this.handleChange.bind(this) } autoComplete="off" />
 							</div>
 							{ !this.state.authorizing
-								? <button type="submit" className="btn btn-primary block full-width m-b" disabled={ this.props.auth.company_pending }>Login</button>
+								? <button type="submit" className="btn btn-primary block full-width m-b" disabled={ this.props.company.company_pending }>Login</button>
 								: <div style={ { margin: '15px 0' } }><Spinner /></div>
 							}
 
