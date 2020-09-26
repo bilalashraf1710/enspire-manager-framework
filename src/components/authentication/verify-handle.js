@@ -23,7 +23,7 @@ export class VerifyHandle extends React.Component {
 				this.setState({ verifying: false });
 				if (exists) {
 					this.setState({ loading: true });
-					this.props.dispatch(actions_authentication.getCompany(this.props.match.params.handle, this.props.firebase, () => {
+					this.props.dispatch(actions_authentication.getCompany(this.state.handle, this.props.firebase, () => {
 						this.setState({ loading: false });
 					}));
 					this.props.history.push('/' + this.state.handle + '/login');
