@@ -42625,7 +42625,7 @@ var VerifyHandle = /*#__PURE__*/function (_React$Component) {
               });
             }));
 
-            _this2.props.history.push('/' + _this2.state.handle + '/login');
+            _this2.props.history.push('/' + _this2.state.handle);
           } else {
             window.toastr.error('This company handle cannot be found.  Please check for errors and try again.', 'Not Found');
           }
