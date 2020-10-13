@@ -175,6 +175,11 @@ export class Table extends React.Component {
 
 		} else {
 			let result = (item[column.field]) ? item[column.field].toString().replace(/_/g, " ") : ''; // replace _ with space 
+			if (item._highlight) {
+				item._highlight.forEach((word) => {
+					result = result.replace(new RegExp(word, "i"), (match) => { return '<mark>' + match + '</mark>' });
+				});
+			}
 			return ((column.prefix) ? column.prefix : '') + result + 
 				((column.postfix) ? column.postfix : '');
 		}
@@ -282,7 +287,7 @@ export class Table extends React.Component {
 
 			var fields = (this.props.columns.length) ? this.props.columns.map((column, column_index) => {
 
-				var styles = { textTransform: 'capitalize' };
+				var styles = {};
 
 				/* NoWrap & Width ------------------------------------*/
 				
@@ -415,8 +420,8 @@ export class Table extends React.Component {
 								<div { ...inputProps } style={ styles } className="btn-group">
 									<button data-toggle="dropdown" className={ 'dropdown-toggle btn ' + buttonClass } aria-expanded="false" onClick={ (e) => e.stopPropagation() }>{ column.button.name }</button>
 									<ul className="dropdown-menu" x-placement="bottom-start" style={{ position: 'absolute',  top: '33px', left: '0px', willChange: 'top, left' }}>
-										{ column.multiple && <li><a className="dropdown-item" onClick={ this.handleToggleMultiple.bind(this, item[column.field]) }>Toggle Multiple</a></li> }
-										{ column.multiple && <li className="dropdown-divider"></li> }
+										{ column.button.multiple && <li><a className="dropdown-item" onClick={ this.handleToggleMultiple.bind(this, item[column.field]) }>Toggle Multiple</a></li> }
+										{ column.button.multiple && <li className="dropdown-divider"></li> }
 										{
 											column.button.links.map((link, link_index) => {
 												if (link.name == 'divider') return ( <li key={ 'dropdown' + link_index } className="dropdown-divider"></li> );
@@ -433,7 +438,7 @@ export class Table extends React.Component {
 					} else if (column.type == 'select') {
 						console.error('EM Table: field of type Select must have a Data Link'); 
 					} else {
-						return ( <td key={ 'td'+column_index } { ...inputProps } style={ styles }>{ this.formatItem(item, column) }</td> );
+						return (<td key={ 'td' + column_index } { ...inputProps } style={ styles } dangerouslySetInnerHTML={{ __html: this.formatItem(item, column) }}></td> );
 					}
 				}
 			}) : null;
@@ -483,7 +488,7 @@ export class Table extends React.Component {
 		}
 
 		var buttonStyle = {};
-		if (this.props.button_in_ibox) buttonStyle = { position: 'absolute', right: '0px', top: '-52px' };
+		if (this.props.button_in_ibox) buttonStyle = { position: 'absolute', right: '0px', top: (this.props.search) ? '-52px' : '-87px' };
 
 		/* Fixed height scrollable ---------------------------*/
 
@@ -509,23 +514,23 @@ export class Table extends React.Component {
 								</select>
 							</div>
 						}
-
-						<div className="col m-b-xs">
-							{ filters && filters.length <= this.state.filter_limit &&
-								<div className="btn-group btn-group-toggle" data-toggle="buttons">
-									{ filters }
-								</div>
-							}
-							{ filters && filters.length > this.state.filter_limit && 
-								<select className="form-control input-s-sm inline" name="limit" value={ this.state.filter_button } onChange={ this.handleFilterDropdown.bind(this) } >
-									<option value="0">- No Category Filter -</option>
-									{ filters  }
-								</select>
-							}
-						</div>
-
-						<div className="col m-b-xs">
-							{ (this.props.search || this.props.button) && 
+						{ filters &&
+							<div className="col m-b-xs">
+								{ filters.length <= this.state.filter_limit &&
+									<div className="btn-group btn-group-toggle" data-toggle="buttons">
+										{ filters }
+									</div>
+								}
+								{ filters.length > this.state.filter_limit && 
+									<select className="form-control input-s-sm inline" name="limit" value={ this.state.filter_button } onChange={ this.handleFilterDropdown.bind(this) } >
+										<option value="0">- No Category Filter -</option>
+										{ filters  }
+									</select>
+								}
+							</div>
+						}
+						{ (this.props.search || this.props.button) && 
+							<div className="col m-b-xs">
 								<div className="input-group">
 									<span style={{ position: 'relative', width: '100%' }}>
 										{ this.props.search && this.state.search &&
@@ -539,8 +544,8 @@ export class Table extends React.Component {
 										<button type="button" className="btn btn-sm btn-primary ml-3" onClick={ this.handleButton.bind(this) } style={ buttonStyle }>{ this.props.button }</button>
 									}
 								</div>
-							}
-						</div>
+							</div>
+						}
 					</form>
 
 					<div className="table-responsive-sm">

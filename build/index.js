@@ -43708,6 +43708,14 @@ var Table = /*#__PURE__*/function (_React$Component) {
       } else {
         var result = item[column.field] ? item[column.field].toString().replace(/_/g, " ") : ''; // replace _ with space 
 
+        if (item._highlight) {
+          item._highlight.forEach(function (word) {
+            result = result.replace(new RegExp(word, "i"), function (match) {
+              return '<mark>' + match + '</mark>';
+            });
+          });
+        }
+
         return (column.prefix ? column.prefix : '') + result + (column.postfix ? column.postfix : '');
       }
     }
@@ -43823,9 +43831,7 @@ var Table = /*#__PURE__*/function (_React$Component) {
         }
 
         var fields = _this2.props.columns.length ? _this2.props.columns.map(function (column, column_index) {
-          var styles = {
-            textTransform: 'capitalize'
-          };
+          var styles = {};
           /* NoWrap & Width ------------------------------------*/
 
           if (column.nowrap || column.checkbox) styles.whiteSpace = 'nowrap';
@@ -43974,10 +43980,10 @@ var Table = /*#__PURE__*/function (_React$Component) {
                     left: '0px',
                     willChange: 'top, left'
                   }
-                }, column.multiple && /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("li", null, /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("a", {
+                }, column.button.multiple && /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("li", null, /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("a", {
                   className: "dropdown-item",
                   onClick: _this2.handleToggleMultiple.bind(_this2, item[column.field])
-                }, "Toggle Multiple")), column.multiple && /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("li", {
+                }, "Toggle Multiple")), column.button.multiple && /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("li", {
                   className: "dropdown-divider"
                 }), column.button.links.map(function (link, link_index) {
                   if (link.name == 'divider') return /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("li", {
@@ -43997,8 +44003,11 @@ var Table = /*#__PURE__*/function (_React$Component) {
                 return /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("td", _extends({
                   key: 'td' + column_index
                 }, inputProps, {
-                  style: styles
-                }), _this2.formatItem(item, column));
+                  style: styles,
+                  dangerouslySetInnerHTML: {
+                    __html: _this2.formatItem(item, column)
+                  }
+                }));
               }
             }
         }) : null;
@@ -44069,7 +44078,7 @@ var Table = /*#__PURE__*/function (_React$Component) {
       if (this.props.button_in_ibox) buttonStyle = {
         position: 'absolute',
         right: '0px',
-        top: '-52px'
+        top: this.props.search ? '-52px' : '-87px'
       };
       /* Fixed height scrollable ---------------------------*/
 
@@ -44108,21 +44117,21 @@ var Table = /*#__PURE__*/function (_React$Component) {
         value: "100"
       }, "100"), /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("option", {
         value: "0"
-      }, "All"))), /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("div", {
+      }, "All"))), filters && /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("div", {
         className: "col m-b-xs"
-      }, filters && filters.length <= this.state.filter_limit && /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("div", {
+      }, filters.length <= this.state.filter_limit && /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("div", {
         className: "btn-group btn-group-toggle",
         "data-toggle": "buttons"
-      }, filters), filters && filters.length > this.state.filter_limit && /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("select", {
+      }, filters), filters.length > this.state.filter_limit && /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("select", {
         className: "form-control input-s-sm inline",
         name: "limit",
         value: this.state.filter_button,
         onChange: this.handleFilterDropdown.bind(this)
       }, /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("option", {
         value: "0"
-      }, "- No Category Filter -"), filters)), /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("div", {
+      }, "- No Category Filter -"), filters)), (this.props.search || this.props.button) && /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("div", {
         className: "col m-b-xs"
-      }, (this.props.search || this.props.button) && /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("div", {
+      }, /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("div", {
         className: "input-group"
       }, /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement("span", {
         style: {
