@@ -7,7 +7,7 @@
 Prop | Type | Description
 -----|------|------------
 **id: \*** | (string) | Field name from which _id_ will be provided
-**data: \*** | (object) | Data from which table data is drawn
+**data: \*** | (object) | Data from which table data is drawn.  If a _\_highlight_ field is included, occurances of that text will be marked with <mark> tags.
 **columns: \*** |(object array) | Column Object (See Column Object below)
 **order:** | (object) | Order Object (See Order Object below)
 **filters:** | (object) | Filter Object (See Filter Object below)
@@ -19,8 +19,6 @@ Prop | Type | Description
 **savestate:** | (boolean) | State state across screen instances
 **hide_header:** | (boolean) | Hide table header
 **click_callback:** | (function) | A callback function with _id_ parameter to be called when a Row is clicked.
-**link:** | (string || array) | field on which to link another data set.  If array, the first is the field for the additional data set, the second is the original dataset.
-**data:** | (object) | Additional dataset for linking
 **button:** | (string) | Label for button
 **button_in_ibox:** | (boolean) | If the table is rendered in an iBox, this will position the button up into the iBox header
 **button_callback:** | (function) A callback function to be called when Button is clicked.
@@ -40,10 +38,12 @@ Parameters | Type | Description
 **width:** | (int) | fixed column width in percent
 **nowarp:** | (bool) | Ensure the column does not wrap
 **max:** | (bool) | Sets column width to 100%, other columns take minimal space
-**type:** | (string) | One of the following: _date, number, select, datepicker, button, actions_ (See Column Parameters - Type below)
+**link:** | (string \|\| array) | Field on which to link another data set. If array, the first is the field for the additional data set, the second is the original dataset.  _Field_ above referrs to linked dataset.
+**data:** | (object) | Additional dataset for linking
+**type:** | (string) | One of the following: _date, number, select, datepicker, button, actions._ _Action_ requires the use of _button_ below to define button actions.  _Select_ requires the use of a linked dataset for the selection options.
 **format:** | (string) | Format based on Type e.g. ``{ type: 'date', format: 'MMMM Do, YYYY' }`` or ``{ type: 'number', format: 'usd' }``
-**button:** | (object) | Button Object used with Type _action_ (See Button Object below)
-**multiple:** | (boolean) | enable multiple selection mode
+**button:** | (object) | Button Object used with Types _button_ and _action_ (See Button Object below)
+**callback:** | (function) | Function to be called by Types _datepicker_ and _button._
 
 #### ORDER OBJECT
 
@@ -68,7 +68,8 @@ Parameter | Type | Description
 **name:** | (string) Label to appear on button
 **className:** | (string) Classname for button
 **activeClass:** | (string) Classname for active button
-**links:** | (object array) | Array of links with key/value pair: `name` and `callback`
+**links:** | (object array) | For _action_ button, array of key/value pair: `name` and `callback`
+**multiple:** | (boolean) | enable multiple selection mode in _Action._
 
 #### EXAMPLE:
 
