@@ -6,7 +6,6 @@
 
 Prop | Type | Description
 -----|------|------------
-**id: \*** | (string) | Field name from which _id_ will be provided
 **data: \*** | (object) | Data from which table data is drawn.  If a _\_highlight_ field is included, occurances of that text will be marked with <mark> tags.
 **columns: \*** |(object array) | Column Object (See Column Object below)
 **order:** | (object) | Order Object (See Order Object below)
@@ -18,7 +17,7 @@ Prop | Type | Description
 **search:** | (boolean) | Render a search field
 **savestate:** | (boolean) | State state across screen instances
 **hide_header:** | (boolean) | Hide table header
-**click_callback:** | (function) | A callback function with _id_ parameter to be called when a Row is clicked.
+**click_callback:** | (function) | A callback function with _item_ entire record parameter to be called when a Row is clicked.
 **button:** | (string) | Label for button
 **button_in_ibox:** | (boolean) | If the table is rendered in an iBox, this will position the button up into the iBox header
 **button_callback:** | (function) A callback function to be called when Button is clicked.
@@ -109,3 +108,16 @@ Parameter | Type | Description
     container_margin={ 270 }
 />
 ```
+
+## Ibox
+
+### Ibox PROP
+
+Prop | Type | Description
+-----|------|------------
+**title: \*** | (string) | Title for the iBox
+**show_spinner:** | (bool) | Whether or not to show loading Spinner
+**mini** | (bool) | display iBox as a small sized iBox
+**children** | (jsx) | displays children in content of iBox
+
+
