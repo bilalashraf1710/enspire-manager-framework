@@ -4,6 +4,7 @@ export { Avatar } from './components/avatar';
 export { Checkbox } from './components/form-elements/checkbox';
 export { Chip } from './components/chip';
 export { CloseX } from './components/closex';
+export { Contact } from './components/contact';
 export { Dropzone } from './components/form-elements/dropzone';
 export { FormBuilder } from './components/forms/form-layout';
 export { Graph } from './components/graph';

@@ -3,16 +3,24 @@ import { Spinner } from './spinner';
 
 export function Avatar(props) {
 
+	var address = '';
 	var initials = '';
 
 	if (props.name && !props.image) {
 		var name_array = props.name.split(' ');
-		if (name_array.length == 2) {
-			initials = name_array[0].charAt(0) + name_array[1].charAt(0);
-		} else if (name_array.length >= 3) {
-			initials = name_array[0].charAt(0) + name_array[1].charAt(0) + name_array[2].charAt(0);
+		var i = 0;
+		var x = 0;
+		if (Number.isInteger(parseInt(name_array[0]))) {
+			address = name_array[0];
+			i++;
+			x = 1;
+		}
+		if (name_array.length == (2 + x)) {
+			initials = name_array[i].charAt(0) + name_array[i + 1].charAt(0);
+		} else if (name_array.length >= (3 + x)) {
+			initials = name_array[i].charAt(0) + name_array[i + 1].charAt(0) + name_array[i + 2].charAt(0);
 		} else {
-			initials = props.name.substring(0, 3);
+			initials = props.name.substring(i, 3);
 		}
 	}
 
@@ -23,6 +31,7 @@ export function Avatar(props) {
 				width: props.size + 'px', 
 				height: props.size + 'px', 
 				display: 'flex', 
+				flexDirection: 'column',
 				alignItems: 'center', 
 				justifyContent: 'center', 
 				fontSize: (props.fontSize) ? props.fontSize + 'px' : '38px',
@@ -33,7 +42,10 @@ export function Avatar(props) {
 				backgroundPosition: 'center center',
 				border: props.border, 
 			} }>
-			<span className="text-uppercase">{ props.element ? props.element : initials }</span>
+			{ address &&
+				<div style={{ fontSize: '14px', marginBottom: '-14px' }}>{ address }</div>
+			}
+			<div className="text-uppercase">{ props.element ? props.element : initials }</div>
 		</div>
 
 	);

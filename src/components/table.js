@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import DatePicker from "react-datepicker";
+const escapeStringRegexp = require('escape-string-regexp');
 
 var _ = require('lodash');
 var moment = require('moment'); 
@@ -106,6 +107,11 @@ export class Table extends React.Component {
 	}
 	handleSearch(event) {
 		this.setState({ [event.target.name]: event.target.value, page: 0 });
+		if (typeof this.props.search_callback === 'function') this.props.search_callback(event.target.value);
+	}
+	handleClearSearch() {
+		this.setState({ search: '' });
+		if (typeof this.props.search_callback === 'function') this.props.search_callback('');
 	}
 	handleFilter(button) {
 		if (this.state.filter_button === button) button = 0;
@@ -154,7 +160,7 @@ export class Table extends React.Component {
 	formatItem(item, column) {
 		if (column.type === 'date') {
 			if (column.format) {
-				return moment(item[column.field].toDate()).format(column.format);
+				return moment(item[column.field], 'X').format(column.format);
 			} else console.error('EM Table: Format required for Date field');
 
 		} else if (column.type === 'number') {
@@ -175,9 +181,10 @@ export class Table extends React.Component {
 
 		} else {
 			let result = (item[column.field]) ? item[column.field].toString().replace(/_/g, " ") : ''; // replace _ with space 
-			if (item._highlight) {
-				item._highlight.forEach((word) => {
-					result = result.replace(new RegExp(word, "i"), (match) => { return '<mark>' + match + '</mark>' });
+			if (this.props.highlight) {
+				var highlight_words = this.props.highlight.split(" ");
+				if (Array.isArray(highlight_words)) highlight_words.forEach((word) => {
+					result = result.replace(new RegExp(escapeStringRegexp(word), "i"), (match) => { return '<mark>' + match + '</mark>' });
 				});
 			}
 			return ((column.prefix) ? column.prefix : '') + result + 
@@ -202,7 +209,7 @@ export class Table extends React.Component {
 
 		/* Search all Fields -----------------------*/
 
-		var filtered_data = (this.state.search) ? _.filter(ordered_data, (o) => {
+		var filtered_data = (this.state.search && !this.props.search_callback) ? _.filter(ordered_data, (o) => {
 			var result = false;
 			this.props.columns.forEach((k, index) => {
 				if (typeof o[k.field] === 'string' && o[k.field].toLowerCase().includes(this.state.search.toLowerCase())) result = true;
@@ -281,7 +288,7 @@ export class Table extends React.Component {
 
 			if (this.props.click_callback && typeof this.props.click_callback === 'function') {
 				inputProps.onClick = () => {
-					this.props.click_callback(item[this.props.id]);
+					this.props.click_callback(item);
 				}
 			}
 
@@ -443,19 +450,19 @@ export class Table extends React.Component {
 				}
 			}) : null;
 
-			var highlight = null;
-			if (this.props.highlight) {
-				this.props.highlight.forEach((entry, index) => {
-					if (item[entry.field] == entry.value) {
-						highlight = { border: '2px solid '+entry.border, backgroundColor: entry.color }
-					}
-				});
+			// var highlight = null;
+			// if (this.props.highlight) {
+			// 	this.props.highlight.forEach((entry, index) => {
+			// 		if (item[entry.field] == entry.value) {
+			// 			highlight = { border: '2px solid '+entry.border, backgroundColor: entry.color }
+			// 		}
+			// 	});
 				
-			}
+			// }
 
 			/* Table Rows TR & Delete column-------------------------------------*/
 
-			var tr_style = { cursor: ((this.props.click_callback) ? 'pointer' : 'default'), ...highlight };
+			var tr_style = { cursor: ((this.props.click_callback) ? 'pointer' : 'default') };
 			if (this.state.container_width > 0) tr_style.width = this.state.container_width;
 
 			return <tr key={ 'tr'+row_index } style={ tr_style }>
@@ -488,7 +495,7 @@ export class Table extends React.Component {
 		}
 
 		var buttonStyle = {};
-		if (this.props.button_in_ibox) buttonStyle = { position: 'absolute', right: '0px', top: (this.props.search) ? '-52px' : '-87px' };
+		if (this.props.button_in_ibox) buttonStyle = { position: 'absolute', right: '0px', top: '-52px' };
 
 		/* Fixed height scrollable ---------------------------*/
 
@@ -529,14 +536,14 @@ export class Table extends React.Component {
 								}
 							</div>
 						}
-						{ (this.props.search || this.props.button) && 
+						{ (this.props.show_search || this.props.button) && 
 							<div className="col m-b-xs">
 								<div className="input-group">
 									<span style={{ position: 'relative', width: '100%' }}>
-										{ this.props.search && this.state.search &&
-											<i className="fas fa-times-circle" style={{ position: 'absolute', color: '#bbbbbb', zIndex: 9, right: '5px', top: '5px', fontSize: '20px', cursor: 'pointer' }} onClick={ () => { this.setState({ search: '' }); } }></i>
+										{ this.props.show_search && this.state.search &&
+											<i className="fas fa-times-circle" style={{ position: 'absolute', color: '#bbbbbb', zIndex: 9, right: '5px', top: '5px', fontSize: '20px', cursor: 'pointer' }} onClick={ this.handleClearSearch.bind(this) }></i>
 										}
-										{ this.props.search && 
+										{ this.props.show_search && 
 											<input name="search" placeholder="Search" type="text" className="form-control" value={ this.state.search } onChange={ this.handleSearch.bind(this) }/>
 										}
 									</span>
