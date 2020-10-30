@@ -49,8 +49,8 @@ export class PasswordReset extends React.Component {
 						: 	<>
 								{ this.props.company.company
 									? 	<div style={{ margin: '20px 0' }}>
-											<img src={this.props.company.company.logo} width="100%" alt={this.props.company.company.name + ' Logo'} />
-											<h3>{this.props.company.company.name}</h3>
+											<img src={this.props.company.company.logoUrl} width="100%" alt={this.props.company.company.companyName + ' Logo'} />
+											<h3>{this.props.company.company.companyName}</h3>
 										</div>
 									: 	<div style={{ margin: '20px 0' }}>
 											<img src={'images/logo.png'} width="100%" alt="Mobile Track Logo" />
