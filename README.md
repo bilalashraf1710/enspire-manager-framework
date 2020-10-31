@@ -1,12 +1,17 @@
-# enspire-manager-framework
+# CHANGELOG
 
-## TABLE
+Version | Description of Changes
+--------|-----------------------
+3.0.3 | Updated of Company fields - *logoUrl*, *companyName*
+3.0.2 | **Table**, deprecation of *id* prop, *click_callback*  returns *item* entire record. **Table** record with *_highlight* field wrappes value with *\<mark>* tags. **Table** addition of *search* and *search_callback* props.  **Avatar** street numbers prefixed above text.  **Ibox** addition of *mini* prop for smaller footprint.
 
-### TABLE PROP
+# TABLES
+
+## TABLE PROP
 
 Prop | Type | Description
 -----|------|------------
-**data: \*** | (object) | Data from which table data is drawn.  If a _\_highlight_ field is included, occurances of that text will be marked with <mark> tags.
+**data: \*** | (object) | Data from which table data is drawn.  If a _\_highlight_ field is included, occurances of that text will be marked with *\<mark>* tags.
 **columns: \*** |(object array) | Column Object (See Column Object below)
 **order:** | (object) | Order Object (See Order Object below)
 **filters:** | (object) | Filter Object (See Filter Object below)
@@ -26,7 +31,7 @@ Prop | Type | Description
 **container_id:** | (string) | dom id for container for fixed height vertical table scrolling 
 **container_margin:** | (int) | vertical margin in pixels for determining column height
 
-#### COLUMN OBJECT
+### COLUMN OBJECT
 
 Parameters | Type | Description
 -----------|------|------------
@@ -44,14 +49,14 @@ Parameters | Type | Description
 **button:** | (object) | Button Object used with Types _button_ and _action_ (See Button Object below)
 **callback:** | (function) | Function to be called by Types _datepicker_ and _button._
 
-#### ORDER OBJECT
+### ORDER OBJECT
 
 Parameter | Type | Description
 ----------|------|------------
 **fields:** | (string array) | Fields for which to order on
 **direction:** | (string array) | Direction for sort, 'asc' or 'desc'
 
-#### FILTER OBJECT
+### FILTER OBJECT
 
 Parameter | Type | Description
 ----------|------|------------
@@ -60,7 +65,7 @@ Parameter | Type | Description
 **limit:** | (int) | Maximum number of filters to be displayed as buttons before converting to drop-down.
 **buttons:** | (object array) | Array of buttons with key/value pair `name` and `value`
 
-#### BUTTON OBJECT
+### BUTTON OBJECT
 
 Parameter | Type | Description
 ----------|------|------------
@@ -70,7 +75,7 @@ Parameter | Type | Description
 **links:** | (object array) | For _action_ button, array of key/value pair: `name` and `callback`
 **multiple:** | (boolean) | enable multiple selection mode in _Action._
 
-#### EXAMPLE:
+### EXAMPLE:
 
 ```
 <Table
@@ -109,9 +114,9 @@ Parameter | Type | Description
 />
 ```
 
-## Ibox
+# Ibox
 
-### Ibox PROP
+## Ibox PROP
 
 Prop | Type | Description
 -----|------|------------
