@@ -181,10 +181,11 @@ export class Table extends React.Component {
 
 		} else {
 			let result = (item[column.field]) ? item[column.field].toString().replace(/_/g, " ") : ''; // replace _ with space 
-			if (this.props.highlight) {
-				var highlight_words = this.props.highlight.split(" ");
+
+			if (this.props.highlight_search) {
+				var highlight_words = (this.props.search_query) ? this.props.search_query.split(" ") : this.state.search.split(" ");
 				if (Array.isArray(highlight_words)) highlight_words.forEach((word) => {
-					result = result.replace(new RegExp(escapeStringRegexp(word), "i"), (match) => { return '<mark>' + match + '</mark>' });
+					if (word) result = result.replace(new RegExp(escapeStringRegexp(word), "i"), (match) => { return '<mark>' + match + '</mark>' });
 				});
 			}
 			return ((column.prefix) ? column.prefix : '') + result + 
@@ -451,8 +452,8 @@ export class Table extends React.Component {
 			}) : null;
 
 			// var highlight = null;
-			// if (this.props.highlight) {
-			// 	this.props.highlight.forEach((entry, index) => {
+			// if (this.props.highlight_search) {
+			// 	this.props.highlight_search.forEach((entry, index) => {
 			// 		if (item[entry.field] == entry.value) {
 			// 			highlight = { border: '2px solid '+entry.border, backgroundColor: entry.color }
 			// 		}
@@ -463,6 +464,7 @@ export class Table extends React.Component {
 			/* Table Rows TR & Delete column-------------------------------------*/
 
 			var tr_style = { cursor: ((this.props.click_callback) ? 'pointer' : 'default') };
+			if (item._accent) tr_style = { ...tr_style, ...item._accent }
 			if (this.state.container_width > 0) tr_style.width = this.state.container_width;
 
 			return <tr key={ 'tr'+row_index } style={ tr_style }>

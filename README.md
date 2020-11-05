@@ -2,6 +2,7 @@
 
 Version | Description of Changes
 --------|-----------------------
+3.0.4 | Update *show_search*, *highlight_search*, and *search_query*. Addition of *_accent* object for CSS accent of a data row.
 3.0.3 | Updated of Company fields - *logoUrl*, *companyName*
 3.0.2 | **Table**, deprecation of *id* prop, *click_callback*  returns *item* entire record. **Table** record with *_highlight* field wrappes value with *\<mark>* tags. **Table** addition of *search* and *search_callback* props.  **Avatar** street numbers prefixed above text.  **Ibox** addition of *mini* prop for smaller footprint.
 
@@ -11,7 +12,7 @@ Version | Description of Changes
 
 Prop | Type | Description
 -----|------|------------
-**data: \*** | (object) | Data from which table data is drawn.  If a _\_highlight_ field is included, occurances of that text will be marked with *\<mark>* tags.
+**data: \*** | (object) | Data from which table data is drawn. A field with name *_accent* can contain CSS key/value pairs for accenting a particular row.
 **columns: \*** |(object array) | Column Object (See Column Object below)
 **order:** | (object) | Order Object (See Order Object below)
 **filters:** | (object) | Filter Object (See Filter Object below)
@@ -19,7 +20,9 @@ Prop | Type | Description
 **pathname:** | (string) | Current page pathname required for savestate
 **show_limit:** | (boolean) | Show limit dropdown
 **limit:** | (numeric) | Initial setting for the record limit dropdown
-**search:** | (boolean) | Render a search field
+**show_search:** | (boolean) | Render a search field
+**highlight_search** | (boolean) | Enclose search results with *\<mark>* tags.
+**search_query** | (string) | External search query for high-lighting. Internal search query is used if not defined.
 **savestate:** | (boolean) | State state across screen instances
 **hide_header:** | (boolean) | Hide table header
 **click_callback:** | (function) | A callback function with _item_ entire record parameter to be called when a Row is clicked.
