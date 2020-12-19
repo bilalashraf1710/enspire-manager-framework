@@ -12,16 +12,22 @@ export class Login extends React.Component {
 			password: '',
 			loading: false,
 			authorizing: false,
+			handle: {},
 		};
 	}
 	componentDidMount() {
 		var user = this.props.firebase.auth().currentUser;
 		if (user) {
 			this.props.history.push(this.props.landing);
-		} else if (this.props.match.params.handle !== 'default' && !this.props.company.company?.id) {
+		} else if (this.props.match.params.handle !== 'default' && !this.state.handle?.id) {
 			this.setState({ loading: true });
-			this.props.dispatch(actions_authentication.getCompany(this.props.match.params.handle, this.props.firebase, () => {
+			this.props.dispatch(actions_authentication.verifyHandle(this.props.match.params.handle, this.props.firebase, (handleDoc) => {
 				this.setState({ loading: false });
+				if (handleDoc.exists) {
+					this.setState({ handle: { ...handleDoc.data(), id: handleDoc.id }});
+				} else {
+					window.toastr.error('This company handle cannot be found.  Please check for errors and try again.', 'Not Found');
+				}
 			}));
 		}
 	}
@@ -50,10 +56,10 @@ export class Login extends React.Component {
 								<Spinner />
 							</div>
 							: <>
-								{ this.props.company.company
+								{ this.state.handle
 									? <div style={ { margin: '20px 0' } }>
-										<img src={ this.props.company.company.logoUrl } width="100%" alt={ this.props.company.company.companyName + ' Logo' } />
-										<h3>{ this.props.company.company.companyName }</h3>
+										<img src={ this.state.handle.logoUrl } width="100%" alt={ this.state.handle.companyName + ' Logo' } />
+										<h3>{ this.state.handle.companyName }</h3>
 									</div>
 									: <div style={ { margin: '20px 0' } }>
 										<img src={ 'images/logo.png' } width="100%" alt="Mobile Track Logo" />
@@ -70,7 +76,7 @@ export class Login extends React.Component {
 								<input type="password" name="password" className="form-control" placeholder="Password" value={ this.state.password } onChange={ this.handleChange.bind(this) } autoComplete="off" />
 							</div>
 							{ !this.state.authorizing
-								? <button type="submit" className="btn btn-primary block full-width m-b" disabled={ this.props.company.company_pending }>Login</button>
+								? <button type="submit" className="btn btn-primary block full-width m-b" disabled={ this.state.handle_pending }>Login</button>
 								: <div style={ { margin: '15px 0' } }><Spinner /></div>
 							}
 

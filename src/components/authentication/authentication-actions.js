@@ -6,10 +6,10 @@ export function verifyHandle(handle, firebase, callback) {
 
 	return dispatch => {
 
-		firebase.firestore().collection(handle).doc('company').get().then((doc) => {
-			if (typeof callback === "function") callback(doc.exists);
+		firebase.firestore().collection('companies').doc(handle).get().then((doc) => {
+			if (typeof callback === "function") callback(doc);
 		}).catch((error) => {
-			process_error(error, 'Get Company: ' + error.message);
+			process_error(error, 'Verify Handle: ' + error.message);
 		});
 	}
 }
