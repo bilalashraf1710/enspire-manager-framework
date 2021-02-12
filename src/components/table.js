@@ -91,16 +91,16 @@ export class Table extends React.Component {
 	/* HANDLERS --------------------------------------------------------------------*/
 
 	handleResize() {
-		if (this.props.container_id) {
-			var container_height = 0;
-			var container_width = 0;
+		// if (this.props.container_id) {
+		// 	var container_height = 0;
+		// 	var container_width = 0;
 
-			if (document.getElementById(this.props.container_id) && document.getElementById(this.props.container_id).querySelectorAll('tbody')[0]) {
-				container_height = document.getElementById(this.props.container_id).clientHeight;
-				container_width = (document.getElementById(this.props.container_id).querySelectorAll('tbody')[0]).clientWidth;
-			}
-			this.setState({ container_height, container_width });
-		}
+		// 	if (document.getElementById(this.props.container_id) && document.getElementById(this.props.container_id).querySelectorAll('tbody')[0]) {
+		// 		container_height = document.getElementById(this.props.container_id).clientHeight;
+		// 		container_width = (document.getElementById(this.props.container_id).querySelectorAll('tbody')[0]).clientWidth;
+		// 	}
+		// 	this.setState({ container_height, container_width });
+		// }
 	}
 	handleLimit(event) {
 		this.setState({ [event.target.name]: parseInt(event.target.value), page: 0 });
@@ -158,9 +158,14 @@ export class Table extends React.Component {
 	/* ACTIONS --------------------------------------------------------------------*/
 
 	formatItem(item, column) {
-		if (column.type === 'date') {
+		if (column.type === 'timestamp') {
 			if (column.format) {
 				return moment(item[column.field], 'X').format(column.format);
+			} else console.error('EM Table: Format required for Date field');
+
+		} else if (column.type === 'date') {
+			if (column.format) {
+				return moment(item[column.field].seconds, 'X').format(column.format);
 			} else console.error('EM Table: Format required for Date field');
 
 		} else if (column.type === 'number') {
@@ -461,13 +466,20 @@ export class Table extends React.Component {
 				
 			// }
 
+			var active = '';
+			if (this.props.active_id && this.props.active_field) {
+				if (item[this.props.active_field] == this.props.active_id) {
+					active = 'active';
+				}
+			}
+
 			/* Table Rows TR & Delete column-------------------------------------*/
 
 			var tr_style = { cursor: ((this.props.click_callback) ? 'pointer' : 'default') };
 			if (item._accent) tr_style = { ...tr_style, ...item._accent }
 			if (this.state.container_width > 0) tr_style.width = this.state.container_width;
 
-			return <tr key={ 'tr'+row_index } style={ tr_style }>
+			return <tr key={ 'tr'+row_index } className={ active }style={ tr_style }>
 				{ fields }
 				{ this.props.delete &&
 					<td key={ 'delete'+row_index } style={{ cursor: 'pointer' }} onClick={ this.props.onDelete.bind(this, item) }><i className="fa fa-times"></i></td>
@@ -510,7 +522,7 @@ export class Table extends React.Component {
 			<div className="row">
 				<div className="col-lg-12">
 
-					<form className="row mb-2" autoComplete="off">
+					<form className="row mb-2" autoComplete="off" onSubmit={ () => false }>
 
 						{ this.state.show_limit &&
 							<div className="col m-b-xs">
