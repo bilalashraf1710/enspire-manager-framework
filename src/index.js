@@ -19,6 +19,7 @@ export { StateOptions } from './components/form-elements/state-options';
 export { Table } from './components/table';
 export { Textarea } from './components/form-elements/textarea';
 export { UserNotFound } from './components/authentication/user-not-found';
+export { UserProfile } from './components/user-profile';
 export { PasswordReset } from './components/authentication/password-reset';
 export { ValidateForm } from './components/forms/validate-form';
 export { VerifyHandle } from './components/authentication/verify-handle';
