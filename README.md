@@ -8,9 +8,38 @@ Version | Description of Changes
 3.0.3 | Updated of Company fields - *logoUrl*, *companyName*
 3.0.2 | **Table**, deprecation of *id* prop, *click_callback*  returns *item* entire record. **Table** record with *_highlight* field wrappes value with *\<mark>* tags. **Table** addition of *search* and *search_callback* props.  **Avatar** street numbers prefixed above text.  **Ibox** addition of *mini* prop for smaller footprint.
 
+# MODAL ALERT
+
+### Example
+
+```
+ModalAlert({
+	title: "Are you sure?",
+	text: "The Part will be Deleted!",
+	type: "warning",
+	callback_success: () => {
+		this.props.dispatch(actions_crud.deleteCRUD('maintenance', 'asset_part', item));
+	},
+});
+```
+
+## MODAL ALERT OPTIONS
+
+option | Type | Description
+-----|------|------------
+**title: \*** | (string) | Title for popup modal alert
+**type: \*** | (string) | success, info, warning, error
+**text: \*** | (string) | The modal message
+**callback_success** | (function) | callback when modal is confirmed
+**callback_cancel** | (function) | optional callback when modal is canceled
+**confirmButtonText** | (string) | Text for confirm button
+**confirmButtonColor** | (string) | Color for confirm button is hex.
+**cancelButtonText** | (string) | Text for cancel button
+**showCancelButton** | (boolean) | whether or not to display a cancel button
+
 # TABLES
 
-## TABLE PROP
+## TABLE PROPS
 
 Prop | Type | Description
 -----|------|------------
@@ -123,7 +152,7 @@ Parameter | Type | Description
 
 # IBOX
 
-## IBOX PROP
+## IBOX PROPS
 
 Prop | Type | Description
 -----|------|------------
@@ -217,7 +246,7 @@ handleUpload(field, filename) {
 }
 ```
 
-## FORM LAYOUT PROP
+## FORM LAYOUT PROPS
 
 The _form_layout_ is an array of form blocks containing the following:
 
