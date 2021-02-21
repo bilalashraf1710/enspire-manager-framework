@@ -45,7 +45,7 @@ export function Avatar(props) {
 			{ address &&
 				<div style={{ fontSize: '14px', marginBottom: '-14px' }}>{ address }</div>
 			}
-			<div className="text-uppercase">{ props.element ? props.element : initials }</div>
+			<div className="text-uppercase">{ initials }</div>
 		</div>
 
 	);

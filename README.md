@@ -2,6 +2,7 @@
 
 Version | Description of Changes
 --------|-----------------------
+3.0.8 | Mapbox & updated UserProfile
 3.0.6 | Format *timestamp* for timestamp fields, and *date* for date fields including a "seconds" key.
 3.0.4 | Update *show_search*, *highlight_search*, and *search_query*. Addition of *_accent* object for CSS accent of a data row.
 3.0.3 | Updated of Company fields - *logoUrl*, *companyName*
