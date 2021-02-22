@@ -2,7 +2,6 @@ import * as actions_authentication from './authentication-actions';
 import React from 'react';
 import { Spinner } from '../spinner';
 
-
 export class Login extends React.Component {
 
 	constructor(props) {
@@ -52,20 +51,20 @@ export class Login extends React.Component {
 				<div className="middle-box text-center loginscreen animated fadeInDown">
 					<div>
 						{ this.state.loading
-							? <div style={ { margin: '60px 0' } }>
-								<Spinner />
-							</div>
-							: <>
-								{ this.state.handle
-									? <div style={ { margin: '20px 0' } }>
-										<img src={ this.state.handle.logoUrl } width="100%" alt={ this.state.handle.companyName + ' Logo' } />
-										<h3>{ this.state.handle.companyName }</h3>
-									</div>
-									: <div style={ { margin: '20px 0' } }>
-										<img src={ 'images/logo.png' } width="100%" alt="Mobile Track Logo" />
-									</div>
-								}
-							</>
+							?	<div style={ { margin: '60px 0' } }>
+									<Spinner />
+								</div>
+							: 	<>
+									{ this.state.handle
+										? <div style={ { margin: '20px 0' } }>
+											<img src={ this.state.handle.logoUrl } width="100%" alt={ this.state.handle.companyName + ' Logo' } />
+											<h3>{ this.state.handle.companyName }</h3>
+										</div>
+										: <div style={ { margin: '20px 0' } }>
+											<img src={ 'images/logo.png' } width="100%" alt="Mobile Track Logo" />
+										</div>
+									}
+								</>
 						}
 
 						<form style={ { marginTop: '40px' } } onSubmit={ this.submitForm.bind(this) }>

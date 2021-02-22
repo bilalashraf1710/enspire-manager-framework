@@ -11,13 +11,19 @@ export class PasswordReset extends React.Component {
 			password: '',
 			loading: false,
 			authorizing: false,
+			handle: {},
 		};
 	}
 	componentDidMount() {
 		if (this.props.match.params.handle !== 'default' && !this.props.company.company?.id) {
 			this.setState({ loading: true });
-			this.props.dispatch(actions_authentication.getCompany(this.props.match.params.handle, this.props.firebase, () => {
+			this.props.dispatch(actions_authentication.verifyHandle(this.props.match.params.handle, this.props.firebase, (handleDoc) => {
 				this.setState({ loading: false });
+				if (handleDoc.exists) {
+					this.setState({ handle: { ...handleDoc.data(), id: handleDoc.id } });
+				} else {
+					window.toastr.error('This company handle cannot be found.  Please check for errors and try again.', 'Not Found');
+				}
 			}));
 		}
 	}
@@ -47,21 +53,21 @@ export class PasswordReset extends React.Component {
 								<Spinner />
 							</div>
 						: 	<>
-								{ this.props.company.company
-									? 	<div style={{ margin: '20px 0' }}>
-											<img src={this.props.company.company.logoUrl} width="100%" alt={this.props.company.company.companyName + ' Logo'} />
-											<h3>{this.props.company.company.companyName}</h3>
-										</div>
-									: 	<div style={{ margin: '20px 0' }}>
-											<img src={'images/logo.png'} width="100%" alt="Mobile Track Logo" />
-										</div>
+								{ this.state.handle
+									? <div style={ { margin: '20px 0' } }>
+										<img src={ this.state.handle.logoUrl } width="100%" alt={ this.state.handle.companyName + ' Logo' } />
+										<h3>{ this.state.handle.companyName }</h3>
+									</div>
+									: <div style={ { margin: '20px 0' } }>
+										<img src={ 'images/logo.png' } width="100%" alt="Mobile Track Logo" />
+									</div>
 								}
 							</>
 					}	
 						
 						
 						<p>If you have an existing login with our system and cannot remember your password, please enter your Email address below.</p>
-						<p>An option for changing your password will be sent.</p>
+						<p>A link for changing your password will be sent.</p>
 						
 						<form style={ { marginTop: '40px' } } onSubmit={ this.submitForm.bind(this) }>
 							<div className="form-group">
