@@ -2,11 +2,46 @@
 
 Version | Description of Changes
 --------|-----------------------
+3.0.11 | New ModalForm
+3.0.10 | Auth fixes
 3.0.8 | Mapbox & updated UserProfile
 3.0.6 | Format *timestamp* for timestamp fields, and *date* for date fields including a "seconds" key.
 3.0.4 | Update *show_search*, *highlight_search*, and *search_query*. Addition of *_accent* object for CSS accent of a data row.
 3.0.3 | Updated of Company fields - *logoUrl*, *companyName*
 3.0.2 | **Table**, deprecation of *id* prop, *click_callback*  returns *item* entire record. **Table** record with *_highlight* field wrappes value with *\<mark>* tags. **Table** addition of *search* and *search_callback* props.  **Avatar** street numbers prefixed above text.  **Ibox** addition of *mini* prop for smaller footprint.
+
+# LINK IN LOCAL ENVIRONMENT
+
+Open `enspire-manager-framework`.  Run the following command:
+
+```
+yarn
+yarn build
+yarn link
+```
+
+In the application using the framework, type the following:
+
+```
+yarn link enspire-manager-framework
+```
+
+The app will now draw on local library and respond to rebuilding of the framework.  
+
+When you want to publish a new version of the library, commit to GitHub, then type:
+
+```
+git tag
+git tag v0.3.12 (new verions)
+git push --tags
+```
+
+To revert back to remote library, update the version tag in package.json, then:
+
+```
+yarn unlink enspire-manager-framework
+yarn
+```
 
 # MODAL ALERT
 
