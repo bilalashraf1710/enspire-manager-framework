@@ -37,6 +37,34 @@ option | Type | Description
 **cancelButtonText** | (string) | Text for cancel button
 **showCancelButton** | (boolean) | whether or not to display a cancel button
 
+# MODAL FORM
+
+### Example
+
+```
+<ModalForm {...this.props}
+	modal_header="Customer Form"
+	cancel_button_title="Cancel"
+	save_button_title="Save Details"
+	submitFormHandler={ this.submitForm.bind(this, form_layout) }
+	history={ this.props.history }
+>
+	...
+</ModalForm>
+
+```
+
+## MODAL ALERT OPTIONS
+
+option | Type | Description
+-----|------|------------
+**history** | (function) | Route History object
+**modal_header: \*** | (string) | Title for popup modal
+**cancel_button_title: \*** | (string) | Label for Cancel button
+**save_button_title: \*** | (string) | Label for Save button
+**submitFormHandler** | (function) | callback when modal is saved
+
+
 # TABLES
 
 ## TABLE PROPS

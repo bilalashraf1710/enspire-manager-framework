@@ -8,8 +8,8 @@ export function UserProfile(props) {
 
 	var roles = [];
 
-	if (user?.roles) {
-		user.roles.forEach((roleId) => {
+	if (user?.roles[props.module]) {
+		user.roles[props.module].forEach((roleId) => {
 			let role = _.find(props.userRoles, (o) => { return o.id == roleId });
 			roles.push(role.name);
 		});

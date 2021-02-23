@@ -13,6 +13,7 @@ export { Input } from './components/form-elements/input';
 export { Login } from './components/authentication/login';
 export { Mapbox } from './components/mapbox';
 export { ModalAlert } from './components/modal-alert';
+export { ModalForm } from './components/modal-form';
 export { Select } from './components/form-elements/select';
 export { Sparkline } from './components/sparkline';
 export { Spinner } from './components/spinner';
