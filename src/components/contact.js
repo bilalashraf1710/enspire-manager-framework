@@ -11,6 +11,10 @@ export class Contact extends React.Component {
 		};
 	}
 
+	componentDidMount() {
+		this.setState({ isOpen: (this.props.open) ? this.props.open : false });
+	}
+
 	render() {
 
 		var typeName = _.find(this.props.contactTypes, { id: this.props.contact.contactTypeId })?.name;
