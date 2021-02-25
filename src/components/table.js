@@ -522,7 +522,8 @@ export class Table extends React.Component {
 			<div className="row">
 				<div className="col-lg-12">
 
-					<form className="row mb-2" autoComplete="off" onSubmit={ () => false }>
+					<form className="row mb-2" autoComplete="off">
+						<button type="submit" disabled style={{ display: 'none' }} aria-hidden="true"></button>
 
 						{ this.state.show_limit &&
 							<div className="col m-b-xs">

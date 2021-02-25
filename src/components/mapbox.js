@@ -52,7 +52,11 @@ export class Mapbox extends React.Component {
 			<div>
 				{
 					this.state.mapReady && (
-						<div className="mapbox"><img src={ this.state.mapURL } style={{ width: '100%' }} /></div>
+						<div className={ 'mapbox animated fadeInRight ' + this.props.className }>
+							<a href={ 'https://maps.google.com/maps/place/' + this.props.map_address } target="_blank">
+								<img src={ this.state.mapURL } style={{ width: '100%' }} />
+							</a>
+						</div>
 					)
 				}
 				{
