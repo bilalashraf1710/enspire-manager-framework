@@ -2,6 +2,7 @@
 
 Version | Description of Changes
 --------|-----------------------
+3.0.12 | User Registration Component
 3.0.11 | New ModalForm
 3.0.10 | Auth fixes
 3.0.8 | Mapbox & updated UserProfile
