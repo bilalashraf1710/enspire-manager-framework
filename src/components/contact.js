@@ -11,6 +11,10 @@ export class Contact extends React.Component {
 		};
 	}
 
+	componentDidMount() {
+		this.setState({ isOpen: (this.props.open) ? this.props.open : false });
+	}
+
 	render() {
 
 		var typeName = _.find(this.props.contactTypes, { id: this.props.contact.contactTypeId })?.name;
@@ -20,8 +24,8 @@ export class Contact extends React.Component {
 			<div onClick={ () => { this.setState({ isOpen: !this.state.isOpen }) }} style={{ cursor: 'pointer', marginBottom: '6px' }}>
 
 				{ this.state.isOpen
-					? 	<span className="float-right"><i className="fas fa-angle-down"></i></span>
-					: 	<span className="float-right"><i className="fas fa-angle-up"></i></span>
+					? 	<span className="float-right" style={{ fontSize: '16px' }}><i className="fas fa-angle-up mr-2"></i></span>
+					: 	<span className="float-right" style={{ fontSize: '16px' }}><i className="fas fa-angle-down mr-2"></i></span>
 				}
 				
 				<i className="fas fa-user"></i> &nbsp;<strong>{ typeName + ': ' }</strong>
