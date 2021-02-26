@@ -2,13 +2,16 @@ import * as actions_authentication from './authentication-actions';
 import React from 'react';
 import { Spinner } from '../spinner';
 
-export class Login extends React.Component {
+export class Register extends React.Component {
 
 	constructor(props) {
 		super(props);
 		this.state = {
+            first_name: '',
+            last_name: '',
 			email: '',
 			password: '',
+            verify_password: '',
 			loading: false,
 			authorizing: false,
 			handle: {},
@@ -36,10 +39,21 @@ export class Login extends React.Component {
 	}
 	submitForm(event) {
 		event.preventDefault();
-		this.setState({ authorizing: true });
-		this.props.dispatch(actions_authentication.login(this.state.email, this.state.password, this.props.firebase, () => {
-			this.setState({ authorizing: false });
-		}));
+        const email = this.state.email;
+        const password = this.state.password;
+        const handle = this.state.handle;
+
+        if (this.state.password !== this.state.verify_password || this.state.password === '' || this.state.verify_password === '') {
+            document.getElementById('password').style = "border: 1px solid red";
+            document.getElementById('verify-password').style = "border: 1px solid red";
+            window.toastr.error('Password do not match');
+        }
+        else if(this.state.password === this.state.verify_password && this.state.password !== '' && this.state.verify_password !== '') {
+            this.setState({ authorizing: true });
+            this.props.dispatch(actions_authentication.register(email, password, handle.id, this.props.firebase, () => {
+                this.setState({ authorizing: false });
+            }));
+        }
 	}
 
 	render() {
@@ -68,20 +82,25 @@ export class Login extends React.Component {
 						}
 
 						<form style={ { marginTop: '40px' } } onSubmit={ this.submitForm.bind(this) }>
-							<div className="form-group">
+                            <div className="form-group">
+								<input type="text" name="first_name" className="form-control" placeholder="First Name" value={ this.state.first_name } onChange={ this.handleChange.bind(this) } />
+							</div>
+                            <div className="form-group">
+								<input type="text" name="last_name" className="form-control" placeholder="Last Name" value={ this.state.last_name } onChange={ this.handleChange.bind(this) } />
+							</div>
+                            <div className="form-group">
 								<input type="text" name="email" className="form-control" placeholder="Email Address" value={ this.state.email } onChange={ this.handleChange.bind(this) } />
 							</div>
 							<div className="form-group">
-								<input type="password" name="password" className="form-control" placeholder="Password" value={ this.state.password } onChange={ this.handleChange.bind(this) } autoComplete="off" />
+								<input type="password" id="password" name="password" className="form-control" placeholder="Password" value={ this.state.password } onChange={ this.handleChange.bind(this) } autoComplete="off" />
+							</div>
+                            <div className="form-group">
+								<input type="password" id="verify-password" name="verify_password" className="form-control" placeholder="Verify Password" value={ this.state.verify_password } onChange={ this.handleChange.bind(this) } autoComplete="off" />
 							</div>
 							{ !this.state.authorizing
-								? <button type="submit" className="btn btn-primary block full-width m-b" disabled={ this.state.handle_pending }>LOGIN</button>
+								? <button type="submit" className="btn btn-primary block full-width m-b" disabled={ this.state.handle_pending }>REGISTER NEW USER</button>
 								: <div style={ { margin: '15px 0' } }><Spinner /></div>
-							}
-							
-							<a onClick={ () => { this.props.history.push('/' + this.props.match.params.handle + '/register_user'); }}>Register a New User</a>&nbsp; - &nbsp;
-							<a onClick={ () => { this.props.history.push('/' + this.props.match.params.handle + '/password_reset'); } }>Forgot password?</a>
-
+                            }
 						</form>
 					</div>
 				</div>

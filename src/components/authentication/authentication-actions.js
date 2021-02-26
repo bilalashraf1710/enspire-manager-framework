@@ -34,6 +34,25 @@ export function logout(firebase, callback) {
 		});
 	}
 }
+export function register(email, password, handle, firebase, callback) {
+
+	return dispatch => {
+
+		// firebase.firestore().collection(handle + '/users/' + handle).get(email).then(doc => {
+		// 	if(doc.exists){
+		// 		console.log('USER EXISTS!');
+		// 	}
+		// })
+
+		firebase.auth().createUserWithEmailAndPassword(email, password).then((userCredential) => {
+			if (typeof callback === "function") callback();
+		}).catch((error) => {
+			process_error(error, 'Register: ' + error.message);
+			if (typeof callback === "function") callback();
+		});
+	}
+}
+
 export function passwordReset(email, firebase, callback) {
 
 	return dispatch => {
