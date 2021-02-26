@@ -11,6 +11,7 @@ export { Graph } from './components/graph';
 export { Ibox } from './components/ibox';
 export { Input } from './components/form-elements/input';
 export { Login } from './components/authentication/login';
+export { Register } from './components/authentication/register';
 export { Mapbox } from './components/mapbox';
 export { ModalAlert } from './components/modal-alert';
 export { ModalForm } from './components/modal-form';
