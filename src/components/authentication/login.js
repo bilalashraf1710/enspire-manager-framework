@@ -79,7 +79,7 @@ export class Login extends React.Component {
 								: <div style={ { margin: '15px 0' } }><Spinner /></div>
 							}
 							
-							<a onClick={ () => { this.props.history.push('/' + this.props.match.params.handle + '/register_user'); }}>Register a New User</a>&nbsp; - &nbsp;
+							<a onClick={ () => { this.props.history.push('/' + this.props.match.params.handle + '/register_user'); }}>Register a New User</a> &nbsp; | &nbsp;
 							<a onClick={ () => { this.props.history.push('/' + this.props.match.params.handle + '/password_reset'); } }>Forgot password?</a>
 
 						</form>

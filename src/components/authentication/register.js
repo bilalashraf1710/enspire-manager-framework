@@ -12,6 +12,8 @@ export class Register extends React.Component {
 			email: '',
 			password: '',
             verify_password: '',
+
+			passwords_mismatch: false,
 			loading: false,
 			authorizing: false,
 			handle: {},
@@ -36,27 +38,30 @@ export class Register extends React.Component {
 
 	handleChange(event) {
 		this.setState({ [event.target.name]: event.target.value });
+		if (event.target.name == 'password' || event.target.name == 'verify_password') {
+			this.setState({ passwords_mismatch: false });
+		}
 	}
 	submitForm(event) {
 		event.preventDefault();
-        const email = this.state.email;
-        const password = this.state.password;
-        const handle = this.state.handle;
 
         if (this.state.password !== this.state.verify_password || this.state.password === '' || this.state.verify_password === '') {
+			this.setState({ passwords_mismatch: true });
             document.getElementById('password').style = "border: 1px solid red";
             document.getElementById('verify-password').style = "border: 1px solid red";
-            window.toastr.error('Password do not match');
+            window.toastr.error('Passwords do not match');
         }
         else if(this.state.password === this.state.verify_password && this.state.password !== '' && this.state.verify_password !== '') {
             this.setState({ authorizing: true });
-            this.props.dispatch(actions_authentication.register(email, password, handle.id, this.props.firebase, () => {
+            this.props.dispatch(actions_authentication.register(this.state.email, this.state.password, this.state.handle.id, this.props.firebase, () => {
                 this.setState({ authorizing: false });
             }));
         }
 	}
 
 	render() {
+
+		var passwordStyle = (this.state.passwords_mismatch) ? { border: '1px solid red' } : {}
 
 		return (
 
@@ -92,10 +97,10 @@ export class Register extends React.Component {
 								<input type="text" name="email" className="form-control" placeholder="Email Address" value={ this.state.email } onChange={ this.handleChange.bind(this) } />
 							</div>
 							<div className="form-group">
-								<input type="password" id="password" name="password" className="form-control" placeholder="Password" value={ this.state.password } onChange={ this.handleChange.bind(this) } autoComplete="off" />
+								<input type="password" id="password" name="password" className="form-control" placeholder="Password" style={ passwordStyle }value={ this.state.password } onChange={ this.handleChange.bind(this) } autoComplete="off" />
 							</div>
                             <div className="form-group">
-								<input type="password" id="verify-password" name="verify_password" className="form-control" placeholder="Verify Password" value={ this.state.verify_password } onChange={ this.handleChange.bind(this) } autoComplete="off" />
+								<input type="password" id="verify-password" name="verify_password" className="form-control" placeholder="Verify Password" style={ passwordStyle }value={ this.state.verify_password } onChange={ this.handleChange.bind(this) } autoComplete="off" />
 							</div>
 							{ !this.state.authorizing
 								? <button type="submit" className="btn btn-primary block full-width m-b" disabled={ this.state.handle_pending }>REGISTER NEW USER</button>

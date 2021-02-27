@@ -37,7 +37,7 @@ export function UserProfile(props) {
 								</ul>
 
 								<p>{ email[0] }<br />{ '@' + email[1] }</p>
-								<p>{ roles.join(', ') }</p>
+								<p className="text-capitalize">{ roles.join(', ') }</p>
 							</>
 					}
 				</>
