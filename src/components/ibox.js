@@ -21,10 +21,12 @@ export function Ibox(props) {
 					</h5>
 				</div>
 				<div className={ 'ibox-content' + ((props.no_fade) ? ' no-fade' : '') + ((props.show_spinner) ? ' sk-loading' : '') } style={ styleContent }>
-
+					
 					<Spinner />
 
-					{ props.children }
+					<div className="px-2">
+						{ props.children }
+					</div>
 
 				</div>
 			</div>

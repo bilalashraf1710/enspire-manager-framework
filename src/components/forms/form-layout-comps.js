@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import { Input } from '../form-elements/input';
 import { Select } from '../form-elements/select';
+import { MultiSelect } from '../form-elements/multiselect';
 import { Checkbox } from '../form-elements/checkbox';
 import { Textarea } from '../form-elements/textarea';
 import { Dropzone } from '../form-elements/dropzone';
@@ -9,7 +10,7 @@ import { Dropzone } from '../form-elements/dropzone';
 export default function FormBuilderComps(props) {
 
 	var label;
-	if  (!Array.isArray(props.field.field)) label = (props.field.label) ? props.field.label : props.field.field.replace(/_/g, ' ');
+	if  (props.field.field && !Array.isArray(props.field.field)) label = (props.field.label) ? props.field.label : props.field.field.replace(/_/g, ' ');
 	var required = (props.field.valid) ? props.field.valid.includes('required') : false;
 
 	var component;
@@ -30,6 +31,7 @@ export default function FormBuilderComps(props) {
 				required={ required }
 				readOnly={ props.field.readOnly }
 				type="text" 
+				disabled={ props.field.disabled }
 				value={ (props.props.record[props.field.field]) ? props.props.record[props.field.field] : '' }
 			/>
 			break;
@@ -50,19 +52,37 @@ export default function FormBuilderComps(props) {
 			/>
 			break;
 		}
-		case 'select'	: {
+		case 'select' : {
 
 			component =	<Select
 				className={ props.field.grid } 
 				form_error={ props.props.form_error } 
 				label={ label } 
 				name={ props.field.field } 
-				onChange={ props.props.callbacks.text } 
+				onChange={ props.props.callbacks.select } 
 				required={ required }
 				value={ (props.props.record[props.field.field]) ? props.props.record[props.field.field] : '' } 
+				disabled={ props.field.disabled }
 			>
 				{ props.field.options }
 			</Select>
+			break;
+		}
+		case 'multiselect' : {
+
+			component =	<MultiSelect
+				className={ props.field.grid } 
+				form_error={ props.props.form_error } 
+				label={ label } 
+				name={ props.field.field } 
+				// options={ props.field.options }
+				onChange={ props.props.callbacks.multiselect } 
+				required={ required }
+				value={ (props.props.record[props.field.field]) ? props.props.record[props.field.field] : [] } 
+				disabled={ props.field.disabled }
+			>
+				{ props.field.options }
+			</MultiSelect>
 			break;
 		}
 		case 'textarea' : {
@@ -76,6 +96,7 @@ export default function FormBuilderComps(props) {
 				required={ required }
 				rows={ (props.field.rows) ? fild.rows : '4' }
 				value={ (props.props.record[props.field.field]) ? props.props.record[props.field.field] : '' } 
+				disabled={ props.field.disabled }
 			/>
 			break;
 		}
@@ -135,6 +156,11 @@ export default function FormBuilderComps(props) {
 				onChange={ props.props.callbacks.dropzone.bind(this) } 
 				maxHeight={ props.field.dropzone.height }
 			/>
+			break;
+		}
+		case 'empty' : {
+			
+			component = <span className={ props.field.grid }></span>
 			break;
 		}
 	}

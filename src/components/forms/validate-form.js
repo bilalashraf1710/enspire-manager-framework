@@ -33,14 +33,14 @@ export function ValidateForm(record, form_builder_layout) {
 		var value = null;
 
 		/* Required -----------------------------------------*/
-		if (field.valid && field.valid.includes('required')) {
+		if (field.valid && field.valid.includes('required') && !field.disabled) {
 			value = (typeof record[field.field] == 'string') ? record[field.field].trim() : record[field.field];
 			if (typeof value == 'string') value = value.trim();
 			if (!value) form_error.push({ field: field.field, type: 'required' });
 		}
 
 		/* numeric -----------------------------------------*/
-		if (field.valid && field.valid.includes('numeric')) {
+		if (field.valid && field.valid.includes('numeric') && !field.disabled) {
 			value = (typeof record[field.field] == 'string') ? record[field.field].trim() : record[field.field];
 			if (value && isNaN(value)) {
 				form_error.push({ field: field.field, type: 'numeric' });
@@ -48,7 +48,7 @@ export function ValidateForm(record, form_builder_layout) {
 		}
 
 		/* email -----------------------------------------*/
-		if (field.valid && field.valid.includes('email')) {
+		if (field.valid && field.valid.includes('email') && !field.disabled) {
 			value = (typeof record[field.field] == 'string') ? record[field.field].trim() : record[field.field];
 			if (value && !isEmail(value)) {
 				form_error.push({ field: field.field, type: 'email' });
@@ -56,7 +56,7 @@ export function ValidateForm(record, form_builder_layout) {
 		}
 
 		/* leading_zeros -----------------------------------------*/
-		if (field.valid && field.valid.includes('leading_zeros')) {
+		if (field.valid && field.valid.includes('leading_zeros') && !field.disabled) {
 			value = (typeof record[field.field] == 'string') ? record[field.field].trim() : record[field.field];
 			if (field.type == 'text' || field.type == 'textarea') {
 				if (value.toString().startsWith('0')) {

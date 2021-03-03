@@ -1,7 +1,8 @@
 import React from 'react';
 import { ValidateMessage } from './validate-message';
+import Select from 'react-select';
 
-export class Select extends React.Component {
+export class MultiSelect extends React.Component {
 
 	constructor(props) {
 		super(props);
@@ -43,16 +44,24 @@ export class Select extends React.Component {
 
 			<div className={ 'form-group '+this.props.className+' '+((this.state.error)?'has-error':'') }>
 				<label>{ this.props.label + ((this.props.required)?' *':'') }</label> 
-				<select 
-					className="form-control form-control-sm" 
-					name={ this.props.name } 
-					onChange={ this.props.onChange.bind(this) } 
-					ref={ this.field_ref } 
-					value={ this.props.value } 
+				<select multiple
+					className="form-control form-control-sm"
+					name={ this.props.name }
+					onChange={ this.props.onChange.bind(this) }
+					ref={ this.field_ref }
+					value={ this.props.value }
 					disabled={ this.props.disabled }
 				>
 					{ this.props.children }
 				</select>
+				{/* <Select 
+					className="form-control form-control-sm" 
+					name={ this.props.name } 
+					options={ this.props.options }
+					onChange={ this.props.onChange.bind(this) } 
+					ref={ this.field_ref } 
+					value={ this.props.value } 
+				/> */}
 				{ this.state.error_message &&
 					<div className="invalid-feedback" style={{ display: 'block' }}>
 						{ this.state.error_message }

@@ -2,6 +2,7 @@
 
 Version | Description of Changes
 --------|-----------------------
+3.0.13 | Add MultiSelect, disabled
 3.0.12 | User Registration Component
 3.0.11 | New ModalForm
 3.0.10 | Auth fixes
@@ -99,6 +100,8 @@ option | Type | Description
 **cancel_button_title: \*** | (string) | Label for Cancel button
 **save_button_title: \*** | (string) | Label for Save button
 **submitFormHandler** | (function) | callback when modal is saved
+**show_spinner** | (bool) | whether or not to display a spinner in the middle of the modal
+**no_fade** | (bool) | do not fade modal if true
 
 
 # TABLES
@@ -222,6 +225,7 @@ Prop | Type | Description
 -----|------|------------
 **title: \*** | (string) | Title for the iBox
 **show_spinner:** | (bool) | Whether or not to show loading Spinner
+**no_fade** | (bool) | do not fade modal if true
 **mini** | (bool) | display iBox as a small sized iBox
 **children** | (jsx) | displays children in content of iBox
 
@@ -333,11 +337,12 @@ Prop | Type | Description
 **grid: \*** | (string) | classname for grid size e.g. _col-lg-6_
 **label: \*** | (string) | Field label
 **field: \*** | (string) | Field name
-**type: \*** | (string) | Field type, one of _text_ or _email_, _textarea_, _select_, _date_, _checkbox_, _checkboxes_, or _dropzone_. 
+**type: \*** | (string) | Field type, one of _text_ or _email_, _textarea_, _select_, _multiselect_, _date_, _checkbox_, _checkboxes_, or _dropzone_. 
 **options:** | (jsx) | List of JSX \<option> tags surrounded by \<Fragment>
 **dropzone:** | (object) | Dropzone object
 **valid:** | (string array) | List of validations to check for, including _required_, _numeric_, _email_, & _leading_zeros_ (warning that leading zeros cannot be preserved)
 **readOnly:** | (boolean) | Should field be rendered Read-Only?
+**disabled:** | (boolean) | Should field be disabled (validation ignored)
 
 ### Dropzone Object
 

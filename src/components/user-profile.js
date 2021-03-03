@@ -5,10 +5,10 @@ export function UserProfile(props) {
 
 	var user = props.user;
 	var email = props.email.split('@');
+	var name = user?.firstName + ' ' + user?.lastName
 
 	var roles = [];
-
-	if (user?.roles[props.module]) {
+	if (user?.roles) {
 		user.roles[props.module].forEach((roleId) => {
 			let role = _.find(props.userRoles, (o) => { return o.id == roleId });
 			roles.push(role.name);
@@ -21,9 +21,9 @@ export function UserProfile(props) {
 			{ user && 
 				<>
 					{ props.collapsed
-						?	<Avatar className="mx-auto mb-3" size={ 50 } image={ user.photoUrl } border='2px solid white' />
+						?	<Avatar className="mx-auto mb-3" size={ 50 } name={ name } image={ user.photoUrl } border='2px solid white' />
 						:	<>
-								<Avatar className="mx-auto" size={ 90 } image={ user.photoUrl } border='4px solid white' />
+								<Avatar className="mx-auto" size={ 90 } name= { name }image={ user.photoUrl } border='4px solid white' />
 
 								<a data-toggle="dropdown" className="dropdown-toggle no-caret" href="#">
 									<h3 style={ { color: 'white', marginTop: '20px' } }>{ user.firstName + ' ' + user.lastName } <b className="caret"></b></h3>

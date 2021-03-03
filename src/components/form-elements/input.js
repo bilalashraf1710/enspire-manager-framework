@@ -71,6 +71,7 @@ export class Input extends React.Component {
 								readOnly={ this.props.readOnly }
 								ref={ this.field_ref } 
 								type="text"
+								disabled={ this.props.disabled }
 								{ ...inputProps }
 							/>
 						:	<DatePicker

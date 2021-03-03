@@ -55,6 +55,7 @@ export class Textarea extends React.Component {
 					ref={ this.field_ref } 
 					rows={ this.props.rows }
 					value={ this.props.value } 
+					disabled={ this.props.disabled }
 				/>
 				{ this.state.error_message &&
 					<div className="invalid-feedback" style={{ display: 'block' }}>

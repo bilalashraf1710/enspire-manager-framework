@@ -1,9 +1,4 @@
 import React, { Fragment } from 'react';
-import { Input } from '../form-elements/input';
-import { Select } from '../form-elements/select';
-import { Checkbox } from '../form-elements/checkbox';
-import { Textarea } from '../form-elements/textarea';
-import { Dropzone } from '../form-elements/dropzone';
 import FormBuilderComps from './form-layout-comps';
 
 

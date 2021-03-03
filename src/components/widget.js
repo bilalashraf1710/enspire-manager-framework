@@ -5,11 +5,12 @@ export function Widget(props) {
 	var cursor = (props.onClick) ? 'pointer' : 'auto'; 
 	var color_class;
 	switch (props.color_number) {
-		case 0 : color_class = 'white-bg'; break;
-		case 1 : color_class = 'navy-bg'; break;
-		case 2 : color_class = 'lazur-bg'; break;
-		case 3 : color_class = 'yellow-bg'; break;
-		case 3 : color_class = 'red-bg'; break;
+		case 0 : color_class = 'bg-muted'; break;
+		case 1 : color_class = 'bg-primary'; break;
+		case 2 : color_class = 'bg-success'; break;
+		case 3 : color_class = 'bg-info'; break;
+		case 4 : color_class = 'bg-warning'; break;
+		case 5 : color_class = 'bg-danger'; break;
 	}
 
 	return (

@@ -1,5 +1,6 @@
 import React from 'react';
 import Modal from 'react-bootstrap4-modal';
+import { Spinner } from './spinner';
 
 export class ModalForm extends React.Component {
 
@@ -23,8 +24,18 @@ export class ModalForm extends React.Component {
 						<i className="fas fa-times" onClick={ () => this.props.history.goBack() }></i>
 					</div>
 				</div>
-				<div className="modal-body">
-					{ this.props.children }
+				<div className={ 'modal-body ' + ((this.props.no_fade) ? ' no-fade' : '') + ((this.props.show_spinner) ? ' sk-loading' : '') }>
+
+					<Spinner />
+
+					<div className="row">
+						<div className="col-10">
+							{ this.props.children }
+						</div>
+						<div className="col-2" style={{ backgroundColor: '#eeeeee' }}>
+						</div>
+					</div>
+
 				</div>
 				<div className="modal-footer">
 					<button className="btn btn-white btn-sm" type="button" onClick={ () => this.props.history.goBack() }>{ this.props.cancel_button_title }</button>
