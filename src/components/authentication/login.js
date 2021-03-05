@@ -75,7 +75,7 @@ export class Login extends React.Component {
 								<input type="password" name="password" className="form-control" placeholder="Password" value={ this.state.password } onChange={ this.handleChange.bind(this) } autoComplete="off" />
 							</div>
 							{ !this.state.authorizing
-								? <button type="submit" className="btn btn-primary block full-width m-b" disabled={ this.state.handle_pending }>LOGIN</button>
+								? <button type="submit" className="btn btn-primary block full-width m-b mt-4" disabled={ this.state.handle_pending }>LOGIN</button>
 								: <div style={ { margin: '15px 0' } }><Spinner /></div>
 							}
 							

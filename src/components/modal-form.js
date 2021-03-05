@@ -26,7 +26,7 @@ export class ModalForm extends React.Component {
 				</div>
 				<div className={ 'modal-body ' + ((this.props.no_fade) ? ' no-fade' : '') + ((this.props.show_spinner) ? ' sk-loading' : '') }>
 
-					<Spinner />
+					{/* <Spinner /> */}
 
 					<div className="row">
 						<div className="col-10">

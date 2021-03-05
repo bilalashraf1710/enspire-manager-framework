@@ -20,6 +20,11 @@ export class NotAuthorized extends React.Component {
 			}
 		}));
 	}
+	
+	logOut(event) {
+		event.preventDefault();
+		this.props.dispatch(actions_authentication.logout(this.props.firebase));
+	}
 
 	render() {
 
@@ -51,6 +56,8 @@ export class NotAuthorized extends React.Component {
 							<p>You are not authorized to view this page.</p>
 							<br />
 							<button type="submit" className="btn btn-primary block full-width m-b">BACK TO PREVIOUS</button>
+							<br />
+							<button type="button" className="btn btn-default block full-width m-b" onClick={ this.logOut.bind(this) }>LOG OUT</button>
 						</form>
 
 					</div>

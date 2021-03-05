@@ -103,9 +103,12 @@ export class Register extends React.Component {
 								<input type="password" id="verify-password" name="verify_password" className="form-control" placeholder="Verify Password" style={ passwordStyle }value={ this.state.verify_password } onChange={ this.handleChange.bind(this) } autoComplete="off" />
 							</div>
 							{ !this.state.authorizing
-								? <button type="submit" className="btn btn-primary block full-width m-b" disabled={ this.state.handle_pending }>REGISTER NEW USER</button>
+								? <button type="submit" className="btn btn-primary block full-width m-b mt-4" disabled={ this.state.handle_pending }>REGISTER NEW USER</button>
 								: <div style={ { margin: '15px 0' } }><Spinner /></div>
                             }
+
+							<a onClick={ () => { this.props.history.push('/' + this.props.match.params.handle + '/login'); } }>Login Existing User</a>
+
 						</form>
 					</div>
 				</div>

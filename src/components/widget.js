@@ -17,7 +17,7 @@ export function Widget(props) {
 
 		<div className={ props.grid }>
 			{ props.type == 2
-				?	<div className={ 'widget style1 '+props.className+' '+color_class } style={{ cursor }} onClick={ props.onClick }>
+				?	<div className={ 'widget style1 animated fadeInRight '+props.className+' '+color_class } style={{ cursor }} onClick={ props.onClick }>
 						<div className="row">
 							<div className="col-4">
 								<i className={ props.icon }></i>
@@ -28,7 +28,7 @@ export function Widget(props) {
 							</div>
 						</div>
 					</div>
-				:	<div className={ 'widget p-lg text-center '+props.className+' '+color_class} style={{ cursor }} onClick={ props.onClick }>
+				:	<div className={ 'widget p-lg text-center animated fadeInRight '+props.className+' '+color_class} style={{ cursor }} onClick={ props.onClick }>
 						<div className="m-b-md">
 							<i className={ props.icon }></i>
 							<h1 className="m-xs">{ props.title }</h1>
