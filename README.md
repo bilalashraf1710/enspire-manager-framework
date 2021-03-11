@@ -225,8 +225,10 @@ Prop | Type | Description
 -----|------|------------
 **title: \*** | (string) | Title for the iBox
 **show_spinner:** | (bool) | Whether or not to show loading Spinner
-**no_fade** | (bool) | do not fade modal if true
+**no_fade** | (bool) | do not fade spinner modal if true
 **mini** | (bool) | display iBox as a small sized iBox
+**icon_array** | (string array) | array of icon classNames for titlebar icons
+**icon_callback_array** | (function array) | callback functions for icon_array
 **children** | (jsx) | displays children in content of iBox
 
 # FORM LAYOUT

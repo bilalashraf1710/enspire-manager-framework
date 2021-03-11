@@ -1,5 +1,6 @@
 import React from 'react';
 
+export { Agile } from './components/agile';
 export { Avatar } from './components/avatar';
 export { Checkbox } from './components/form-elements/checkbox';
 export { Chip } from './components/chip';

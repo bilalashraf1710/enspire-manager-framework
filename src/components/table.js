@@ -175,14 +175,14 @@ export class Table extends React.Component {
 				} else console.error('EM Table: Unknown number format'); 
 			} else console.error('EM Table: Format required for Number field');
 
-		} else if (column.badge !== null && Array.isArray(column.badge)) {
-			var badgestyle = '';
-			if (item[column.field] == 1) badgestyle = 'badge-info';
-			if (item[column.field] == 2) badgestyle = 'badge-success';
-			if (item[column.field] == 3) badgestyle = 'badge-warning';
-			if (item[column.field] == 4) badgestyle = 'badge-danger';
+		// } else if (column.badge !== null && Array.isArray(column.badge)) {
+		// 	var badgestyle = '';
+		// 	if (item[column.field] == 1) badgestyle = 'badge-info';
+		// 	if (item[column.field] == 2) badgestyle = 'badge-success';
+		// 	if (item[column.field] == 3) badgestyle = 'badge-warning';
+		// 	if (item[column.field] == 4) badgestyle = 'badge-danger';
 
-			return <span className={ 'badge ' + badgestyle }>{ column.badge[item[column.field]] }</span>
+		// 	return <span className={ 'badge ' + badgestyle }>{ column.badge[item[column.field]] }</span>
 
 		} else {
 			let result = (item[column.field]) ? item[column.field].toString().replace(/_/g, " ") : ''; // replace _ with space 
@@ -472,6 +472,7 @@ export class Table extends React.Component {
 					active = 'active';
 				}
 			}
+			var stripe_color = (this.props.stripe_color) ? 'stripe_color_' + item[this.props.stripe_color] : null;
 
 			/* Table Rows TR & Delete column-------------------------------------*/
 
@@ -479,7 +480,7 @@ export class Table extends React.Component {
 			if (item._accent) tr_style = { ...tr_style, ...item._accent }
 			if (this.state.container_width > 0) tr_style.width = this.state.container_width;
 
-			return <tr key={ 'tr'+row_index } className={ active }style={ tr_style }>
+			return <tr key={ 'tr'+row_index } className={ active + ' ' + stripe_color } style={ tr_style }>
 				{ fields }
 				{ this.props.delete &&
 					<td key={ 'delete'+row_index } style={{ cursor: 'pointer' }} onClick={ this.props.onDelete.bind(this, item) }><i className="fa fa-times"></i></td>
@@ -585,7 +586,7 @@ export class Table extends React.Component {
 							<tbody style={ tbody_style }>
 								{ rows
 									?	rows
-									: 	<tr style={{ backgroundColor: 'transparent' }}><td colSpan={ this.props.columns.length }><h2 className="text-center" style={{ marginTop: '40px' }}>No Records Found</h2></td></tr>
+									: 	<tr style={ { backgroundColor: 'transparent' }}><td colSpan={ this.props.columns.length }><h2 className="text-center" style={{ marginTop: '40px' }}>No Records Found</h2></td></tr>
 								}
 							</tbody>
 						</table>

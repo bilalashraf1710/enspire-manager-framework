@@ -49,7 +49,7 @@ export class Select extends React.Component {
 					onChange={ this.props.onChange.bind(this) } 
 					ref={ this.field_ref } 
 					value={ this.props.value } 
-					disabled={ this.props.disabled }
+					disabled={ this.props.disabled || this.props.readOnly }
 				>
 					{ this.props.children }
 				</select>
