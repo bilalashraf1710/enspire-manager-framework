@@ -17,7 +17,7 @@ export function Ibox(props) {
 							{ 
 								props.icon_callback_array?.slice().reverse().map((callback, index) => {
 									if (typeof callback === "function") return (
-										<a onClick={ () => callback() } className="ml-2" style={{ fontSize: '14px' }}>
+										<a key={ 'icon'+index } onClick={ () => callback() } className="ml-2" style={{ fontSize: '14px' }}>
 											<i className={ props.icon_array.slice().reverse()[index] } style={ { color: '#c4c4c4' } }></i>
 										</a>
 									);
