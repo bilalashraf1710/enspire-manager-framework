@@ -52,10 +52,10 @@ export class Input extends React.Component {
 			<div className={ 'form-group '+this.props.className+' '+((this.state.error)?'has-error':'') }>
 				
 				{ this.props.label !== undefined &&
-					<label>{ this.props.label + ((this.props.required)?' *':'') }</label> 
+					<label style={{ whiteSpace: 'nowrap', width: '100%', overflow: 'hidden', textOverflow: 'ellipsis' }}>{ this.props.label + ((this.props.required)?' *':'') }</label> 
 				}
 				
-				<div className={ 'input-group ' + ((this.props.type === 'date') ? 'date '+this.props.name : '') }>
+				<div className={ 'input-group input-group-sm ' + ((this.props.type === 'date') ? 'date '+this.props.name : '') }>
 					{ this.props.prepend &&
 						<div className="input-group-prepend">
 							<span className="input-group-text input-group-addon">{ this.props.prepend }</span>
@@ -82,7 +82,7 @@ export class Input extends React.Component {
 							/>
 					}
 					{ this.props.append &&
-						<div className="input-group-append">
+						<div className="input-group-append input-group-sm">
 							<span className="input-group-text input-group-addon">{ this.props.append }</span>
 						</div>
 					}

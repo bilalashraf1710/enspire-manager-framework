@@ -38,12 +38,6 @@ export function register(email, password, handle, firebase, callback) {
 
 	return dispatch => {
 
-		// firebase.firestore().collection(handle + '/users/' + handle).get(email).then(doc => {
-		// 	if(doc.exists){
-		// 		console.log('USER EXISTS!');
-		// 	}
-		// })
-
 		firebase.auth().createUserWithEmailAndPassword(email, password).then((userCredential) => {
 			if (typeof callback === "function") callback();
 		}).catch((error) => {

@@ -7,9 +7,9 @@ export class Register extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-            first_name: '',
-            last_name: '',
-			email: '',
+			first_name: (this.props.match.params.first) ? this.props.match.params.first : '',
+			last_name: (this.props.match.params.last) ? this.props.match.params.last : '',
+			email: (this.props.match.params.email) ? this.props.match.params.email : '',
 			password: '',
             verify_password: '',
 
@@ -21,8 +21,10 @@ export class Register extends React.Component {
 	}
 	componentDidMount() {
 		var user = this.props.firebase.auth().currentUser;
+
 		if (user) {
 			this.props.history.push(this.props.landing);
+
 		} else if (this.props.match.params.handle !== 'default' && !this.state.handle?.id) {
 			this.setState({ loading: true });
 			this.props.dispatch(actions_authentication.verifyHandle(this.props.match.params.handle, this.props.firebase, (handleDoc) => {

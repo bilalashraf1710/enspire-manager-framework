@@ -147,6 +147,8 @@ Parameters | Type | Description
 **link:** | (string \|\| array) | Field on which to link another data set. If array, the first is the field for the additional data set, the second is the original dataset.  _Field_ above referrs to linked dataset.
 **max:** | (bool) | Sets column width to 100%, other columns take minimal space
 **nowarp:** | (bool) | Ensure the column does not wrap
+**prepend:** | (string) | Input Group Prepend
+**append:** | (string) | Input Group Append
 **postfix:** | (string) | String to append to column value
 **prefix:** | (string) | String to prepend to column value
 **type:** | (string) | One of the following: _date, timestamp, number, select, datepicker, button, actions._ _Action_ requires the use of _button_ below to define button actions.  _Select_ requires the use of a linked dataset for the selection options.
