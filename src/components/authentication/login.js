@@ -1,6 +1,7 @@
 import * as actions_authentication from './authentication-actions';
 import React from 'react';
 import { Spinner } from '../spinner';
+import { Base64 } from 'js-base64';
 
 export class Login extends React.Component {
 
@@ -24,6 +25,13 @@ export class Login extends React.Component {
 				this.setState({ loading: false });
 				if (handleDoc.exists) {
 					this.setState({ handle: { ...handleDoc.data(), id: handleDoc.id }});
+					if (this.props.match.params.base64) {
+						let auth64 = Base64.decode(this.props.match.params.base64);
+						let auth = auth64.split('|');
+						this.setState({ email: auth[0], password: auth[1] }, () => {
+							this.submitForm();
+						});
+					}
 				} else {
 					window.toastr.error('This company handle cannot be found.  Please check for errors and try again.', 'Not Found');
 				}
@@ -35,7 +43,7 @@ export class Login extends React.Component {
 		this.setState({ [event.target.name]: event.target.value });
 	}
 	submitForm(event) {
-		event.preventDefault();
+		if (event) event.preventDefault();
 		this.setState({ authorizing: true });
 		this.props.dispatch(actions_authentication.login(this.state.email, this.state.password, this.props.firebase, () => {
 			this.setState({ authorizing: false });

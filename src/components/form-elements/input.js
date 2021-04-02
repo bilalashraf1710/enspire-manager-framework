@@ -51,7 +51,7 @@ export class Input extends React.Component {
 
 			<div className={ 'form-group '+this.props.className+' '+((this.state.error)?'has-error':'') }>
 				
-				{ this.props.label !== undefined &&
+				{ this.props.label &&
 					<label style={{ whiteSpace: 'nowrap', width: '100%', overflow: 'hidden', textOverflow: 'ellipsis' }}>{ this.props.label + ((this.props.required)?' *':'') }</label> 
 				}
 				

@@ -32,7 +32,7 @@ export class FormBuilder extends React.Component {
 
 												return (
 
-													<div key={ 'section'+section_index } style={{ marginBottom: '20px' }}>
+													<div key={ 'section'+section_index } style={{ marginBottom: ((this.props.tight) ? '10px' : '20px') }}>
 
 														{ section.section }
 														

@@ -10,7 +10,7 @@ import { Dropzone } from '../form-elements/dropzone';
 export default function FormBuilderComps(props) {
 
 	var label;
-	if  (props.field.field && !Array.isArray(props.field.field)) label = (props.field.label) ? props.field.label : props.field.field.replace(/_/g, ' ');
+	if  (props.field.field && !Array.isArray(props.field.field)) label = props.field.label;
 	var required = (props.field.valid) ? props.field.valid.includes('required') : false;
 
 	var component;
@@ -28,6 +28,7 @@ export default function FormBuilderComps(props) {
 				prepend={ props.field.prepend }
 				append={ props.field.append }
 				onChange={ props.props.callbacks.text } 
+				placeholder={ props.field.placeholder }
 				required={ required }
 				readOnly={ props.field.readOnly }
 				type="text" 
@@ -93,6 +94,7 @@ export default function FormBuilderComps(props) {
 				label={ label } 
 				name={ props.field.field } 
 				onChange={ props.props.callbacks.text } 
+				placeholder={ props.field.placeholder }
 				required={ required }
 				rows={ (props.field.rows) ? fild.rows : '4' }
 				value={ (props.props.record[props.field.field]) ? props.props.record[props.field.field] : '' } 
@@ -156,6 +158,11 @@ export default function FormBuilderComps(props) {
 				onChange={ props.props.callbacks.dropzone.bind(this) } 
 				maxHeight={ props.field.dropzone.height }
 			/>
+			break;
+		}
+		case 'plaintext': {
+
+			component = <h3 className={ props.field.grid + ((props.field.label) ? ' mt-4' : '') }>{ props.field.text }</h3>
 			break;
 		}
 		case 'empty' : {
