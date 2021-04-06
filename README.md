@@ -2,6 +2,8 @@
 
 Version | Description of Changes
 --------|-----------------------
+3.0.19 | Dropzone add PDF preview support
+... |
 3.0.13 | Add MultiSelect, disabled
 3.0.12 | User Registration Component
 3.0.11 | New ModalForm

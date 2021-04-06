@@ -1,6 +1,9 @@
 import axios from 'axios';
 import React from 'react';
 import { ModalAlert } from '../modal-alert';
+import { pdfjs, Document, Page } from 'react-pdf';
+
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 export class Dropzone extends React.Component {
 
@@ -11,6 +14,8 @@ export class Dropzone extends React.Component {
 			uploading: false,
 			progress: 1, // Keeps screen from jumping when upload starts
 			counter: 0,
+			pdfPage: 1,
+			pdfPages: 1,
 		};
 	}
 
@@ -64,10 +69,28 @@ export class Dropzone extends React.Component {
 		if (this.props.storage == 's3') this.uploadS3(file);
 		if (this.props.storage == 'firebase') this.uploadFirestore(file);
 	}
+	handlePagination(value) {
+		this.setState({ pdfPage: value });
+	}
+	handlePageShift(shift) {
+		let page = this.state.pdfPage + shift;
+		if (page < 1) page = 1;
+		if (page > this.state.pdfPages) page = this.state.pdfPages;
+		this.setState({ pdfPage: page });
+	}
+	onDocumentLoadSuccess({ numPages }) {
+		this.setState({ pdfPages: numPages });
+	}
+
 	uploadFirestore(file) {
 		
 		var metadata = { contentType: file.type };
-		var filename = ((this.props.directory) ? this.props.directory + '/' : '') + ((this.props.filename) ? this.props.filename : (Date.now()));
+		var ext = '';
+		if (file.type.endsWith('pdf')) ext = '.pdf';
+		if (file.type.endsWith('jpeg')) ext = '.jpg';
+		if (file.type.endsWith('png')) ext = '.png';
+
+		var filename = ((this.props.directory) ? this.props.directory + '/' : '') + ((this.props.filename) ? this.props.filename : (Date.now()) + ext);
 		var uploadTask = this.props.storageRef.child(this.props.bin + '/' + filename).put(file, metadata);
 
 		this.setState({ hover: true, uploading: true, progress: 1 });
@@ -114,13 +137,18 @@ export class Dropzone extends React.Component {
 	render() {
 
 		// TODO - handle multiple files at a time with prop multiple = TRUE
+		var pagination = [];
+		for (var i = 1; i <= this.state.pdfPages; i++) {
+			pagination.push(<button className={ 'btn btn-white ' + ((this.state.pdfPage == i) ? 'active' : '') } onClick={ this.handlePagination.bind(this, i) }>{ i }</button>);
+		}
+
 
 		return (
 
 			<div style={{ width: '100%', marginLeft: '5px', marginRight: '5px' }}>
 
 				{ this.props.image &&
-					<div style={{ position: 'relative', textAlign: 'center', border: '1px solid #e5e6e7', padding: '10px' }}>
+					<div className={ this.props.className } style={{ position: 'relative', textAlign: 'center', border: '1px solid #e5e6e7', padding: '10px' }}>
 						<i className="far fa-times-circle fa-3x" 
 							style={{ 
 								color: 'white', 
@@ -134,7 +162,31 @@ export class Dropzone extends React.Component {
 							}}
 							onClick={ this.removeFile.bind(this) }
 						></i>
-						<img src={ this.props.image  } width={ this.props.width } style={{ width: '100%' }} />
+						{ (this.props.image.includes('.jpg') || this.props.image.includes('.png')) &&
+							<div>
+								<img src={ this.props.image  } width={ this.props.width } style={{ width: '100%' }} />
+								<p><a href="this.props.image" target="_blank">Open in Browser</a></p>
+							</div>
+						}
+						{ this.props.image.includes('.pdf') &&
+							<center style={{ height: '600px' }}>
+								<Document
+									file={ this.props.image }
+									onLoadSuccess={ this.onDocumentLoadSuccess.bind(this) }
+									onLoadError={ console.error }
+								>
+									<Page pageNumber={ this.state.pdfPage } width={ 400 } renderMode="svg" />
+								</Document>
+								
+								<div className="btn-group">
+									<button type="button" className="btn btn-white" onClick={ this.handlePageShift.bind(this, -1) }><i className="fa fa-chevron-left"></i></button>
+									{ pagination }
+									<button type="button" className="btn btn-white" onClick={ this.handlePageShift.bind(this, 1) }><i className="fa fa-chevron-right"></i> </button>
+								</div>
+
+								<p className="mt-3"><a href={ this.props.image } target="_blank">Open in Browser <i class="fas fa-external-link-alt"></i></a></p>
+							</center>
+						}
 					</div>
 				}
 
@@ -148,12 +200,7 @@ export class Dropzone extends React.Component {
 								{ this.state.uploading
 
 									?	<div>
-											<h3>
-												{ this.state.progress > 0
-													?	<span>Uploading...</span>
-													: 	<span>Finished!</span>
-												}
-											</h3>
+											<h3><span>Uploading...</span></h3>
 											{ this.state.progress > 0 &&
 												<div className="progress mt-3 mb-3" style={{ backgroundColor: 'white' }}>
 													<div className="progress-bar" style={{ width: this.state.progress+'%' }} role="progressbar"></div>
