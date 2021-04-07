@@ -2,17 +2,22 @@
 
 Version | Description of Changes
 --------|-----------------------
-3.0.19 | Dropzone add PDF preview support
-... |
-3.0.13 | Add MultiSelect, disabled
-3.0.12 | User Registration Component
-3.0.11 | New ModalForm
-3.0.10 | Auth fixes
-3.0.8 | Mapbox & updated UserProfile
-3.0.6 | Format *timestamp* for timestamp fields, and *date* for date fields including a "seconds" key.
-3.0.4 | Update *show_search*, *highlight_search*, and *search_query*. Addition of *_accent* object for CSS accent of a data row.
-3.0.3 | Updated of Company fields - *logoUrl*, *companyName*
-3.0.2 | **Table**, deprecation of *id* prop, *click_callback*  returns *item* entire record. **Table** record with *_highlight* field wrappes value with *\<mark>* tags. **Table** addition of *search* and *search_callback* props.  **Avatar** street numbers prefixed above text.  **Ibox** addition of *mini* prop for smaller footprint.
+0.4.1 | Update Modal Form with configurable buttons
+0.4.0 | Dropzone add PDF preview support
+0.3.18 | Base64 Auth support
+0.3.17 | Prepopulate Register screen
+0.3.16 | App Selector Dropdown Component
+0.3.15 | Agile Component
+0.3.14 | Logout on Not Authorized
+0.3.13 | Add MultiSelect, disabled
+0.3.12 | User Registration Component
+0.3.11 | New ModalForm
+0.3.10 | Auth fixes
+0.3.8 | Mapbox & updated UserProfile
+0.3.6 | Format *timestamp* for timestamp fields, and *date* for date fields including a "seconds" key.
+0.3.4 | Update *show_search*, *highlight_search*, and *search_query*. Addition of *_accent* object for CSS accent of a data row.
+0.3.3 | Updated of Company fields - *logoUrl*, *companyName*
+0.3.2 | **Table**, deprecation of *id* prop, *click_callback*  returns *item* entire record. **Table** record with *_highlight* field wrappes value with *\<mark>* tags. **Table** addition of *search* and *search_callback* props.  **Avatar** street numbers prefixed above text.  **Ibox** addition of *mini* prop for smaller footprint.
 
 # LINK IN LOCAL ENVIRONMENT
 
@@ -99,8 +104,11 @@ option | Type | Description
 -----|------|------------
 **history** | (function) | Route History object
 **modal_header: \*** | (string) | Title for popup modal
-**cancel_button_title: \*** | (string) | Label for Cancel button
-**save_button_title: \*** | (string) | Label for Save button
+**cancel_button_title: \*** | (string) | Label for Cancel button. Defaults to "CANCEL"
+**cancel_button_callback:** | (function) | callback for when modal is closed or canceled.  Defaults to "back"
+**delete_button_title:** | (string) | Label for Cancel button.  Defaults to "DELETE"
+**delete_button_callback:** | (function) | callback for when modal is closed or canceled
+**save_button_title: \*** | (string) | Label for Save button. Defaults to "SAVE CHANGES"
 **submitFormHandler** | (function) | callback when modal is saved
 **show_spinner** | (bool) | whether or not to display a spinner in the middle of the modal
 **no_fade** | (bool) | do not fade modal if true

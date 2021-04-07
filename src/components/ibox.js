@@ -15,10 +15,10 @@ export function Ibox(props) {
 					<h5>{ props.title }
 						<div className="ibox-tools" style={{ marginTop: '-5px' }}>
 							{ 
-								props.icon_callback_array?.slice().reverse().map((callback, index) => {
+								props.icon_callback_array?.slice().map((callback, index) => {
 									if (typeof callback === "function") return (
 										<a key={ 'icon'+index } onClick={ () => callback() } className="ml-2" style={{ fontSize: (props.mini) ? '14px' : '18px' }}>
-											<i className={ props.icon_array.slice().reverse()[index] } style={ { color: '#c4c4c4' } }></i>
+											<i className={ props.icon_array.slice()[index] } style={ { color: '#c4c4c4' } }></i>
 										</a>
 									);
 								})
