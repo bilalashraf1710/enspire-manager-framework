@@ -2,6 +2,7 @@
 
 Version | Description of Changes
 --------|-----------------------
+0.5.0 | Add ElasticSearch function
 0.4.1 | Update Modal Form with configurable buttons
 0.4.0 | Dropzone add PDF preview support
 0.3.18 | Base64 Auth support
@@ -98,7 +99,7 @@ option | Type | Description
 
 ```
 
-## MODAL ALERT OPTIONS
+## MODAL FORM OPTIONS
 
 option | Type | Description
 -----|------|------------

@@ -8,6 +8,7 @@ export { Chip } from './components/chip';
 export { CloseX } from './components/closex';
 export { Contact } from './components/contact';
 export { Dropzone } from './components/form-elements/dropzone';
+export { elasticSearch } from './components/elastic-search';
 export { FormBuilder } from './components/forms/form-layout';
 export { Graph } from './components/graph';
 export { Ibox } from './components/ibox';

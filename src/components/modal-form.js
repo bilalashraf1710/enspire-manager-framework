@@ -36,10 +36,10 @@ export class ModalForm extends React.Component {
 							<h2 className="mt-0">Hints / Tips</h2>
 							<p className="mb-auto">&nbsp;</p>
 							{ this.props.delete_button_callback && 
-								<button className="btn btn-warning btn-sm btn-block mb-2" type="button" onClick={ () => this.props.delete_button_callback() }>{ (this.props.delete_button_title) ? this.props.delete_button_title : 'DELETE' }</button>
+								<button className="btn btn-warning btn-sm btn-block mb-2" type="button" onClick={ () => this.props.delete_button_callback() }>{ (this.props.delete_button_title) ? this.props.delete_button_title.toUpperCase() : 'DELETE' }</button>
 							}
-							<button className="btn btn-white btn-sm btn-block" type="button" onClick={ () => cancel_callback() }>{ this.props.cancel_button_title }</button>
-							<button className="btn btn-primary btn-lg btn-block" type="button" onClick={ () => this.props.submitFormHandler() }>{ (this.props.save_button_title) ? this.props.save_button_title : 'SAVE CHANGES' }</button>
+							<button className="btn btn-white btn-sm btn-block" type="button" onClick={ () => cancel_callback() }>{ this.props.cancel_button_title.toUpperCase() }</button>
+							<button className="btn btn-primary btn-lg btn-block" type="button" onClick={ () => this.props.submitFormHandler() }>{ (this.props.save_button_title) ? this.props.save_button_title.toUpperCase() : 'SAVE CHANGES' }</button>
 						</div>
 					</div>
 
