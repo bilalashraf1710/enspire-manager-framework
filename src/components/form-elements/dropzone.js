@@ -1,6 +1,5 @@
-import axios from 'axios';
 import React from 'react';
-import { ModalAlert } from '../modal-alert';
+import { PdfPreview } from '../pdf-preview';
 import { pdfjs, Document, Page } from 'react-pdf';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
@@ -169,23 +168,7 @@ export class Dropzone extends React.Component {
 							</div>
 						}
 						{ this.props.image.includes('.pdf') &&
-							<center style={{ height: '600px' }}>
-								<Document
-									file={ this.props.image }
-									onLoadSuccess={ this.onDocumentLoadSuccess.bind(this) }
-									onLoadError={ console.error }
-								>
-									<Page pageNumber={ this.state.pdfPage } width={ 400 } renderMode="svg" />
-								</Document>
-								
-								<div className="btn-group">
-									<button type="button" className="btn btn-white" onClick={ this.handlePageShift.bind(this, -1) }><i className="fa fa-chevron-left"></i></button>
-									{ pagination }
-									<button type="button" className="btn btn-white" onClick={ this.handlePageShift.bind(this, 1) }><i className="fa fa-chevron-right"></i> </button>
-								</div>
-
-								<p className="mt-3"><a href={ this.props.image } target="_blank">Open in Browser <i class="fas fa-external-link-alt"></i></a></p>
-							</center>
+							<PdfPreview file={ this.props.image } width={ 400 } centered={ true }/>
 						}
 					</div>
 				}

@@ -2,6 +2,7 @@
 
 Version | Description of Changes
 --------|-----------------------
+0.6.0 | Add Pdf Preview
 0.5.0 | Add ElasticSearch function
 0.4.1 | Update Modal Form with configurable buttons
 0.4.0 | Dropzone add PDF preview support
@@ -115,6 +116,32 @@ option | Type | Description
 **no_fade** | (bool) | do not fade modal if true
 
 
+# PDF PREVIEW
+
+### Example
+
+```
+<PdfPreview 
+	file={ this.state.downloadUrl } 
+	width={ 400 } />
+	pagination={ true }
+	download_link={ false }
+	centered={ true }
+/>
+
+```
+
+## MODAL FORM OPTIONS
+
+option | Type | Description
+-----|------|------------
+**file \*** | (string) | Path or Url for pdf document
+**width: \*** | (number) | Width for rendered PDF in pixels
+**pagination:** | (boolean) | Show pagination. Defaults to TRUE
+**download_link:** | (boolean) | Show download link. Defaults to TRUE
+**centered:** | (boolean) | Center Pdf Preview and Navigation. Defaults to FALSE
+
+
 # TABLES
 
 ## TABLE PROPS
@@ -139,7 +166,6 @@ Prop | Type | Description
 **on_delete:** | (function) | function to which *id* is sent upon delete
 **order:** | (object) | Order Object (See Order Object below)
 **pathname:** | (string) | Current page pathname required for savestate
-**savestate:** | (boolean) | State state across screen instances
 **savestate:** | (boolean) | State state across screen instances
 **search_query** | (string) | External search query for high-lighting. Internal search query is used if not defined.
 **show_limit:** | (boolean) | Show limit dropdown
