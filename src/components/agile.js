@@ -27,16 +27,16 @@ export function Agile(props) {
 	
 	return (
 
-		<li className={ 'agile ui-sortable-handle ' + color_class } onClick={ (typeof props.callback === "function") ? () => { props.onClick(props.id) } : null }>
+		<li className={ 'agile ui-sortable-handle animated fadeInDown ' + color_class } onClick={ (typeof props.callback === "function") ? () => { props.onClick(props.id) } : null }>
 
 			<div className="btn-group float-right">
-				<button data-toggle="dropdown" className="dropdown-toggle btn btn-white" aria-expanded="false"></button>
+				<button data-toggle="dropdown" className="dropdown-toggle btn btn-white" aria-expanded="false" style={{ padding: '0px 10px', marginTop: '-2px', border: 'none' }}></button>
 				<ul className="dropdown-menu dropdown-menu-right" x-placement="bottom-start" style={ { position: 'absolute', top: '33px', right: '0px', willChange: 'top, right' } }>
 					{ links }
 				</ul>
 			</div>
 			{ props.title }
-			<div className="agile-detail">
+			<div className="agile-detail" style={{ fontSize: '11px' }}>
 				{ props.detail } {/*<i className="far fa-clock"></i> 12.10.2015 */}
 			</div>
 		</li>

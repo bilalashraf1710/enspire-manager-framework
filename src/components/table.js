@@ -1,8 +1,8 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import DatePicker from "react-datepicker";
-const escapeStringRegexp = require('escape-string-regexp');
+import { Input } from './form-elements/input';
 
+const escapeStringRegexp = require('escape-string-regexp');
 var _ = require('lodash');
 var moment = require('moment'); 
 var sessionStorage = window.sessionStorage;
@@ -16,6 +16,9 @@ export class Table extends React.Component {
 
 			filter_button: 0,
 			filter_limit: 4,
+
+			startDate: null,
+			endDate: null,
 
 			page: 0,
 			limit: 0,
@@ -48,6 +51,8 @@ export class Table extends React.Component {
 		if (this.props.limit) this.setState({ limit: parseInt(this.props.limit), show_limit: true });
 		if (this.props.order) this.setState({ order: this.props.order });
 		if (this.props.filters) this.setState({ filters: this.props.filters });
+		if (this.props.daterange?.startDate) this.setState({ startDate: this.props.daterange?.startDate });
+		if (this.props.daterange?.endDate) this.setState({ endDate: this.props.daterange?.endDate });
 
 		this.updateSessionStorage();
 		this.handleResize();
@@ -116,6 +121,10 @@ export class Table extends React.Component {
 	handleFilter(button) {
 		if (this.state.filter_button === button) button = 0;
 		this.setState({ filter_button: button, page: 0 });
+	}
+	handleDate(name, date) {
+		console.error(name, date);
+		this.setState({ [name]: date });
 	}
 	handleFilterDropdown(event) {
 		this.setState({ filter_button: event.target.value, page: 0 });
@@ -234,6 +243,9 @@ export class Table extends React.Component {
 			} else {
 				if (this.state.filter_button !== 0 && this.state.filter_button !== "0") filtered_data = _.filter(filtered_data, { [this.props.filters.field]: this.state.filter_button }); 
 			}
+		}
+		if (this.props.daterange?.show) {
+			filtered_data = _.filter(filtered_data, (o) => { return o[this.props.daterange?.field]?.seconds >= parseInt(moment(this.state.startDate).format('X')) && o[this.props.daterange?.field]?.seconds <= parseInt(moment(this.state.endDate).format('X')) });
 		}
 
 		/* Limit --------------------------------------*/
@@ -535,6 +547,34 @@ export class Table extends React.Component {
 									<option value="100">100</option>
 									<option value="0">All</option>
 								</select>
+							</div>
+						}
+						{ this.props.daterange?.show &&
+							<div className="col m-b-xs">
+								<div className="row">
+									<Input
+										className={ "col pr-0" }
+										name={ 'startDate' }
+										prepend={ <i className="far fa-calendar-alt"></i> }
+										onChange={ (name, date) => this.handleDate(name, date) }
+										type="date"
+										selectsStart
+										selected={ this.state.startDate }
+										startDate={ this.state.startDate }
+										endDate={ this.state.endDate }
+										/>
+									<Input
+										className={ "col pl-0" }
+										name={ 'endDate' }
+										onChange={ (name, date) => this.handleDate(name, date) }
+										type="date"
+										selectsEnd
+										selected={ this.state.endDate }
+										startDate={ this.state.startDate }
+										minDate={ this.state.startDate }
+										endDate={ this.state.endDate }
+									/>
+								</div>
 							</div>
 						}
 						{ filters &&

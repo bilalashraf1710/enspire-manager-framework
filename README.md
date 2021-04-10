@@ -2,6 +2,7 @@
 
 Version | Description of Changes
 --------|-----------------------
+0.6.1 | Add support for Number input type which returns parseFloat value
 0.6.0 | Add Pdf Preview
 0.5.0 | Add ElasticSearch function
 0.4.1 | Update Modal Form with configurable buttons

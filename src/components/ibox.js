@@ -13,25 +13,22 @@ export function Ibox(props) {
 			<div className="ibox" style={ styleIbox }>
 				<div className="ibox-title" style={ styleTitle }>
 					<h5>{ props.title }
-						<div className="ibox-tools" style={{ marginTop: '-5px' }}>
-							{ 
-								props.icon_callback_array?.slice().map((callback, index) => {
-									if (typeof callback === "function") return (
-										<a key={ 'icon'+index } onClick={ () => callback() } className="ml-2" style={{ fontSize: (props.mini) ? '14px' : '18px' }}>
-											<i className={ props.icon_array.slice()[index] } style={ { color: '#c4c4c4' } }></i>
-										</a>
-									);
-								})
-							}
-						</div>
-						{/* { typeof props.icon_callback === "function" &&
-							<a onClick={ props.icon_callback }>
-								<i className={ props.icon + ' pull-right' } style={{ color: '#c4c4c4', marginTop: '-3px' }} onClick={ props.icon_callback }></i>
-							</a>
+						{ props.icon_array &&
+							<div className="ibox-tools" style={{ marginTop: '-5px' }}>
+								{ 
+									props.icon_callback_array?.slice().map((callback, index) => {
+										if (typeof callback === "function") return (
+											<a key={ 'icon'+index } onClick={ () => callback() } className="ml-2" style={{ fontSize: (props.mini) ? '14px' : '18px' }}>
+												<i className={ props.icon_array.slice()[index] } style={ { color: '#c4c4c4' } }></i>
+											</a>
+										);
+									})
+								}
+							</div>
 						}
 						{ props.button &&
-							<>{ props.button }</>
-						} */}
+							<button type="button" className="btn btn-sm btn-primary ml-3 pull-right" style={{ marginTop: '-4px' }} onClick={ props.button_callback.bind(this) }>{ props.button }</button>
+						}
 					</h5>
 				</div>
 				<div className={ 'ibox-content' + ((props.no_fade) ? ' no-fade' : '') + ((props.show_spinner) ? ' sk-loading' : '') } style={ styleContent }>

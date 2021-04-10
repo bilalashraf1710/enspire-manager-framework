@@ -1,6 +1,8 @@
-import React from 'react';
-import { ValidateMessage } from './validate-message';
 import DatePicker from "react-datepicker";
+import React from 'react';
+import { AsyncTypeahead } from 'react-bootstrap-typeahead';
+import { ValidateMessage } from './validate-message';
+import { elasticSearch } from '../elastic-search';
 
 var _ = require('lodash');
 var moment = require('moment'); 
@@ -12,6 +14,9 @@ export class Input extends React.Component {
 		this.state = {
 			error: false,
 			error_message: null,
+			search: '',
+			options: [],
+			isLoading: false,
 		};
 		this.field_ref = React.createRef();
 	}
@@ -37,15 +42,34 @@ export class Input extends React.Component {
 			}
 		}
 	}
+	async handleSearch(search) {
+
+		var config = {
+			table: this.props.table,
+			fields: this.props.fields,
+			sort: this.props.sort,
+		}
+		var hits = await elasticSearch(search, config);
+		console.log(hits);
+		const options = hits.map((hit) => {
+			return { address: hit.displayName, id: hit.id }
+		})
+
+		this.setState({ options, search, isLoading: false });
+		return false; // prevent <Enter> key from reloading
+	}
+
 
 	render() {
 
-		// input CANNOT have both value and defaultValue
 		var inputProps = {};
-		if (this.props.defaultValue) inputProps.defaultValue = this.props.defaultValue;
-		else if (this.props.value !== undefined) inputProps.value = this.props.value;
-
-		var selected = (this.props.type === 'date' && this.props.defaultValue !== null) ? moment(this.props.defaultValue).toDate() : '';
+		if (this.props.selectsStart) inputProps.selectsStart = this.props.selectsStart;
+		if (this.props.selectsEnd) inputProps.selectsEnd = this.props.selectsEnd;
+		if (this.props.startDate) inputProps.startDate = this.props.startDate;
+		if (this.props.endDate) inputProps.endDate = this.props.endDate;
+		if (this.props.minDate) inputProps.minDate = this.props.minDate;
+		if (this.props.name) inputProps.name = this.props.name;
+		if (this.props.selected) inputProps.selected = this.props.selected;
 
 		return (
 
@@ -61,25 +85,45 @@ export class Input extends React.Component {
 							<span className="input-group-text input-group-addon">{ this.props.prepend }</span>
 						</div>
 					}
-					{ this.props.type !== 'date'
-						?	<input 
-								autoComplete="off" 
-								className="form-control form-control-sm" 
-								name={ this.props.name } 
-								onChange={ this.props.onChange.bind(this) } 
-								placeholder={ this.props.placeholder } 
-								readOnly={ this.props.readOnly }
-								ref={ this.field_ref } 
-								type="text"
-								disabled={ this.props.disabled }
-								{ ...inputProps }
-							/>
-						:	<DatePicker
-								className="form-control form-control-sm" 
-								dateFormat="yyyy-MM-dd"
-								selected={ selected }
-								onChange={ this.props.onChange.bind(this, this.props.name) }
-							/>
+					{ this.props.type == 'text' &&
+						<input 
+							autoComplete="off" 
+							className="form-control form-control-sm" 
+							name={ this.props.name } 
+							onChange={ this.props.onChange.bind(this) } 
+							placeholder={ this.props.placeholder } 
+							readOnly={ this.props.readOnly }
+							ref={ this.field_ref } 
+							type="text"
+							disabled={ this.props.disabled }
+							{ ...inputProps }
+						/>
+					}
+					{ this.props.type == 'lookahead' &&
+						<AsyncTypeahead
+							filterBy={ () => true }
+							id="async-typeahead"
+							isLoading={ this.state.isLoading }
+							labelKey="address"
+							minLength={ 2 }
+							onSearch={ this.handleSearch.bind(this) }
+							options={ this.state.options }
+							placeholder="Search for Customer"
+							renderMenuItemChildren={ (options, props) => (
+								<Fragment>
+									<span>{ options.address }</span>
+								</Fragment>
+							) }
+						/>
+					}
+					{ this.props.type == 'date' &&
+						<DatePicker
+							className="form-control form-control-sm" 
+							dateFormat="MM-dd-yyyy"
+							selected={ this.props.selected }
+							onChange={ this.props.onChange.bind(this, this.props.name) }
+							{ ...inputProps }
+						/>
 					}
 					{ this.props.append &&
 						<div className="input-group-append input-group-sm">

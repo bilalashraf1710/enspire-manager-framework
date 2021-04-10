@@ -1,4 +1,5 @@
 import React from 'react';
+import { Spinner } from './spinner';
 import { pdfjs, Document, Page } from 'react-pdf';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
@@ -33,12 +34,14 @@ export class PdfPreview extends React.Component {
 			pagination.push(<button className={ 'btn btn-white ' + ((this.state.pdfPage == i) ? 'active' : '') } onClick={ this.handlePagination.bind(this, i) }>{ i }</button>);
 		}
 
+		var height = (this.props.width) ? this.props.width * 1.5 : 600;
 
 		return (
 
-			<div className={ (this.props.centered) ? 'text-center' : '' } style={ { width: (this.props.width) ? this.props.width : 400, height: (this.props.width) ? this.props.width * 1.5 : 600 }}>
+			<div className={ (this.props.centered) ? 'text-center' : '' } style={ { width: (this.props.width) ? this.props.width : 400, height: height }}>
 				<Document
 					file={ this.props.file }
+					loading={ <Spinner style={{ marginTop: (height * .40) + 'px', marginBottom: (height * .40) + 'px' }} /> }
 					onLoadSuccess={ this.onDocumentLoadSuccess.bind(this) }
 					onLoadError={ console.error }
 				>

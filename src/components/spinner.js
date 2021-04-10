@@ -13,7 +13,7 @@ export function Spinner(props) {
 
 	return (
 
-		<div className="sk-spinner sk-spinner-wave" style={ style }>
+		<div className="sk-spinner sk-spinner-wave" style={{ ...style, ...props.style  }}>
 			<div className="sk-rect1"></div>
 			<div className="sk-rect2"></div>
 			<div className="sk-rect3"></div>

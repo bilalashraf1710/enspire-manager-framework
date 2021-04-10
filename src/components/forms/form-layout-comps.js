@@ -17,6 +17,7 @@ export default function FormBuilderComps(props) {
 
 	switch (props.field.type) {
 
+		case 'number'	:
 		case 'email'	: 
 		case 'text'		: {
 
@@ -32,6 +33,28 @@ export default function FormBuilderComps(props) {
 				required={ required }
 				readOnly={ props.field.readOnly }
 				type="text" 
+				disabled={ props.field.disabled }
+				value={ (props.props.record[props.field.field]) ? props.props.record[props.field.field] : '' }
+			/>
+			break;
+		}
+		case 'lookahead'		: {
+
+			component =	<Input
+				className={ props.field.grid } 
+				form_error={ props.props.form_error } 
+				label={ label } 
+				name={ props.field.field } 
+				prepend={ props.field.prepend }
+				append={ props.field.append }
+				onChange={ props.props.callbacks.text } 
+				placeholder={ props.field.placeholder }
+				required={ required }
+				readOnly={ props.field.readOnly }
+				table={ props.field.table }
+				fields={ props.field.fields }
+				sort={ props.field.sort }
+				type="lookahead" 
 				disabled={ props.field.disabled }
 				value={ (props.props.record[props.field.field]) ? props.props.record[props.field.field] : '' }
 			/>
