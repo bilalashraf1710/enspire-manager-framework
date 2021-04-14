@@ -21,7 +21,7 @@ export class Table extends React.Component {
 			endDate: null,
 
 			page: 0,
-			limit: 0,
+			limit: 25,
 			show_limit: false,
 
 			order: {
@@ -263,7 +263,7 @@ export class Table extends React.Component {
 
 		var pagination = [];
 		if (this.state.limit > 0 && filtered_data.length > this.state.limit) {
-			for (var i=0; i * this.props.limit < filtered_data.length; i++) {
+			for (var i=0; i * this.state.limit < filtered_data.length; i++) {
 
 				if (i < this.state.page - 2) {
 					gap_low = true;

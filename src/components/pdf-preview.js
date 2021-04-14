@@ -57,7 +57,7 @@ export class PdfPreview extends React.Component {
 				}
 
 				{ this.props.download_link !== false &&
-					<p className="mt-3"><a href={ this.props.file } target="_blank">Open in Browser <i class="fas fa-external-link-alt"></i></a></p>
+					<p className="mt-3"><a href={ this.props.file } target="_blank">Open in Browser <i className="fas fa-external-link-alt"></i></a></p>
 				}
 			</div>
 		);

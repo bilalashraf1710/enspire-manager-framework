@@ -27,7 +27,7 @@ export function Agile(props) {
 	
 	return (
 
-		<li className={ 'agile ui-sortable-handle animated fadeInDown ' + color_class } onClick={ (typeof props.callback === "function") ? () => { props.onClick(props.id) } : null }>
+		<li className={ 'agile ui-sortable-handle fadeInDown ' + color_class } onClick={ (typeof props.callback === "function") ? () => { props.onClick(props.id) } : null }>
 
 			<div className="btn-group float-right">
 				<button data-toggle="dropdown" className="dropdown-toggle btn btn-white" aria-expanded="false" style={{ padding: '0px 10px', marginTop: '-2px', border: 'none' }}></button>

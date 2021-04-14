@@ -21,7 +21,7 @@ export class Contact extends React.Component {
 		
 		return (
 
-			<div onClick={ () => { this.setState({ isOpen: !this.state.isOpen }) }} style={{ cursor: 'pointer', marginBottom: '6px' }}>
+			<div onClick={ () => { this.setState({ isOpen: !this.state.isOpen }) }} style={{ cursor: 'pointer', marginBottom: '7px', paddingBottom: '1px' }}>
 
 				{ this.state.isOpen
 					? 	<span className="float-right" style={{ fontSize: '16px' }}><i className="fas fa-angle-up mr-2"></i></span>
@@ -36,11 +36,13 @@ export class Contact extends React.Component {
 						{ this.props.contact.phone &&
 							<div className="mt-1"><i className="fas fa-phone"></i> &nbsp; { this.props.contact.phone }</div>
 						}
-						<span className="float-right" style={ { fontSize: '16px' } }>
-							<a onClick={ () => { this.props.editCallback(this.props.contact.contactId) } }>
-								<i className="fas fa-edit mr-2" style={ { color: '#c4c4c4' } }></i>
-							</a>
-						</span>
+						{ this.props.show_edit && this.props.editCallback &&
+							<span className="float-right" style={ { fontSize: '16px' } }>
+								<a onClick={ () => { this.props.editCallback(this.props.contact.contactId) } }>
+									<i className="fas fa-edit mr-2" style={ { color: '#c4c4c4' } }></i>
+								</a>
+							</span>
+						}
 						{ this.props.contact.mobile &&
 							<div className="mt-1"><i className="fas fa-mobile"></i> &nbsp; { this.props.contact.mobile }</div>
 						}
