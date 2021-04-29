@@ -52,7 +52,7 @@ export class Input extends React.Component {
 		var hits = await elasticSearch(search, config);
 		console.log(hits);
 		const options = hits.map((hit) => {
-			return { address: hit.displayName, id: hit.id }
+			return { target: hit.displayName, id: hit.id }
 		})
 
 		this.setState({ options, search, isLoading: false });
@@ -104,12 +104,13 @@ export class Input extends React.Component {
 					}
 					{ this.props.type == 'lookahead' &&
 						<AsyncTypeahead
-							filterBy={ () => true }
 							id="async-typeahead"
+							filterBy={ () => true }
 							isLoading={ this.state.isLoading }
-							labelKey="address"
+							labelKey="target"
 							minLength={ 2 }
 							onSearch={ this.handleSearch.bind(this) }
+							onChange={ this.props.onChange.bind(this) }
 							options={ this.state.options }
 							placeholder="Search for Customer"
 							renderMenuItemChildren={ (options, props) => (
