@@ -1,5 +1,5 @@
 import DatePicker from "react-datepicker";
-import React from 'react';
+import React, { Fragment } from 'react';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { ValidateMessage } from './validate-message';
 import { elasticSearch } from '../elastic-search';
