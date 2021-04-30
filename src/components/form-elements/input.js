@@ -103,6 +103,7 @@ export class Input extends React.Component {
 						<AsyncTypeahead
 							id="async-lookahead"
 							style={ { width: '100%' } }
+							allowNew={ this.props.allowNew }
 							filterBy={ () => true }
 							isLoading={ this.state.isLoading }
 							labelKey="target"

@@ -45,6 +45,7 @@ export default function FormBuilderComps(props) {
 				form_error={ props.props.form_error } 
 				label={ label } 
 				name={ props.field.field } 
+				allowNew={ props.field.allow_new }
 				prepend={ props.field.prepend }
 				append={ props.field.append }
 				onChange={ props.props.callbacks.typeahead } 
