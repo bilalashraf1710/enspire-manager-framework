@@ -104,6 +104,7 @@ export class Input extends React.Component {
 							id="async-lookahead"
 							style={ { width: '100%' } }
 							allowNew={ this.props.allowNew }
+							newSelectionPrefix={ 'ADD NEW: ' }
 							filterBy={ () => true }
 							isLoading={ this.state.isLoading }
 							labelKey="target"
@@ -119,6 +120,11 @@ export class Input extends React.Component {
 								</Fragment>
 							) }
 						/>
+					}
+					{ this.props.type == 'typeahead' && this.props.allowNew &&
+						<div class="input-group-append">
+							<button class="btn btn-primary" type="button" onClick={ () => { this.props.onchange([{ customOption: true, target: '' }]) } }>+ New</button>
+						</div>
 					}
 					{ this.props.type == 'date' &&
 						<DatePicker
