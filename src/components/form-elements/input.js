@@ -29,12 +29,10 @@ export class Input extends React.Component {
 			if (error && !this.state.error) {
 
 				var error_message = ValidateMessage(error);
-
 				if (this.props.form_error[0].field === this.props.name) {
 					if (this.field_ref.current) this.field_ref.current.focus();
 					window.toastr.error('Please update your value for <em>'+this.props.label+'</em>', error_message);
 				}
-				
 				this.setState({ error: true, error_message });
 
 			} else if (!error && this.state.error) {
@@ -50,7 +48,6 @@ export class Input extends React.Component {
 			sort: this.props.sort,
 		}
 		var hits = await elasticSearch(search, config);
-		console.log(hits);
 		const options = hits.map((hit) => {
 			return { target: hit.displayName, id: hit.id }
 		})
@@ -112,10 +109,10 @@ export class Input extends React.Component {
 							onSearch={ this.handleSearch.bind(this) }
 							onChange={ this.props.onChange.bind(this) }
 							options={ this.state.options }
-							placeholder="Search for Customer"
+							placeholder={ this.props.placeholder }
 							renderMenuItemChildren={ (options, props) => (
 								<Fragment>
-									<span>{ options.address }</span>
+									<span>{ options.target }</span>
 								</Fragment>
 							) }
 						/>
