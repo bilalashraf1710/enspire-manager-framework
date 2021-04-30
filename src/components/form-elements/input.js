@@ -99,9 +99,9 @@ export class Input extends React.Component {
 							{ ...inputProps }
 						/>
 					}
-					{ this.props.type == 'typehead' &&
+					{ this.props.type == 'typeahead' &&
 						<AsyncTypeahead
-							id="async-typeahead"
+							id="async-lookahead"
 							style={ { width: '100%' } }
 							filterBy={ () => true }
 							isLoading={ this.state.isLoading }
