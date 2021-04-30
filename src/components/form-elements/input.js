@@ -102,7 +102,7 @@ export class Input extends React.Component {
 					{ this.props.type == 'typeahead' &&
 						<AsyncTypeahead
 							id="async-lookahead"
-							style={ { width: '100%' } }
+							style={ { width: (this.props.allowNew) ? '88%' : '100%' } }
 							allowNew={ this.props.allowNew }
 							newSelectionPrefix={ 'ADD NEW: ' }
 							filterBy={ () => true }
@@ -122,8 +122,8 @@ export class Input extends React.Component {
 						/>
 					}
 					{ this.props.type == 'typeahead' && this.props.allowNew &&
-						<div class="input-group-append">
-							<button class="btn btn-primary" type="button" onClick={ () => { this.props.onchange([{ customOption: true, target: '' }]) } }>+ New</button>
+						<div className="input-group-append">
+							<button className="btn btn-primary" type="button" onClick={ this.props.onchange.bind(this, [{ customOption: true, target: '' }]) }>+ New</button>
 						</div>
 					}
 					{ this.props.type == 'date' &&
