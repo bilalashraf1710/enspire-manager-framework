@@ -38,7 +38,7 @@ export default function FormBuilderComps(props) {
 			/>
 			break;
 		}
-		case 'lookahead'		: {
+		case 'typeahead'		: {
 
 			component =	<Input
 				className={ props.field.grid } 
@@ -47,14 +47,14 @@ export default function FormBuilderComps(props) {
 				name={ props.field.field } 
 				prepend={ props.field.prepend }
 				append={ props.field.append }
-				onChange={ props.props.callbacks.lookahead } 
+				onChange={ props.props.callbacks.typeahead } 
 				placeholder={ props.field.placeholder }
 				required={ required }
 				readOnly={ props.field.readOnly }
 				table={ props.field.table }
 				fields={ props.field.fields }
 				sort={ props.field.sort }
-				type="lookahead" 
+				type="typeahead" 
 				disabled={ props.field.disabled }
 			/>
 			break;

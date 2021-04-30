@@ -99,12 +99,14 @@ export class Input extends React.Component {
 							{ ...inputProps }
 						/>
 					}
-					{ this.props.type == 'lookahead' &&
+					{ this.props.type == 'typehead' &&
 						<AsyncTypeahead
 							id="async-typeahead"
+							style={ { width: '100%' } }
 							filterBy={ () => true }
 							isLoading={ this.state.isLoading }
 							labelKey="target"
+							highlightOnlyResult={ true }
 							minLength={ 2 }
 							onSearch={ this.handleSearch.bind(this) }
 							onChange={ this.props.onChange.bind(this) }
