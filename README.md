@@ -2,6 +2,7 @@
 
 Version | Description of Changes
 --------|-----------------------
+0.6.15 | Add Send Email Reset to Portal-Activation
 0.6.1 | Add support for Number input type which returns parseFloat value
 0.6.0 | Add Pdf Preview
 0.5.0 | Add ElasticSearch function
@@ -20,7 +21,7 @@ Version | Description of Changes
 0.3.6 | Format *timestamp* for timestamp fields, and *date* for date fields including a "seconds" key.
 0.3.4 | Update *show_search*, *highlight_search*, and *search_query*. Addition of *_accent* object for CSS accent of a data row.
 0.3.3 | Updated of Company fields - *logoUrl*, *companyName*
-0.3.2 | **Table**, deprecation of *id* prop, *click_callback*  returns *item* entire record. **Table** record with *_highlight* field wrappes value with *\<mark>* tags. **Table** addition of *search* and *search_callback* props.  **Avatar** street numbers prefixed above text.  **Ibox** addition of *mini* prop for smaller footprint.
+0.3.2 | **Table**, deprecation of *id* prop, *click_callback*  returns *item* entire record. **Table** record with *_highlight* field wrapes value with *\<mark>* tags. **Table** addition of *search* and *search_callback* props.  **Avatar** street numbers prefixed above text.  **Ibox** addition of *mini* prop for smaller footprint.
 
 # LINK IN LOCAL ENVIRONMENT
 
@@ -255,6 +256,13 @@ Parameter | Type | Description
     container_id={ 'column1' }
     container_margin={ 270 }
 />
+```
+
+Linking Tables:
+
+```
+	{ name: 'Trailer', field: 'number', prefix: '#', data: this.props.trailers?.trailers, link: [ 'vehicleId', 'id' ], width: 40 },
+
 ```
 
 # IBOX
