@@ -72,7 +72,7 @@ export default function FormBuilderComps(props) {
 				onChange={ props.props.callbacks.date } 
 				required={ required }
 				type="date" 
-				defaultValue={ (props.props.record[props.field.field]) ? props.props.record[props.field.field] : null }
+				selected={ (props.props.record[props.field.field]) ? props.props.record[props.field.field] : null }
 			/>
 			break;
 		}
