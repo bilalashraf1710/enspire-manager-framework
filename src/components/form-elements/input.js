@@ -130,7 +130,7 @@ export class Input extends React.Component {
 						<DatePicker
 							className="form-control form-control-sm" 
 							dateFormat="MM-dd-yyyy"
-							selected={ this.props.selected }
+							// selected={ this.props.selected }
 							onChange={ this.props.onChange.bind(this, this.props.name) }
 							{ ...inputProps }
 						/>

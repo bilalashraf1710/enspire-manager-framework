@@ -144,10 +144,12 @@ export class Dropzone extends React.Component {
 
 		return (
 
-			<div style={{ width: '100%', marginLeft: '5px', marginRight: '5px' }}>
+			<div className={ this.props.className } style={{ width: '100%', paddingLeft: '5px', paddingRight: '5px', margin: '8px 0' }}>
+				
+				{ this.props.label && <p>{ this.props.label }</p> }
 
 				{ this.props.image &&
-					<div className={ this.props.className } style={{ position: 'relative', textAlign: 'center', border: '1px solid #e5e6e7', padding: '10px' }}>
+					<div style={{ position: 'relative', textAlign: 'center', border: '1px solid #e5e6e7', padding: '10px' }}>
 						<i className="far fa-times-circle fa-3x" 
 							style={{ 
 								color: 'white', 
@@ -173,10 +175,9 @@ export class Dropzone extends React.Component {
 					</div>
 				}
 
-
 				<div id={ 'dropzone' }>
 					{ !this.props.image &&
-						<div className={ this.props.className + (this.state.hover ? ' highlight' : '') } 
+						<div className={ (this.state.hover ? ' highlight' : '') } 
 							style={ { height: (this.props.maxHeight) ? this.props.maxHeight : '250px' }}
 						>
 							<>
