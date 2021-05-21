@@ -67,7 +67,6 @@ export class Input extends React.Component {
 		if (this.props.minDate) inputProps.minDate = this.props.minDate;
 		if (this.props.name) inputProps.name = this.props.name;
 		if (this.props.selected) inputProps.selected = this.props.selected;
-
 		if (this.props.defaultValue) inputProps.defaultValue = this.props.defaultValue;
 		else if (this.props.value !== undefined) inputProps.value = this.props.value;
 		
@@ -130,7 +129,7 @@ export class Input extends React.Component {
 						<DatePicker
 							className="form-control form-control-sm" 
 							dateFormat="MM-dd-yyyy"
-							// selected={ this.props.selected }
+							isClearable={ true }
 							onChange={ this.props.onChange.bind(this, this.props.name) }
 							{ ...inputProps }
 						/>
