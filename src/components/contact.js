@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 
 var _ = require('lodash');
 
@@ -18,28 +19,28 @@ export class Contact extends React.Component {
 	render() {
 
 		var typeName = _.find(this.props.contactTypes, { id: this.props.contact.contactTypeId })?.name;
-		
+
 		return (
 
-			<div onClick={ () => { this.setState({ isOpen: !this.state.isOpen }) }} style={{ cursor: 'pointer', marginBottom: '7px', paddingBottom: '1px' }}>
+			<div onClick={ () => { this.setState({ isOpen: !this.state.isOpen }) } } style={ { cursor: 'pointer', marginBottom: '7px', paddingBottom: '1px' } }>
 
-				{ this.props.show_edit && this.props.editCallback &&
-					<span className="float-right" style={ { fontSize: '16px' } }>
-						<a onClick={ () => { this.props.editCallback(this.props.contact.contactId) } }>
-							<i className="fas fa-edit" style={ { color: '#c4c4c4' } }></i>
-						</a>
-					</span>
-				}
 				{ this.state.isOpen
-					? 	<span className="float-right" style={{ fontSize: '16px' }}><i className="fas fa-angle-up mr-3"></i></span>
-					: 	<span className="float-right" style={{ fontSize: '16px' }}><i className="fas fa-angle-down mr-3"></i></span>
+					? <span className="float-right" style={ { fontSize: '16px' } }><i className="fas fa-angle-up"></i></span>
+					: <span className="float-right" style={ { fontSize: '16px' } }><i className="fas fa-angle-down"></i></span>
 				}
-				
+
 				<i className="fas fa-user"></i> &nbsp;<strong>{ typeName + ': ' }</strong>
-					{ this.props.contact.firstName + ' ' + this.props.contact.lastName } {/*  + ((this.props.contact.phone) ? ', ' + this.props.contact.phone: '') } */}
-				
-				{ this.state.isOpen && 
+				{ this.props.contact.firstName + ' ' + this.props.contact.lastName }
+
+				{ this.state.isOpen &&
 					<div>
+						{ this.props.show_edit && this.props.editCallback &&
+							<span className="float-right position-absolute" style={ { fontSize: '16px', right: '40px' } }>
+								<a onClick={ () => { this.props.editCallback(this.props.contact.id) } }>
+									<i className="fas fa-edit" style={ { color: '#c4c4c4' } }></i>
+								</a>
+							</span>
+						}
 						{ this.props.contact.phone &&
 							<div className="mt-1"><i className="fas fa-phone"></i> &nbsp; { this.props.contact.phone }</div>
 						}
@@ -49,6 +50,60 @@ export class Contact extends React.Component {
 						{ this.props.contact.email &&
 							<div className="mt-1"><i className="fas fa-envelope"></i> &nbsp; { this.props.contact.email }</div>
 						}
+
+						{ this.props.user?.roles?.procurement?.length > 0 &&
+							<div className="pl-3 mt-3">
+								<p><strong className="mr-2">Portal Activation:</strong>
+									{ this.props.user.roles.procurement.includes('0') &&
+										<span className="label ml-2 bg-secondary text-white">Administrator</span>
+									}
+									{ this.props.user.roles.procurement.includes('1') &&
+										<span className="label ml-2 bg-secondary text-white">Dispatcher</span>
+									}
+									{ this.props.user.roles.procurement.includes('2') &&
+										<span className="label ml-2 bg-secondary text-white">Technician</span>
+									}
+									{ this.props.user.roles.procurement.includes('5') &&
+										<span className="label ml-2 bg-secondary text-white">Customer</span>
+									}
+									{ this.props.user.roles.procurement.includes('3') &&
+										<span className="label ml-2 bg-secondary text-white">Supplier</span>
+									}
+									{ this.props.user.roles.procurement.includes('4') &&
+										<span className="label ml-2 bg-secondary text-white">Truck Driver</span>
+									}
+									{ this.props.user.activated
+										? <span className="label ml-2" style={ { backgroundColor: 'limeGreen', color: 'white' } }>Activated</span>
+										: <span className="label label-warning ml-2">Inactive</span>
+									}
+								</p>
+
+								{ this.props.admin &&
+									<>
+										{ this.props.user.activated && this.props.sendPasswordReset && this.props.sendInvite
+											? <button className="btn btn-warning btn-sm btn-outline float-right" type="button" onClick={ this.props.sendPasswordReset.bind(this, this.props.user) }>Send Password Reset Email
+                                                { this.props.sendPending &&
+													<span className="spinner-border spinner-border-sm ml-2" role="status" aria-hidden="true"></span>
+												}
+											</button>
+											: <button className="btn btn-primary btn-sm btn-outline float-right" type="button" onClick={ this.props.sendInvite.bind(this, this.props.user) }>Send Invitation Email
+                                                { this.props.sendPending &&
+													<span className="spinner-border spinner-border-sm ml-2" role="status" aria-hidden="true"></span>
+												}
+											</button>
+										}
+
+										{ this.props.user.invitationSent &&
+											<p><strong className="mr-2">Invitation Sent:</strong> { moment(this.props.user.invitationSent.seconds, 'X').format('MMM Do YYYY,  h:mm a') }</p>
+										}
+										{ this.props.user.activated &&
+											<p><strong className="mr-2">Activated:</strong> { moment(this.props.user.activatedDate.seconds, 'X').format('MMM Do YYYY,  h:mm a') }</p>
+										}
+									</>
+								}
+							</div>
+						}
+
 						<hr />
 					</div>
 				}

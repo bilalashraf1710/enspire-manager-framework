@@ -21,7 +21,6 @@ export { ModalForm } from './components/modal-form';
 export { NotAuthorized } from './components/authentication/not-authorized';
 export { PasswordReset } from './components/authentication/password-reset';
 export { PdfPreview } from './components/pdf-preview';
-export { PortalActivation } from './components/portal-activation';
 export { Register } from './components/authentication/register';
 export { Select } from './components/form-elements/select';
 export { MultiSelect } from './components/form-elements/multiselect';

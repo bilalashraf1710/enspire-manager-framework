@@ -279,6 +279,17 @@ Prop | Type | Description
 **icon_callback_array** | (function array) | callback functions for icon_array
 **children** | (jsx) | displays children in content of iBox
 
+```
+<Ibox key={ address.id }
+    title={ <span><i className="fas fa-home"></i> &nbsp; { addressType?.name }</span> }
+    mini={ true }
+    className={ 'animation-delay-' + (index * 2) }
+    icon_array={ ["fas fa-plus"] }
+    icon_callback_array={ [this.addressForm.bind(this, 0)] }
+>...
+```
+
+
 # FORM LAYOUT
 
 ## THEORY OF OPERATION
