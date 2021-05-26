@@ -24,7 +24,7 @@ export class Mapbox extends React.Component {
 		}
 	}
 	getMapCoordinates() {
-		const url_endpoint = 'geocoding/v5/mapbox.places/' + this.props.map_address + '.json';
+		const url_endpoint = 'geocoding/v5/mapbox.places/' + encodeURIComponent(this.props.map_address) + '.json';
 
 		axios({
 			url: url_endpoint,

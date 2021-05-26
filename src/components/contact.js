@@ -22,12 +22,13 @@ export class Contact extends React.Component {
 
 		return (
 
-			<div onClick={ () => { this.setState({ isOpen: !this.state.isOpen }) } } style={ { cursor: 'pointer', marginBottom: '7px', paddingBottom: '1px' } }>
-
-				{ this.state.isOpen
-					? <span className="float-right" style={ { fontSize: '16px' } }><i className="fas fa-angle-up"></i></span>
-					: <span className="float-right" style={ { fontSize: '16px' } }><i className="fas fa-angle-down"></i></span>
-				}
+			<div>
+				<div onClick={ () => { this.setState({ isOpen: !this.state.isOpen }) } } style={ { cursor: 'pointer', marginBottom: '7px', paddingBottom: '1px' } }>
+					{ this.state.isOpen
+						? <span className="float-right px-1" style={ { fontSize: '16px' } }><i className="fas fa-angle-up"></i></span>
+						: <span className="float-right px-1" style={ { fontSize: '16px' } }><i className="fas fa-angle-down"></i></span>
+					}
+				</div>
 
 				<i className="fas fa-user"></i> &nbsp;<strong>{ typeName + ': ' }</strong>
 				{ this.props.contact.firstName + ' ' + this.props.contact.lastName }
@@ -37,7 +38,7 @@ export class Contact extends React.Component {
 						{ this.props.show_edit && this.props.editCallback &&
 							<span className="float-right position-absolute" style={ { fontSize: '16px', right: '40px' } }>
 								<a onClick={ () => { this.props.editCallback(this.props.contact.id) } }>
-									<i className="fas fa-edit" style={ { color: '#c4c4c4' } }></i>
+									<i className="fas fa-pencil-alt" style={ { color: '#c4c4c4' } }></i>
 								</a>
 							</span>
 						}
