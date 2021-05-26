@@ -35,7 +35,7 @@ export class Contact extends React.Component {
 
 				{ this.state.isOpen &&
 					<div>
-						{ this.props.show_edit && this.props.editCallback &&
+						{ this.props.editCallback &&
 							<span className="float-right position-absolute" style={ { fontSize: '16px', right: '40px' } }>
 								<a onClick={ () => { this.props.editCallback(this.props.contact.id) } }>
 									<i className="fas fa-pencil-alt" style={ { color: '#c4c4c4' } }></i>
@@ -82,7 +82,7 @@ export class Contact extends React.Component {
 								{ this.props.admin &&
 									<>
 										{ this.props.user.activated && this.props.sendPasswordReset && this.props.sendInvite
-											? <button className="btn btn-warning btn-sm btn-outline float-right" type="button" onClick={ this.props.sendPasswordReset.bind(this, this.props.user) }>Send Password Reset Email
+											? <button className="btn btn-default btn-sm float-right" type="button" onClick={ this.props.sendPasswordReset.bind(this, this.props.user) }>Send Password Reset Email
                                                 { this.props.sendPending &&
 													<span className="spinner-border spinner-border-sm ml-2" role="status" aria-hidden="true"></span>
 												}

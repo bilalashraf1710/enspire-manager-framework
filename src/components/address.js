@@ -16,7 +16,7 @@ export class Address extends React.Component {
 		return (
 
 			<div className="mb-2">
-				{ this.props.show_edit && this.props.editCallback &&
+				{ this.props.editCallback &&
 					<span className="float-right" style={ { fontSize: '16px' } }>
 						<a onClick={ () => { this.props.editCallback(this.props.address.id) } }>
 							<i className="fas fa-pencil-alt" style={ { color: '#c4c4c4' } }></i>
