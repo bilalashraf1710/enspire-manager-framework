@@ -4,7 +4,7 @@ import { Input } from './form-elements/input';
 
 const escapeStringRegexp = require('escape-string-regexp');
 var _ = require('lodash');
-var moment = require('moment'); 
+var moment = require('moment');
 var sessionStorage = window.sessionStorage;
 
 export class Table extends React.Component {
@@ -31,7 +31,7 @@ export class Table extends React.Component {
 
 			container_height: 0,
 			container_width: 0,
-			
+
 			selected: [],
 			storagekey: null,
 		};
@@ -61,7 +61,7 @@ export class Table extends React.Component {
 	componentDidUpdate() {
 		if (this.props.savestate) {
 			if (this.props.pathname) {
-				var storagekey = this.props.pathname.replace (/\//g, "_");
+				var storagekey = this.props.pathname.replace(/\//g, "_");
 				if (storagekey !== this.state.storagekey) {
 					this.loadSessionStorage();
 				}
@@ -77,10 +77,10 @@ export class Table extends React.Component {
 	loadSessionStorage() {
 		if (this.props.savestate) {
 			if (this.props.pathname) {
-				var storagekey = this.props.pathname.replace (/\//g, "_");
+				var storagekey = this.props.pathname.replace(/\//g, "_");
 				this.setState({ storagekey });
-				if (sessionStorage['table'+storagekey]) {
-					this.setState({ ...this.state, ...JSON.parse(sessionStorage['table'+storagekey])});
+				if (sessionStorage['table' + storagekey]) {
+					this.setState({ ...this.state, ...JSON.parse(sessionStorage['table' + storagekey]) });
 				}
 			} else console.error('EM Table: page Pathname required for savestate');
 		}
@@ -88,8 +88,8 @@ export class Table extends React.Component {
 	updateSessionStorage() {
 		if (this.props.savestate) {
 			var savestate = _.clone(this.state);
-			delete(savestate.selected);
-			sessionStorage['table'+this.state.storagekey] = JSON.stringify(savestate);
+			delete (savestate.selected);
+			sessionStorage['table' + this.state.storagekey] = JSON.stringify(savestate);
 		}
 	}
 
@@ -180,18 +180,18 @@ export class Table extends React.Component {
 		} else if (column.type === 'number') {
 			if (column.format) {
 				if (column.format === 'usd') {
-					return '$ '+parseFloat(item[column.field]).toFixed(2);
-				} else console.error('EM Table: Unknown number format'); 
+					return '$ ' + parseFloat(item[column.field]).toFixed(2);
+				} else console.error('EM Table: Unknown number format');
 			} else console.error('EM Table: Format required for Number field');
 
-		// } else if (column.badge !== null && Array.isArray(column.badge)) {
-		// 	var badgestyle = '';
-		// 	if (item[column.field] == 1) badgestyle = 'badge-info';
-		// 	if (item[column.field] == 2) badgestyle = 'badge-success';
-		// 	if (item[column.field] == 3) badgestyle = 'badge-warning';
-		// 	if (item[column.field] == 4) badgestyle = 'badge-danger';
+			// } else if (column.badge !== null && Array.isArray(column.badge)) {
+			// 	var badgestyle = '';
+			// 	if (item[column.field] == 1) badgestyle = 'badge-info';
+			// 	if (item[column.field] == 2) badgestyle = 'badge-success';
+			// 	if (item[column.field] == 3) badgestyle = 'badge-warning';
+			// 	if (item[column.field] == 4) badgestyle = 'badge-danger';
 
-		// 	return <span className={ 'badge ' + badgestyle }>{ column.badge[item[column.field]] }</span>
+			// 	return <span className={ 'badge ' + badgestyle }>{ column.badge[item[column.field]] }</span>
 
 		} else {
 			let result = (item[column.field]) ? item[column.field].toString().replace(/_/g, " ") : ''; // replace _ with space 
@@ -202,16 +202,16 @@ export class Table extends React.Component {
 					if (word) result = result.replace(new RegExp(escapeStringRegexp(word), "i"), (match) => { return '<mark>' + match + '</mark>' });
 				});
 			}
-			return ((column.prefix) ? column.prefix : '') + result + 
+			return ((column.prefix) ? column.prefix : '') + result +
 				((column.postfix) ? column.postfix : '');
 		}
 	}
 	columnSort(column) {
 		var sortindex = (this.state.order) ? this.state.order.fields.indexOf(column.field) : -1;
-		var direction = (sortindex > -1) ? ((this.state.order.direction[sortindex] === 'asc') ? 'desc' : 'asc' ) : 'asc';
+		var direction = (sortindex > -1) ? ((this.state.order.direction[sortindex] === 'asc') ? 'desc' : 'asc') : 'asc';
 		var order = {
-			fields: [ column.field ],
-			direction: [ direction ],
+			fields: [column.field],
+			direction: [direction],
 		}
 		this.setState({ order });
 	}
@@ -236,12 +236,12 @@ export class Table extends React.Component {
 		/* Filtered -----------------------------------*/
 
 		if (_.get(this.props.filters, 'buttons', null)) { // has buttons?
-			if (this.props.filters.buttons.length <= 5 ) {
-				if (this.state.filter_button && _.get(this.props.filters, 'buttons.'+(this.state.filter_button-1)+'.value', null) !== null) {
-					filtered_data = _.filter(filtered_data, { [this.props.filters.field]: this.props.filters.buttons[this.state.filter_button-1].value });
+			if (this.props.filters.buttons.length <= 5) {
+				if (this.state.filter_button && _.get(this.props.filters, 'buttons.' + (this.state.filter_button - 1) + '.value', null) !== null) {
+					filtered_data = _.filter(filtered_data, { [this.props.filters.field]: this.props.filters.buttons[this.state.filter_button - 1].value });
 				}
 			} else {
-				if (this.state.filter_button !== 0 && this.state.filter_button !== "0") filtered_data = _.filter(filtered_data, { [this.props.filters.field]: this.state.filter_button }); 
+				if (this.state.filter_button !== 0 && this.state.filter_button !== "0") filtered_data = _.filter(filtered_data, { [this.props.filters.field]: this.state.filter_button });
 			}
 		}
 		if (this.props.daterange?.show) {
@@ -263,7 +263,7 @@ export class Table extends React.Component {
 
 		var pagination = [];
 		if (this.state.limit > 0 && filtered_data.length > this.state.limit) {
-			for (var i=0; i * this.state.limit < filtered_data.length; i++) {
+			for (var i = 0; i * this.state.limit < filtered_data.length; i++) {
 
 				if (i < this.state.page - 2) {
 					gap_low = true;
@@ -271,30 +271,30 @@ export class Table extends React.Component {
 					gap_high = true;
 				} else {
 					pagination.push(
-						<button key={ i } type="button" className={ 'btn btn-'+((this.state.page == i)?'primary':'default') } onClick={ this.handlePage.bind(this, i) }>{ i + 1 }</button>
+						<button key={ i } type="button" className={ 'btn btn-' + ((this.state.page == i) ? 'primary' : 'default') } onClick={ this.handlePage.bind(this, i) }>{ i + 1 }</button>
 					);
 				}
 			}
 		}
 
-		/* Columns Headings ---------------------------------*/	
+		/* Columns Headings ---------------------------------*/
 
-		var columns = (this.props.columns.length) ? this.props.columns.map((column, index) => {
+		var columns = (this.props.columns?.length) ? this.props.columns.map((column, index) => {
 
 			var sortindex = (this.state.order) ? this.state.order.fields.indexOf(column.field) : -1;
-			var sort = (sortindex > -1) ? ((this.state.order.direction[sortindex] === 'asc') ? 'sort-up' : 'sort-down' ) : null;
-			
+			var sort = (sortindex > -1) ? ((this.state.order.direction[sortindex] === 'asc') ? 'sort-up' : 'sort-down') : null;
+
 			var styles = { lineHeight: 1 };
 			if (column.width) styles.width = ((this.state.container_width - 10) * column.width / 100).toString() + 'px';
 
-			return ( 
-				<th key={ 'th'+index } style={ styles }>
-					<a style={{ cursor: 'pointer', whiteSpace: 'nowrap' }} onClick={ this.columnSort.bind(this, column) }>
-						{ column.name.toUpperCase() }<i className={ 'fa fa-'+sort } style={{ color: '#aaaaaa', marginLeft: '7px' }} />
+			return (
+				<th key={ 'th' + index } style={ styles }>
+					<a style={ { cursor: 'pointer', whiteSpace: 'nowrap' } } onClick={ this.columnSort.bind(this, column) }>
+						{ column.name.toUpperCase() }<i className={ 'fa fa-' + sort } style={ { color: '#aaaaaa', marginLeft: '7px' } } />
 					</a>
-				</th>		
+				</th>
 			);
-		}) : null;	
+		}) : null;
 
 		/* Rows ------------------------------------*/
 
@@ -315,10 +315,10 @@ export class Table extends React.Component {
 				var styles = {};
 
 				/* NoWrap & Width ------------------------------------*/
-				
+
 				if (column.nowrap || column.checkbox) styles.whiteSpace = 'nowrap';
 				if (column.width) styles.width = ((this.state.container_width - 10) * column.width / 100).toString() + 'px';
-				
+
 				/* Data ------------------------------------*/
 
 				if (column.data) {
@@ -334,46 +334,46 @@ export class Table extends React.Component {
 					var items = [];
 					var linked = _.filter(column.data, { [link_field]: item[link_data_field] });
 
-					if (column.filter){
+					if (column.filter) {
 						column.filter.forEach((element, element_index) => {
 							let filtered = _.filter(linked, { [column.filter_field]: element });
-							if (filtered.length) items = items.concat(filtered);
+							if (filtered?.length) items = items.concat(filtered);
 						});
 					} else {
 						items = linked;
 					}
 
-					{/* SELECT --------------------------------------------------------------------------------------------*/}
+					{/* SELECT --------------------------------------------------------------------------------------------*/ }
 
 					if (column.type == 'select') {
 
 						if (Array.isArray(column.static) && item[column.static[0]] == column.static[2]) {
 
 							let entry = _.find(column.data, { [link_field]: item[link_data_field] });
-							if (!entry) 
-								return (<td key={ 'td'+column_index }></td>);
+							if (!entry)
+								return (<td key={ 'td' + column_index }></td>);
 							else
 								return (
-								<td key={ 'td'+column_index }>
-									{ entry[column.field] }
-								</td>
-							);
+									<td key={ 'td' + column_index }>
+										{ entry[column.field] }
+									</td>
+								);
 
 						} else {
 
 							var select_options = column.data.map((option, select_index) => {
 								return (
-									<option key={ 'select'+select_index } value={ option[link_field] }>{ option[column.field] }</option>
+									<option key={ 'select' + select_index } value={ option[link_field] }>{ option[column.field] }</option>
 								);
 							});
 
 							return (
-								<td key={ 'td'+column_index }>
-									<select 
-										className="form-control" 
-										name={ link_data_field } 
-										onChange={ column.callback.bind(this, item[this.props.id]) } 
-										value={ (item[link_data_field]) ? item[link_data_field] : ''  }
+								<td key={ 'td' + column_index }>
+									<select
+										className="form-control"
+										name={ link_data_field }
+										onChange={ column.callback.bind(this, item[this.props.id]) }
+										value={ (item[link_data_field]) ? item[link_data_field] : '' }
 									>
 										<option value="">Choose...</option>
 										{ select_options }
@@ -383,16 +383,16 @@ export class Table extends React.Component {
 						}
 
 					} else if (column.type == 'datepicker') {
-						console.error('EM Table: Field of type Datepicker cannot have a Data Link'); 
+						console.error('EM Table: Field of type Datepicker cannot have a Data Link');
 					} else if (column.type == 'button') {
-						console.error('EM Table: Field of type Button cannot have a Data Link'); 
+						console.error('EM Table: Field of type Button cannot have a Data Link');
 					} else {
-						return ( <td key={ 'td'+column_index } { ...inputProps } style={ styles }>{ (items.length) ? this.formatItem(items[0], column) : '' }</td> ); // TODO check for multiple
+						return (<td key={ 'td' + column_index } { ...inputProps } style={ styles }>{ (items?.length) ? this.formatItem(items[0], column) : '' }</td>); // TODO check for multiple
 					}
 
 				} else {
 
-					{/* DATE PICKER -----------------------------------------------------------------------------------------*/}
+					{/* DATE PICKER -----------------------------------------------------------------------------------------*/ }
 
 					if (column.type == 'datepicker') {
 
@@ -416,23 +416,23 @@ export class Table extends React.Component {
 											<span className="input-group-text input-group-addon"><i className="far fa-calendar-alt"></i></span>
 										</div>
 										<DatePicker
-											className="form-control" 
+											className="form-control"
 											dateFormat="M-dd-yyyy"
 											selected={ selected }
-											onChange={ column.callback.bind(this, item[this.props.id]) } 
+											onChange={ column.callback.bind(this, item[this.props.id]) }
 										/>
 									</div>
 								</td>
 							);
 						}
 
-					{/* BUTTON ---------------------------------------------------------------------------------------------*/}
+						{/* BUTTON ---------------------------------------------------------------------------------------------*/ }
 
 					} else if (column.type == 'button') {
-						if (!column.callback) return ( <td key={ 'td'+column_index } { ...inputProps } style={ styles }><button className={ 'btn '+column.button.className }>{ column.button.name }</button></td> );
-						return ( <td key={ 'td'+column_index } { ...inputProps } style={ styles }><button className={ 'btn '+column.button.className } onClick={ column.callback.bind(this, item[column.field]) }>{ column.button.name }</button></td> );
+						if (!column.callback) return (<td key={ 'td' + column_index } { ...inputProps } style={ styles }><button className={ 'btn ' + column.button.className }>{ column.button.name }</button></td>);
+						return (<td key={ 'td' + column_index } { ...inputProps } style={ styles }><button className={ 'btn ' + column.button.className } onClick={ column.callback.bind(this, item[column.field]) }>{ column.button.name }</button></td>);
 
-					{/* ACTIONS --------------------------------------------------------------------------------------------*/}
+						{/* ACTIONS --------------------------------------------------------------------------------------------*/ }
 
 					} else if (column.type == 'actions') {
 
@@ -440,16 +440,16 @@ export class Table extends React.Component {
 						var row_results = (this.state.selected && this.state.selected.length > 0) ? this.state.selected : item[column.field];
 
 						return (
-							<td key={ 'td'+column_index }>
+							<td key={ 'td' + column_index }>
 
 								<div { ...inputProps } style={ styles } className="btn-group">
 									<button data-toggle="dropdown" className={ 'dropdown-toggle btn ' + buttonClass } aria-expanded="false" onClick={ (e) => e.stopPropagation() }>{ column.button.name }</button>
-									<ul className="dropdown-menu" x-placement="bottom-start" style={{ position: 'absolute',  top: '33px', left: '0px', willChange: 'top, left' }}>
+									<ul className="dropdown-menu" x-placement="bottom-start" style={ { position: 'absolute', top: '33px', left: '0px', willChange: 'top, left' } }>
 										{ column.button.multiple && <li><a className="dropdown-item" onClick={ this.handleToggleMultiple.bind(this, item[column.field]) }>Toggle Multiple</a></li> }
 										{ column.button.multiple && <li className="dropdown-divider"></li> }
 										{
 											column.button.links.map((link, link_index) => {
-												if (link.name == 'divider') return ( <li key={ 'dropdown' + link_index } className="dropdown-divider"></li> );
+												if (link.name == 'divider') return (<li key={ 'dropdown' + link_index } className="dropdown-divider"></li>);
 												return (
 													<li key={ 'dropdown' + link_index }><a className="dropdown-item" onClick={ link.callback.bind(this, row_results) }>{ link.name }</a></li>
 												);
@@ -461,9 +461,9 @@ export class Table extends React.Component {
 						);
 
 					} else if (column.type == 'select') {
-						console.error('EM Table: field of type Select must have a Data Link'); 
+						console.error('EM Table: field of type Select must have a Data Link');
 					} else {
-						return (<td key={ 'td' + column_index } { ...inputProps } style={ styles } dangerouslySetInnerHTML={{ __html: this.formatItem(item, column) }}></td> );
+						return (<td key={ 'td' + column_index } { ...inputProps } style={ styles } dangerouslySetInnerHTML={ { __html: this.formatItem(item, column) } }></td>);
 					}
 				}
 			}) : null;
@@ -475,7 +475,7 @@ export class Table extends React.Component {
 			// 			highlight = { border: '2px solid '+entry.border, backgroundColor: entry.color }
 			// 		}
 			// 	});
-				
+
 			// }
 
 			var active = '';
@@ -492,10 +492,10 @@ export class Table extends React.Component {
 			if (item._accent) tr_style = { ...tr_style, ...item._accent }
 			if (this.state.container_width > 0) tr_style.width = this.state.container_width;
 
-			return <tr key={ 'tr'+row_index } className={ active + ' ' + stripe_color } style={ tr_style }>
+			return <tr key={ 'tr' + row_index } className={ active + ' ' + stripe_color } style={ tr_style }>
 				{ fields }
 				{ this.props.delete &&
-					<td key={ 'delete'+row_index } style={{ cursor: 'pointer' }} onClick={ this.props.onDelete.bind(this, item) }><i className="fa fa-times"></i></td>
+					<td key={ 'delete' + row_index } style={ { cursor: 'pointer' } } onClick={ this.props.onDelete.bind(this, item) }><i className="fa fa-times"></i></td>
 				}
 			</tr>
 
@@ -507,8 +507,8 @@ export class Table extends React.Component {
 		if (this.props.filters && this.props.filters.buttons.length <= this.state.filter_limit) {
 			filters = (this.props.filters) ? this.props.filters.buttons.map((item, index) => {
 				return (
-					<label key={ 'filter' + index } className={ 'btn' + ((index == this.state.filter_button - 1) ? ' btn-primary active' : ' btn-white')} onClick={this.handleFilter.bind(this, index + 1)}>
-						<input type="radio" name="filters" value={this.state.filter_button} /> {item.name}
+					<label key={ 'filter' + index } className={ 'btn' + ((index == this.state.filter_button - 1) ? ' btn-primary active' : ' btn-white') } onClick={ this.handleFilter.bind(this, index + 1) }>
+						<input type="radio" name="filters" value={ this.state.filter_button } /> {item.name }
 					</label>
 				)
 			}) : null;
@@ -536,7 +536,7 @@ export class Table extends React.Component {
 				<div className="col-lg-12">
 
 					<form className="row mb-2" autoComplete="off">
-						<button type="submit" disabled style={{ display: 'none' }} aria-hidden="true"></button>
+						<button type="submit" disabled style={ { display: 'none' } } aria-hidden="true"></button>
 
 						{ this.state.show_limit &&
 							<div className="col m-b-xs">
@@ -562,7 +562,7 @@ export class Table extends React.Component {
 										selected={ this.state.startDate }
 										startDate={ this.state.startDate }
 										endDate={ this.state.endDate }
-										/>
+									/>
 									<Input
 										className={ "col pl-0" }
 										name={ 'endDate' }
@@ -584,26 +584,26 @@ export class Table extends React.Component {
 										{ filters }
 									</div>
 								}
-								{ filters.length > this.state.filter_limit && 
+								{ filters.length > this.state.filter_limit &&
 									<select className="form-control input-s-sm inline" name="limit" value={ this.state.filter_button } onChange={ this.handleFilterDropdown.bind(this) } >
 										<option value="0">- No Category Filter -</option>
-										{ filters  }
+										{ filters }
 									</select>
 								}
 							</div>
 						}
-						{ (this.props.show_search || this.props.button) && 
+						{ (this.props.show_search || this.props.button) &&
 							<div className="col m-b-xs">
 								<div className="input-group">
-									<span style={{ position: 'relative', width: '100%' }}>
+									<span style={ { position: 'relative', width: '100%' } }>
 										{ this.props.show_search && this.state.search &&
-											<i className="fas fa-times-circle" style={{ position: 'absolute', color: '#bbbbbb', zIndex: 9, right: '5px', top: '5px', fontSize: '20px', cursor: 'pointer' }} onClick={ this.handleClearSearch.bind(this) }></i>
+											<i className="fas fa-times-circle" style={ { position: 'absolute', color: '#bbbbbb', zIndex: 9, right: '5px', top: '5px', fontSize: '20px', cursor: 'pointer' } } onClick={ this.handleClearSearch.bind(this) }></i>
 										}
-										{ this.props.show_search && 
-											<input name="search" placeholder="Search" type="text" className="form-control" value={ this.state.search } onChange={ this.handleSearch.bind(this) }/>
+										{ this.props.show_search &&
+											<input name="search" placeholder="Search" type="text" className="form-control" value={ this.state.search } onChange={ this.handleSearch.bind(this) } />
 										}
 									</span>
-									{ this.props.button && 
+									{ this.props.button &&
 										<button type="button" className="btn btn-sm btn-primary ml-3" onClick={ this.handleButton.bind(this) } style={ buttonStyle }>{ this.props.button }</button>
 									}
 								</div>
@@ -625,12 +625,12 @@ export class Table extends React.Component {
 							}
 							<tbody style={ tbody_style }>
 								{ rows
-									?	rows
-									: 	<tr style={ { backgroundColor: 'transparent' }}><td colSpan={ this.props.columns.length }><h2 className="text-center" style={{ marginTop: '40px' }}>No Records Found</h2></td></tr>
+									? rows
+									: <tr style={ { backgroundColor: 'transparent' } }><td colSpan={ this.props.columns?.length }><h2 className="text-center" style={ { marginTop: '40px' } }>No Records Found</h2></td></tr>
 								}
 							</tbody>
 						</table>
-						
+
 						{ this.state.show_limit &&
 							<div className="btn-group pull-right" role="group" aria-label="Basic example">
 								<button type="button" className="btn btn-default" onClick={ this.handleFirst.bind(this) }>First</button>
