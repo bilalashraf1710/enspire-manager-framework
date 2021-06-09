@@ -1,5 +1,6 @@
 import React from 'react';
 import moment from 'moment';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 var _ = require('lodash');
 
@@ -87,11 +88,18 @@ export class Contact extends React.Component {
 													<span className="spinner-border spinner-border-sm ml-2" role="status" aria-hidden="true"></span>
 												}
 											</button>
-											: <button className="btn btn-primary btn-sm btn-outline float-right" type="button" onClick={ this.props.sendInvite.bind(this, this.props.user) }>Send Invitation Email
-                                                { this.props.sendPending &&
-													<span className="spinner-border spinner-border-sm ml-2" role="status" aria-hidden="true"></span>
-												}
-											</button>
+											: <div className="float-right text-right">
+												<button className="btn btn-primary btn-sm btn-outline mb-2" type="button" onClick={ this.props.sendInvite.bind(this, this.props.user) }>Send Invitation Email
+													{ this.props.sendPending &&
+														<span className="spinner-border spinner-border-sm ml-2" role="status" aria-hidden="true"></span>
+													}
+												</button>
+												<br/>
+												Trouble receiving email?
+												<CopyToClipboard text={ encodeURI('https://manage.mobiletrack.systems/procurement/#/' + this.props.handle + '/register_user/' + this.props.contact.firstName + '/' + this.props.contact.lastName + '/' + this.props.contact.email) } onCopy={ () => window.toastr.success('The Registration link has been successfully copied to your clipboard.', 'Link Copied!') }>
+													<button className="btn btn-secondary btn-xs btn-outline ml-2" type="button">Copy Link</button>
+												</CopyToClipboard>
+											</div>
 										}
 
 										{ this.props.user.invitationSent &&
@@ -104,6 +112,7 @@ export class Contact extends React.Component {
 								}
 							</div>
 						}
+						<div style={{ clear: 'both' }} />
 
 						<hr />
 					</div>

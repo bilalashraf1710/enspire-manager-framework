@@ -15,6 +15,7 @@
     "moment": "^2.24.0",
     "react-bootstrap-typeahead": "^5.1.4",
     "react-bootstrap4-modal": "^1.7.5",
+    "react-copy-to-clipboard": "^5.0.3",
     "react-datepicker": "^3.7.0",
     "react-pdf": "^5.2.0",
     "react-router-dom": "^5.0.0",
