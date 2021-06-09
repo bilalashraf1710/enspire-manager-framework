@@ -40,8 +40,9 @@ export class Input extends React.Component {
 			}
 		}
 	}
-	onChangeEmail(email) {
-		this.props.onChange(email.toLowerCase());
+	onChangeEmail(event) {
+		event.target.value = event.target.value.toLowerCase();
+		this.props.onChange(event);
 	}
 	async handleSearch(search) {
 
