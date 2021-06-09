@@ -17,7 +17,7 @@ export function login(email, password, firebase, callback) {
 
 	return dispatch => {
 
-		firebase.auth().signInWithEmailAndPassword(email, password).catch((error) => {
+		firebase.auth().signInWithEmailAndPassword(email.trim(), password.trim()).catch((error) => {
 			process_error(error, 'Login: ' + error.message);
 			if (typeof callback === "function") callback();
 		});
