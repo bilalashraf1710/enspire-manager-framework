@@ -40,6 +40,9 @@ export class Input extends React.Component {
 			}
 		}
 	}
+	onChangeEmail(email) {
+		this.props.onChange(email.toLowerCase());
+	}
 	async handleSearch(search) {
 
 		var config = {
@@ -90,6 +93,20 @@ export class Input extends React.Component {
 							className="form-control form-control-sm" 
 							name={ this.props.name } 
 							onChange={ this.props.onChange.bind(this) } 
+							placeholder={ this.props.placeholder } 
+							readOnly={ this.props.readOnly }
+							ref={ this.field_ref } 
+							type="text"
+							disabled={ this.props.disabled }
+							{ ...inputProps }
+						/>
+					}
+					{ this.props.type == 'email' &&
+						<input 
+							autoComplete="off" 
+							className="form-control form-control-sm" 
+							name={ this.props.name } 
+							onChange={ this.onChangeEmail.bind(this) } 
 							placeholder={ this.props.placeholder } 
 							readOnly={ this.props.readOnly }
 							ref={ this.field_ref } 
