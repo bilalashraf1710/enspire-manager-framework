@@ -16,7 +16,7 @@ export class ModalForm extends React.Component {
 		var cancel_callback = (this.props.cancel_button_callback) ? this.props.cancel_button_callback : this.props.history.goBack;
 
 		return (
-			<Modal dialogClassName="modal-md" visible={ true } className={ "animated fadeInDown " + (this.state.expand ? "expand-modal" : "shrink-modal") }>
+			<Modal dialogClassName="modal-md" visible={ (this.props.visible === undefined) ? true : this.props.visible } className={ "animated fadeInDown " + (this.state.expand ? "expand-modal" : "shrink-modal") }>
 				<div className="modal-header">
 					<h3 className="modal-title">{ this.props.modal_header }</h3>
 					<div className="expand-icon-position expand-icon-style">

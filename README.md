@@ -2,6 +2,8 @@
 
 Version | Description of Changes
 --------|-----------------------
+0.7.13 | ModalForm allows prop.visible - defaults to true.
+0.7.12 | Updated MultiSelect - new handler required.
 0.7.7 | Add Email type input which forces lowercase, add Copy link to Contact.  Requires handle parameter.
 0.6.15 | Add Send Email Reset to Portal-Activation
 0.6.1 | Add support for Number input type which returns parseFloat value
