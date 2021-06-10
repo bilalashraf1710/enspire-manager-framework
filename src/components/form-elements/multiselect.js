@@ -55,7 +55,7 @@ export class MultiSelect extends React.Component {
 					{ this.props.children }
 				</select> */}
 				<Select 
-					className="form-control form-control-sm" 
+					className="em-multiselect" 
 					isMulti={ true }
 					name={ this.props.name } 
 					options={ this.props.options }
