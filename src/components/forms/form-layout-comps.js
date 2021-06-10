@@ -117,13 +117,13 @@ export default function FormBuilderComps(props) {
 				form_error={ props.props.form_error } 
 				label={ label } 
 				name={ props.field.field } 
-				// options={ props.field.options }
+				options={ props.field.options }
 				onChange={ props.props.callbacks.multiselect } 
 				required={ required }
 				value={ (props.props.record[props.field.field]) ? props.props.record[props.field.field] : [] } 
 				disabled={ props.field.disabled }
 			>
-				{ props.field.options }
+				{/* { props.field.options } */}
 			</MultiSelect>
 			break;
 		}
