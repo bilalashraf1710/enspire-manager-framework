@@ -251,7 +251,7 @@ export class Table extends React.Component {
 		/* Limit --------------------------------------*/
 
 		var page = this.state.page;
-		var display_data = (this.state.limit > 0)
+		var display_data = (this.state.show_limit && this.state.limit > 0)
 			? filtered_data.slice(page * this.state.limit, page * this.state.limit + this.state.limit)
 			: filtered_data;
 
