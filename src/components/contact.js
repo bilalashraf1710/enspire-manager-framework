@@ -14,7 +14,7 @@ export class Contact extends React.Component {
 	}
 
 	componentDidMount() {
-		this.setState({ isOpen: (this.props.open) ? this.props.open : false });
+		this.setState({ isOpen: (this.props.open || !this.props.user.activated) ? this.props.open : false });
 	}
 
 	render() {
@@ -80,7 +80,7 @@ export class Contact extends React.Component {
 									}
 								</p>
 
-								{ this.props.admin &&
+								{ true && //this.props.admin &&
 									<>
 										{ this.props.user.activated && this.props.sendPasswordReset && this.props.sendInvite
 											? <button className="btn btn-default btn-sm float-right" type="button" onClick={ this.props.sendPasswordReset.bind(this, this.props.user) }>Send Password Reset Email
