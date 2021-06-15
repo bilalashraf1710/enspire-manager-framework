@@ -14,7 +14,7 @@ export class Contact extends React.Component {
 	}
 
 	componentDidMount() {
-		this.setState({ isOpen: (this.props.open || !this.props.user.activated) ? this.props.open : false });
+		this.setState({ isOpen: (this.props.open || !this.props.user.activated) ? true : false });
 	}
 
 	render() {
