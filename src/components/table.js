@@ -184,15 +184,6 @@ export class Table extends React.Component {
 				} else console.error('EM Table: Unknown number format');
 			} else console.error('EM Table: Format required for Number field');
 
-			// } else if (column.badge !== null && Array.isArray(column.badge)) {
-			// 	var badgestyle = '';
-			// 	if (item[column.field] == 1) badgestyle = 'badge-info';
-			// 	if (item[column.field] == 2) badgestyle = 'badge-success';
-			// 	if (item[column.field] == 3) badgestyle = 'badge-warning';
-			// 	if (item[column.field] == 4) badgestyle = 'badge-danger';
-
-			// 	return <span className={ 'badge ' + badgestyle }>{ column.badge[item[column.field]] }</span>
-
 		} else {
 			let result = (item[column.field]) ? item[column.field].toString().replace(/_/g, " ") : ''; // replace _ with space 
 
@@ -207,20 +198,26 @@ export class Table extends React.Component {
 		}
 	}
 	columnSort(column) {
-		var sortindex = (this.state.order) ? this.state.order.fields.indexOf(column.field) : -1;
-		var direction = (sortindex > -1) ? ((this.state.order.direction[sortindex] === 'asc') ? 'desc' : 'asc') : 'asc';
-		var order = {
-			fields: [column.field],
-			direction: [direction],
+		if (!this.props.order_by) {
+			var sortindex = (this.state.order) ? this.state.order.fields.indexOf(column.field) : -1;
+			var direction = (sortindex > -1) ? ((this.state.order.direction[sortindex] === 'asc') ? 'desc' : 'asc') : 'asc';
+			var order = {
+				fields: [column.field],
+				direction: [direction],
+			}
+			this.setState({ order });
 		}
-		this.setState({ order });
 	}
 
 	render() {
 
 		/* Sort ------------------------------------*/
 
-		var ordered_data = (this.state.order) ? _.orderBy(this.props.data, this.state.order.fields, this.state.order.direction) : this.props.data;
+		if (this.props.group_by) {
+			var ordered_data = _.orderBy(this.props.data, [this.props.group_by], ['asc']);
+		} else {
+			var ordered_data = (this.state.order) ? _.orderBy(this.props.data, this.state.order.fields, this.state.order.direction) : this.props.data;
+		}
 
 		/* Search all Fields -----------------------*/
 
@@ -298,7 +295,22 @@ export class Table extends React.Component {
 
 		/* Rows ------------------------------------*/
 
-		var rows = (display_data.length) ? display_data.map((item, row_index) => {
+		var groupedRows = [];
+		var groupBy = null;
+		var rows = [];
+
+		if (display_data.length) display_data.map((item, row_index) => {
+
+			/* Group By ---------------------------------*/
+
+			if (item[this.props.group_by] != groupBy) {
+				groupBy = item[this.props.group_by];
+				rows.push(
+					<tr key={ 'heading:' + groupBy } style={ { backgroundColor: '#dddddd' } }>
+						<td colspan="99" style={ { color: 'black' } }>{ groupBy }</td>
+					</tr>
+				);
+			}
 
 			var inputProps = {};
 
@@ -434,6 +446,16 @@ export class Table extends React.Component {
 
 						{/* ACTIONS --------------------------------------------------------------------------------------------*/ }
 
+					} else if (column.type == 'badge') {
+
+						var badgestyle = '';
+						if (item[column.field] == 1) badgestyle = 'badge-success';
+						if (item[column.field] == 2) badgestyle = 'badge-info';
+						if (item[column.field] == 3) badgestyle = 'badge-warning';
+						if (item[column.field] == 4) badgestyle = 'badge-danger';
+
+						return (<span className={ 'badge ' + badgestyle + ' mt-2' }>{ column.badge[item[column.field]] }</span>);
+
 					} else if (column.type == 'actions') {
 
 						var buttonClass = (this.state.selected && this.state.selected.includes(item[column.field])) ? column.button.activeClass : column.button.className;
@@ -492,14 +514,15 @@ export class Table extends React.Component {
 			if (item._accent) tr_style = { ...tr_style, ...item._accent }
 			if (this.state.container_width > 0) tr_style.width = this.state.container_width;
 
-			return <tr key={ 'tr' + row_index } className={ active + ' ' + stripe_color } style={ tr_style }>
-				{ fields }
-				{ this.props.delete &&
-					<td key={ 'delete' + row_index } style={ { cursor: 'pointer' } } onClick={ this.props.onDelete.bind(this, item) }><i className="fa fa-times"></i></td>
-				}
-			</tr>
-
-		}) : null;
+			rows.push(
+				<tr key={ 'tr' + row_index } className={ active + ' ' + stripe_color } style={ tr_style }>
+					{ fields }
+					{ this.props.delete &&
+						<td key={ 'delete' + row_index } style={ { cursor: 'pointer' } } onClick={ this.props.onDelete.bind(this, item) }><i className="fa fa-times"></i></td>
+					}
+				</tr>
+			)
+		});
 
 		/* Filter Buttons / Dropdown --------------------------*/
 
@@ -508,7 +531,7 @@ export class Table extends React.Component {
 			filters = (this.props.filters) ? this.props.filters.buttons.map((item, index) => {
 				return (
 					<label key={ 'filter' + index } className={ 'btn' + ((index == this.state.filter_button - 1) ? ' btn-primary active' : ' btn-white') } onClick={ this.handleFilter.bind(this, index + 1) }>
-						<input type="radio" name="filters" value={ this.state.filter_button } /> {item.name }
+						<input type="radio" name="filters" value={ this.state.filter_button } /> { item.name }
 					</label>
 				)
 			}) : null;

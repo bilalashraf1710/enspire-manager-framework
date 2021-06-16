@@ -2,6 +2,7 @@
 
 Version | Description of Changes
 --------|-----------------------
+0.8.0 | Add Badge Support
 0.7.13 | ModalForm allows prop.visible - defaults to true.
 0.7.12 | Updated MultiSelect - new handler required.
 0.7.7 | Add Email type input which forces lowercase, add Copy link to Contact.  Requires handle parameter.
@@ -175,6 +176,7 @@ Prop | Type | Description
 **search_query** | (string) | External search query for high-lighting. Internal search query is used if not defined.
 **show_limit:** | (boolean) | Show limit dropdown
 **show_search:** | (boolean) | Render a search field
+**group_by:** | (string) | field by which to group and add heading.  Sorting disabled.
 
 ### COLUMN OBJECT
 
@@ -187,13 +189,14 @@ Parameters | Type | Description
 **data:** | (object) | Additional dataset for linking
 **format:** | (string) | Format based on Type e.g. ``{ type: 'date', format: 'MMMM Do, YYYY' }`` or ``{ type: 'number', format: 'usd' }``
 **link:** | (string \|\| array) | Field on which to link another data set. If array, the first is the field for the additional data set, the second is the original dataset.  _Field_ above referrs to linked dataset.
+**badge:** | (array) | An array of String labels for matching badge values 0 - 4 (1 - success, 2 - info, 3 - warning, 4 - danger)
 **max:** | (bool) | Sets column width to 100%, other columns take minimal space
 **nowarp:** | (bool) | Ensure the column does not wrap
 **prepend:** | (string) | Input Group Prepend
 **append:** | (string) | Input Group Append
 **postfix:** | (string) | String to append to column value
 **prefix:** | (string) | String to prepend to column value
-**type:** | (string) | One of the following: _date, timestamp, number, select, datepicker, button, actions._ _Action_ requires the use of _button_ below to define button actions.  _Select_ requires the use of a linked dataset for the selection options.
+**type:** | (string) | One of the following: _badge, date, timestamp, number, select, datepicker, button, actions._ _Action_ requires the use of _button_ below to define button actions.  _Select_ requires the use of a linked dataset for the selection options.
 **width:** | (int) | fixed column width in percent
 
 ### ORDER OBJECT
@@ -233,6 +236,7 @@ Parameter | Type | Description
     columns={[
       { name: 'Date/Time', field: 'datetime', type: 'date', format: 'MMMM Do, YYYY', width: 50 },
       { name: 'User', field: 'user', width: 50 },
+      { name: 'Ticket', field: 'badge', type: 'badge', badge: [ '', 'Uploaded', '', '', 'Needed' ], width: 10 },
       {
         name: 'Action',
         field: 'work_order_id',
