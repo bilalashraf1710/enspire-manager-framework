@@ -163,7 +163,7 @@ export class Dropzone extends React.Component {
 							}}
 							onClick={ this.removeFile.bind(this) }
 						></i>
-						{ (this.props.image.includes('.jpg') || this.props.image.includes('.png')) &&
+						{ (this.props.image.includes('.jpg') || this.props.image.includes('.jpeg') || this.props.image.includes('.png')) &&
 							<div>
 								<img src={ this.props.image  } width={ this.props.width } style={{ width: '100%' }} />
 								<p><a href="this.props.image" target="_blank">Open in Browser</a></p>
@@ -202,7 +202,7 @@ export class Dropzone extends React.Component {
 												: 	<span>
 														<label style={{ cursor: 'pointer' }}>
 															<strong>Choose a file</strong>
-															<input type="file" style={{ display: 'none' }} onChange={ this.chooseFile.bind(this) } />
+															<input type="file" accept="image/png, image/jpeg, .pdf" style={{ display: 'none' }} onChange={ this.chooseFile.bind(this) } />
 														</label>&nbsp;or Drag here
 													</span>
 											}
