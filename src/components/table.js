@@ -306,8 +306,8 @@ export class Table extends React.Component {
 			if (item[this.props.group_by] != groupBy) {
 				groupBy = item[this.props.group_by];
 				rows.push(
-					<tr key={ 'heading:' + groupBy } style={ { backgroundColor: '#dddddd' } }>
-						<td colspan="99" style={ { color: 'black' } }>{ groupBy }</td>
+					<tr key={ 'heading:' + groupBy } style={ { backgroundColor: '#666666' } }>
+						<td colSpan="99" style={ { color: 'white' } }>{ groupBy }</td>
 					</tr>
 				);
 			}
