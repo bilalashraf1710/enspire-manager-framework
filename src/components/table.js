@@ -37,7 +37,7 @@ export class Table extends React.Component {
 	componentDidMount() {
 		this.loadSessionStorage();
 		if (_.get(this.props, 'filters.active', null)) {
-			if (this.props.filters.buttons.length <= 5) {
+			if (this.props.filters?.buttons?.length <= 5) {
 				this.setState({ filter_button: this.props.filters.active });
 			} else {
 				if (this.props.filters.active > 0) this.setState({ filter_button: this.props.filters.buttons[this.props.filters.active - 1].value });
@@ -228,7 +228,7 @@ export class Table extends React.Component {
 		/* Filtered -----------------------------------*/
 
 		if (_.get(this.props.filters, 'buttons', null)) { // has buttons?
-			if (this.props.filters.buttons.length <= 5) {
+			if (this.props.filters?.buttons?.length <= 5) {
 				if (this.state.filter_button && _.get(this.props.filters, 'buttons.' + (this.state.filter_button - 1) + '.value', null) !== null) {
 					filtered_data = _.filter(filtered_data, { [this.props.filters.field]: this.props.filters.buttons[this.state.filter_button - 1].value });
 				}
@@ -248,11 +248,11 @@ export class Table extends React.Component {
 
 		var gap_low = false;
 		var gap_high = false;
-		var max_page = Math.floor(filtered_data.length / this.props.limit);
+		var max_page = Math.floor(filtered_data?.length / this.props.limit);
 
 		var pagination = [];
-		if (this.state.limit > 0 && filtered_data.length > this.state.limit) {
-			for (var i = 0; i * this.state.limit < filtered_data.length; i++) {
+		if (this.state.limit > 0 && filtered_data?.length > this.state.limit) {
+			for (var i = 0; i * this.state.limit < filtered_data?.length; i++) {
 
 				if (i < this.state.page - 2) {
 					gap_low = true;
@@ -291,7 +291,7 @@ export class Table extends React.Component {
 		var groupBy = null;
 		var rows = [];
 
-		if (display_data.length) display_data.map((item, row_index) => {
+		if (display_data?.length) display_data.map((item, row_index) => {
 
 			/* Group By ---------------------------------*/
 
@@ -314,7 +314,7 @@ export class Table extends React.Component {
 				}
 			}
 
-			var fields = (this.props.columns.length) ? this.props.columns.map((column, column_index) => {
+			var fields = (this.props.columns?.length) ? this.props.columns.map((column, column_index) => {
 
 				var styles = {};
 
@@ -450,8 +450,8 @@ export class Table extends React.Component {
 
 					} else if (column.type == 'actions') {
 
-						var buttonClass = (this.state.selected && this.state.selected.includes(item[column.field])) ? column.button.activeClass : column.button.className;
-						var row_results = (this.state.selected && this.state.selected.length > 0) ? this.state.selected : item[column.field];
+						var buttonClass = (this.state.selected && this.state.selected?.includes(item[column.field])) ? column.button.activeClass : column.button.className;
+						var row_results = (this.state.selected && this.state.selected?.length > 0) ? this.state.selected : item[column.field];
 
 						return (
 							<td key={ 'td' + column_index }>
@@ -519,7 +519,7 @@ export class Table extends React.Component {
 		/* Filter Buttons / Dropdown --------------------------*/
 
 		var filters;
-		if (this.props.filters && this.props.filters.buttons.length <= this.state.filter_limit) {
+		if (this.props.filters && this.props.filters?.buttons?.length <= this.state.filter_limit) {
 			filters = (this.props.filters) ? this.props.filters.buttons.map((item, index) => {
 				return (
 					<label key={ 'filter' + index } className={ 'btn' + ((index == this.state.filter_button - 1) ? ' btn-primary active' : ' btn-white') } onClick={ this.handleFilter.bind(this, index + 1) }>
@@ -566,12 +566,12 @@ export class Table extends React.Component {
 						}
 						{ filters &&
 							<div className="col m-b-xs">
-								{ filters.length <= this.state.filter_limit &&
+								{ filters?.length <= this.state.filter_limit &&
 									<div className="btn-group btn-group-toggle" data-toggle="buttons">
 										{ filters }
 									</div>
 								}
-								{ filters.length > this.state.filter_limit &&
+								{ filters?.length > this.state.filter_limit &&
 									<select className="form-control input-s-sm inline" name="limit" value={ this.state.filter_button } onChange={ this.handleFilterDropdown.bind(this) } >
 										<option value="0">- No Category Filter -</option>
 										{ filters }
