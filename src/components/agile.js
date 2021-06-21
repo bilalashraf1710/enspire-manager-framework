@@ -24,6 +24,7 @@ export function Agile(props) {
 	}) : null;
 
 	let style = (typeof props.onClick === "function") ? { cursor: 'pointer' } : null;
+	let TitleTag = (props.titleTag) ? props.titleTag : 'p';
 	
 	return (
 
@@ -37,7 +38,8 @@ export function Agile(props) {
 					</ul>
 				</div>
 			}
-			{ props.title }
+			{}
+			<TitleTag className="m-0 p-0"><strong>{ props.title }</strong></TitleTag>
 			<div className="agile-detail" style={{ fontSize: '11px' }}>
 				{ props.detail } {/*<i className="far fa-clock"></i> 12.10.2015 */}
 			</div>

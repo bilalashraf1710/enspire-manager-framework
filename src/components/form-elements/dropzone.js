@@ -150,19 +150,21 @@ export class Dropzone extends React.Component {
 
 				{ this.props.image &&
 					<div style={{ position: 'relative', textAlign: 'center', border: '1px solid #e5e6e7', padding: '10px' }}>
-						<i className="far fa-times-circle fa-3x" 
-							style={{ 
-								color: 'white', 
-								cursor: 'pointer',
-								opacity: '.5', 
-								position: 'absolute', 
-								right: '5px', 
-								textShadow: '2px 2px 5px black', 
-								top: '3px', 
-								zIndex: '100', 
-							}}
-							onClick={ this.removeFile.bind(this) }
-						></i>
+						{ !this.props.readOnly &&
+							<i className="far fa-times-circle fa-3x" 
+								style={{ 
+									color: 'white', 
+									cursor: 'pointer',
+									opacity: '.5', 
+									position: 'absolute', 
+									right: '5px', 
+									textShadow: '2px 2px 5px black', 
+									top: '3px', 
+									zIndex: '100', 
+								}}
+								onClick={ this.removeFile.bind(this) }
+							></i>
+						}
 						{ (this.props.image.includes('.jpg') || this.props.image.includes('.jpeg') || this.props.image.includes('.png')) &&
 							<div>
 								<img src={ this.props.image  } width={ this.props.width } style={{ width: '100%' }} />
@@ -175,43 +177,51 @@ export class Dropzone extends React.Component {
 					</div>
 				}
 
-				<div id={ 'dropzone' }>
-					{ !this.props.image &&
-						<div className={ (this.state.hover ? ' highlight' : '') } 
-							style={ { height: (this.props.maxHeight) ? this.props.maxHeight : '250px' }}
-						>
-							<>
-								{ this.state.uploading
+				{ !this.props.image &&
 
-									?	<div>
-											<h3><span>Uploading...</span></h3>
-											{ this.state.progress > 0 &&
-												<div className="progress mt-3 mb-3" style={{ backgroundColor: 'white' }}>
-													<div className="progress-bar" style={{ width: this.state.progress+'%' }} role="progressbar"></div>
-												</div>
-											}
-										</div>
+					<>
+						{ this.props.readOnly
+						? <div style={ { padding: '20px', textAlign: 'center', border: '1px solid #e5e6e7' }}>
+									<h3>No File Available</h3>
+								</div>
+							: 	<div id={ 'dropzone' }>
+									<div className={ (this.state.hover ? ' highlight' : '') } 
+										style={ { height: (this.props.maxHeight) ? this.props.maxHeight : '250px' }}
+									>
+										<>
+											{ this.state.uploading
 
-									: 	<h3 style={{ backgroundColor: 'transparent' }}>
-											<i className="fa fa-upload fa-3x mb-3" style={{ color: '#cccccc', marginTop: '15px' }}></i>
-											<br/>
-											{ this.state.hover
-												? 	<span>
-														<strong>Drop Here!!</strong>
-													</span>
-												: 	<span>
-														<label style={{ cursor: 'pointer' }}>
-															<strong>Choose a file</strong>
-															<input type="file" accept="image/png, image/jpeg, .pdf" style={{ display: 'none' }} onChange={ this.chooseFile.bind(this) } />
-														</label>&nbsp;or Drag here
-													</span>
+												?	<div>
+														<h3><span>Uploading...</span></h3>
+														{ this.state.progress > 0 &&
+															<div className="progress mt-3 mb-3" style={{ backgroundColor: 'white' }}>
+																<div className="progress-bar" style={{ width: this.state.progress+'%' }} role="progressbar"></div>
+															</div>
+														}
+													</div>
+
+												: 	<h3 style={{ backgroundColor: 'transparent' }}>
+														<i className="fa fa-upload fa-3x mb-3" style={{ color: '#cccccc', marginTop: '15px' }}></i>
+														<br/>
+														{ this.state.hover
+															? 	<span>
+																	<strong>Drop Here!!</strong>
+																</span>
+															: 	<span>
+																	<label style={{ cursor: 'pointer' }}>
+																		<strong>Choose a file</strong>
+																		<input type="file" accept="image/png, image/jpeg, .pdf" style={{ display: 'none' }} onChange={ this.chooseFile.bind(this) } />
+																	</label>&nbsp;or Drag here
+																</span>
+														}
+													</h3>
 											}
-										</h3>
-								}
-							</>
-						</div>
-					}
-				</div>
+										</>
+									</div>
+								</div>
+						}
+					</>
+				}
 			</div>
 		);
 	}

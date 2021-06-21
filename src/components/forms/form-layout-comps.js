@@ -198,6 +198,7 @@ export default function FormBuilderComps(props) {
 				multiple={ false }
 				onChange={ props.props.callbacks.dropzone.bind(this) } 
 				maxHeight={ props.field.dropzone.height }
+				readOnly={ props.field.readOnly }
 			/>
 			break;
 		}
