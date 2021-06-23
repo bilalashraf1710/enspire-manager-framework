@@ -147,7 +147,7 @@ export class Input extends React.Component {
 						<DatePicker
 							className="form-control form-control-sm" 
 							dateFormat="MM-dd-yyyy"
-							isClearable={ true }
+							isClearable={ false }
 							onChange={ this.props.onChange.bind(this, this.props.name) }
 							{ ...inputProps }
 						/>
