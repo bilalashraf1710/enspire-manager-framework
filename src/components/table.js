@@ -446,7 +446,7 @@ export class Table extends React.Component {
 						if (item[column.field] == 3) badgestyle = 'badge-warning';
 						if (item[column.field] == 4) badgestyle = 'badge-danger';
 
-						return (<span className={ 'badge ' + badgestyle + ' mt-2' }>{ column.badge[item[column.field]] }</span>);
+						return (<td key={ 'td' + column_index }><span className={ 'badge ' + badgestyle + ' mt-2' }>{ column.badge[item[column.field]] }</span></td>);
 
 					} else if (column.type == 'actions') {
 
