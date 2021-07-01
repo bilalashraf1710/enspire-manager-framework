@@ -209,7 +209,7 @@ export class Table extends React.Component {
 		/* Sort ------------------------------------*/
 
 		if (this.props.group_by) {
-			var ordered_data = _.orderBy(this.props.data, [this.props.group_by], ['asc']);
+			var ordered_data = _.orderBy(this.props.data, [this.props.group_by[0], this.props.group_by[2]], [this.props.group_by[1], this.props.group_by[3]]);
 		} else {
 			var ordered_data = (this.state.order) ? _.orderBy(this.props.data, this.state.order.fields, this.state.order.direction) : this.props.data;
 		}
@@ -295,13 +295,15 @@ export class Table extends React.Component {
 
 			/* Group By ---------------------------------*/
 
-			if (item[this.props.group_by] != groupBy) {
-				groupBy = item[this.props.group_by];
-				rows.push(
-					<tr key={ 'heading:' + groupBy } style={ { backgroundColor: '#666666' } }>
-						<td colSpan="99" style={ { color: 'white' } }>{ groupBy }</td>
-					</tr>
-				);
+			if (this.props.group_by) {
+				if (item[this.props.group_by[0]] != groupBy) {
+					groupBy = item[this.props.group_by[0]];
+					rows.push(
+						<tr key={ 'heading:' + groupBy } style={ { backgroundColor: '#666666' } }>
+							<td colSpan="99" style={ { color: 'white' } }>{ groupBy }</td>
+						</tr>
+					);
+				}
 			}
 
 			var inputProps = {};
