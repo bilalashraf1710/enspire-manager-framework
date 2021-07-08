@@ -2,6 +2,7 @@
 
 Version | Description of Changes
 --------|-----------------------
+0.8.8 | Add parameters hideLabel and noLabel to Form fields.
 0.8.0 | Add Badge Support
 0.7.13 | ModalForm allows prop.visible - defaults to true.
 0.7.12 | Updated MultiSelect - new handler required.
@@ -404,6 +405,8 @@ Prop | Type | Description
 -----|------|------------
 **grid: \*** | (string) | classname for grid size e.g. _col-lg-6_
 **label: \*** | (string) | Field label
+**hideLabel** | (boolean) | Hide label but keep spacing
+**noLabel** | (boolean) | Remove label and spacing entirely
 **field: \*** | (string) | Field name
 **type: \*** | (string) | Field type, one of _text_ or _email_, _textarea_, _select_, _multiselect_, _date_, _checkbox_, _checkboxes_, or _dropzone_. 
 **options:** | (jsx) | List of JSX \<option> tags surrounded by \<Fragment>

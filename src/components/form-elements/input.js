@@ -73,13 +73,19 @@ export class Input extends React.Component {
 		if (this.props.selected) inputProps.selected = this.props.selected;
 		if (this.props.defaultValue) inputProps.defaultValue = this.props.defaultValue;
 		else if (this.props.value !== undefined) inputProps.value = this.props.value;
-		
+
 		return (
 
 			<div className={ 'form-group '+this.props.className+' '+((this.state.error)?'has-error':'') }>
 				
-				{ this.props.label &&
-					<label style={{ whiteSpace: 'nowrap', width: '100%', overflow: 'hidden', textOverflow: 'ellipsis' }}>{ this.props.label + ((this.props.required)?' *':'') }</label> 
+				{ this.props.hideLabel
+					? 	<label>&nbsp;</label>
+					: 	<>
+							{ this.props.noLabel
+								? <></>
+								: <label style={{ whiteSpace: 'nowrap', width: '100%', overflow: 'hidden', textOverflow: 'ellipsis' }}>{ this.props.label + ((this.props.required)?' *':'') }</label>
+							}
+						</>
 				}
 				
 				<div className={ 'input-group input-group-sm ' + ((this.props.type === 'date') ? 'date '+this.props.name : '') }>

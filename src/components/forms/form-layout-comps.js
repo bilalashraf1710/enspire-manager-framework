@@ -24,7 +24,9 @@ export default function FormBuilderComps(props) {
 				className={ props.field.grid } 
 				form_error={ props.props.form_error } 
 				label={ label } 
-				name={ props.field.field } 
+				hideLabel={ props.field.hideLabel }
+				noLabel={ props.field.noLabel }
+				name={ props.field.field }
 				prepend={ props.field.prepend }
 				append={ props.field.append }
 				onChange={ props.props.callbacks.text } 
@@ -43,7 +45,9 @@ export default function FormBuilderComps(props) {
 				className={ props.field.grid } 
 				form_error={ props.props.form_error } 
 				label={ label } 
-				name={ props.field.field } 
+				hideLabel={ props.field.hideLabel }
+				noLabel={ props.field.noLabel }
+				name={ props.field.field }
 				prepend={ props.field.prepend }
 				append={ props.field.append }
 				onChange={ props.props.callbacks.text } 
@@ -62,7 +66,9 @@ export default function FormBuilderComps(props) {
 				className={ props.field.grid } 
 				form_error={ props.props.form_error } 
 				label={ label } 
-				name={ props.field.field } 
+				hideLabel={ props.field.hideLabel }
+				noLabel={ props.field.noLabel }
+				name={ props.field.field }
 				allowNew={ props.field.allow_new }
 				prepend={ props.field.prepend }
 				append={ props.field.append }
@@ -84,7 +90,9 @@ export default function FormBuilderComps(props) {
 				className={ props.field.grid } 
 				form_error={ props.props.form_error } 
 				label={ label } 
-				name={ props.field.field } 
+				hideLabel={ props.field.hideLabel }
+				noLabel={ props.field.noLabel }
+				name={ props.field.field }
 				prepend={ <i className="far fa-calendar-alt"></i> }
 				append={ props.field.append }
 				onChange={ props.props.callbacks.date } 
