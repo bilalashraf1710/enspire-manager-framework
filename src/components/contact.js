@@ -14,7 +14,7 @@ export class Contact extends React.Component {
 	}
 
 	componentDidMount() {
-		this.setState({ isOpen: (this.props.open || !this.props.user.activated) ? true : false });
+		this.setState({ isOpen: (this.props.open || !this.props.user?.activated) ? true : false });
 	}
 
 	render() {
@@ -80,36 +80,34 @@ export class Contact extends React.Component {
 									}
 								</p>
 
-								{ true && //this.props.admin &&
-									<>
-										{ this.props.user.activated && this.props.sendPasswordReset && this.props.sendInvite
-											? <button className="btn btn-default btn-sm float-right" type="button" onClick={ this.props.sendPasswordReset.bind(this, this.props.user) }>Send Password Reset Email
-                                                { this.props.sendPending &&
+								<div>
+									{ this.props.user.activated && this.props.sendPasswordReset && this.props.sendInvite
+										? <button className="btn btn-default btn-sm float-right" type="button" onClick={ this.props.sendPasswordReset.bind(this, this.props.user) }>Send Password Reset Email
+											{ this.props.sendPending &&
+												<span className="spinner-border spinner-border-sm ml-2" role="status" aria-hidden="true"></span>
+											}
+										</button>
+										: <div className="float-right text-right">
+											<button className="btn btn-primary btn-sm btn-outline mb-2" type="button" onClick={ this.props.sendInvite.bind(this, this.props.user) }>Send Invitation Email
+												{ this.props.sendPending &&
 													<span className="spinner-border spinner-border-sm ml-2" role="status" aria-hidden="true"></span>
 												}
 											</button>
-											: <div className="float-right text-right">
-												<button className="btn btn-primary btn-sm btn-outline mb-2" type="button" onClick={ this.props.sendInvite.bind(this, this.props.user) }>Send Invitation Email
-													{ this.props.sendPending &&
-														<span className="spinner-border spinner-border-sm ml-2" role="status" aria-hidden="true"></span>
-													}
-												</button>
-												<br/>
-												Trouble receiving email?
-												<CopyToClipboard text={ encodeURI('https://manage.mobiletrack.systems/procurement/#/' + this.props.handle + '/register_user/' + this.props.contact.firstName + '/' + this.props.contact.lastName + '/' + this.props.contact.email) } onCopy={ () => window.toastr.success('The Registration link has been successfully copied to your clipboard.', 'Link Copied!') }>
-													<button className="btn btn-secondary btn-xs btn-outline ml-2" type="button">Copy Link</button>
-												</CopyToClipboard>
-											</div>
-										}
+											<br/>
+											Trouble receiving email?
+											<CopyToClipboard text={ encodeURI('https://manage.mobiletrack.systems/procurement/#/' + this.props.handle + '/register_user/' + this.props.contact.firstName + '/' + this.props.contact.lastName + '/' + this.props.contact.email) } onCopy={ () => window.toastr.success('The Registration link has been successfully copied to your clipboard.', 'Link Copied!') }>
+												<button className="btn btn-secondary btn-xs btn-outline ml-2" type="button">Copy Link</button>
+											</CopyToClipboard>
+										</div>
+									}
 
-										{ this.props.user.invitationSent &&
-											<p><strong className="mr-2">Invitation Sent:</strong> { moment(this.props.user.invitationSent.seconds, 'X').format('MMM Do YYYY,  h:mm a') }</p>
-										}
-										{ this.props.user.activated &&
-											<p><strong className="mr-2">Activated:</strong> { moment(this.props.user.activatedDate.seconds, 'X').format('MMM Do YYYY,  h:mm a') }</p>
-										}
-									</>
-								}
+									{ this.props.user.invitationSent &&
+										<p><strong className="mr-2">Invitation Sent:</strong> { moment(this.props.user.invitationSent.seconds, 'X').format('MMM Do YYYY,  h:mm a') }</p>
+									}
+									{ this.props.user.activated &&
+										<p><strong className="mr-2">Activated:</strong> { moment(this.props.user.activatedDate.seconds, 'X').format('MMM Do YYYY,  h:mm a') }</p>
+									}
+								</div>
 							</div>
 						}
 						<div style={{ clear: 'both' }} />
