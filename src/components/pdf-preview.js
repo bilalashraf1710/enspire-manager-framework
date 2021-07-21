@@ -31,7 +31,7 @@ export class PdfPreview extends React.Component {
 
 		var pagination = [];
 		for (var i = 1; i <= this.state.pdfPages; i++) {
-			pagination.push(<button className={ 'btn btn-white ' + ((this.state.pdfPage == i) ? 'active' : '') } onClick={ this.handlePagination.bind(this, i) }>{ i }</button>);
+			pagination.push(<button key={ 'button' + i } className={ 'btn btn-white ' + ((this.state.pdfPage == i) ? 'active' : '') } onClick={ this.handlePagination.bind(this, i) }>{ i }</button>);
 		}
 
 		var height = (this.props.width) ? this.props.width * 1.5 : 600;

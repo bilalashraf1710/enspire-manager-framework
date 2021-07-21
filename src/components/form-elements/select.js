@@ -42,7 +42,17 @@ export class Select extends React.Component {
 		return (
 
 			<div className={ 'form-group '+this.props.className+' '+((this.state.error)?'has-error':'') }>
-				<label>{ this.props.label + ((this.props.required)?' *':'') }</label> 
+				
+				{ this.props.hideLabel
+					? 	<label>&nbsp;</label>
+					: 	<>
+							{ this.props.noLabel
+								? <></>
+								: <label style={{ whiteSpace: 'nowrap', width: '100%', overflow: 'hidden', textOverflow: 'ellipsis' }}>{ this.props.label + ((this.props.required)?' *':'') }</label>
+							}
+						</>
+				}
+
 				<select 
 					className="form-control form-control-sm" 
 					name={ this.props.name } 

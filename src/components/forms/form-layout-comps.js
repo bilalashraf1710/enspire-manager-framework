@@ -108,7 +108,9 @@ export default function FormBuilderComps(props) {
 				className={ props.field.grid } 
 				form_error={ props.props.form_error } 
 				label={ label } 
-				name={ props.field.field } 
+				hideLabel={ props.field.hideLabel }
+				noLabel={ props.field.noLabel }
+				name={ props.field.field }
 				onChange={ props.props.callbacks.select } 
 				required={ required }
 				value={ (props.props.record[props.field.field]) ? props.props.record[props.field.field] : '' } 
