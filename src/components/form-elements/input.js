@@ -53,7 +53,7 @@ export class Input extends React.Component {
 		}
 		var hits = await elasticSearch(search, config);
 		const options = hits.map((hit) => {
-			return { target: hit.displayName, id: hit.id }
+			return { target: hit[this.props.target], id: hit[this.props.id] }
 		})
 
 		this.setState({ options, search, isLoading: false });
