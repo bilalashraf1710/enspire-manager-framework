@@ -146,7 +146,7 @@ export class Input extends React.Component {
 					}
 					{ this.props.type == 'typeahead' && this.props.allowNew &&
 						<div className="input-group-append">
-							<button className="btn btn-primary" type="button" onClick={ () => { this.props.onChange(this.props.name, [{ customOption: true, target: '' }]) } }>+ New</button>
+							<button className="btn btn-primary" type="button" onClick={ () => { this.props.onChange(this.props.name, [{ customOption: true, target: search }]) } }>+ New</button>
 						</div>
 					}
 					{ this.props.type == 'date' &&
