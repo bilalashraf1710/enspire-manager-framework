@@ -17,6 +17,7 @@ export class Input extends React.Component {
 			search: '',
 			options: [],
 			isLoading: false,
+			disableNew: false,
 		};
 		this.field_ref = React.createRef();
 	}
@@ -46,6 +47,7 @@ export class Input extends React.Component {
 	}
 	async handleSearch(search) {
 
+		this.setState({ isLoading: true });
 		var config = {
 			table: this.props.table,
 			fields: this.props.fields,
@@ -54,9 +56,11 @@ export class Input extends React.Component {
 		var hits = await elasticSearch(search, config);
 		const options = hits.map((hit) => {
 			return { target: hit[this.props.target], id: hit[this.props.id] }
-		})
+		});
 
-		this.setState({ options, search, isLoading: false });
+		var disableNew = _.find(hits, (o) => { return o[this.props.target] == search });
+
+		this.setState({ options, search, isLoading: false, disableNew });
 		return false; // prevent <Enter> key from reloading
 	}
 
@@ -146,7 +150,7 @@ export class Input extends React.Component {
 					}
 					{ this.props.type == 'typeahead' && this.props.allowNew &&
 						<div className="input-group-append">
-							<button className="btn btn-primary" type="button" onClick={ () => { this.props.onChange(this.props.name, [{ customOption: true, target: this.state.search }]) } }>+ New</button>
+							<button className="btn btn-primary" type="button" disabled={ this.state.disableNew } onClick={ () => { this.props.onChange(this.props.name, [{ customOption: true, target: this.state.search }]) } }>+ New</button>
 						</div>
 					}
 					{ this.props.type == 'date' &&
