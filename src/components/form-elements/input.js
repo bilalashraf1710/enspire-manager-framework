@@ -57,8 +57,8 @@ export class Input extends React.Component {
 		const options = hits.map((hit) => {
 			return { target: hit[this.props.target], id: hit[this.props.id] }
 		});
-
-		var disableNew = _.find(hits, (o) => { return o[this.props.target] == search });
+		console.info(hits, search);
+		var disableNew = (_.find(hits, (o) => { return o[this.props.target] == search })) ? true : false;
 
 		this.setState({ options, search, isLoading: false, disableNew });
 		return false; // prevent <Enter> key from reloading
