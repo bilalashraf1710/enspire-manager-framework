@@ -145,7 +145,7 @@ export class Input extends React.Component {
 							highlightOnlyResult={ true }
 							minLength={ 2 }
 							onSearch={ this.handleSearch.bind(this) }
-							onChange={ this.onTypeaheadChange.bind(this, this.props.name) }
+							onChange={ this.onTypeaheadChange.bind(this) }
 							options={ this.state.options }
 							placeholder={ this.props.placeholder }
 							renderMenuItemChildren={ (options, props) => (
