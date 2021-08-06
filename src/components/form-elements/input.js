@@ -47,7 +47,6 @@ export class Input extends React.Component {
 		this.props.onChange(event);
 	}
 	onTypeaheadChange(result) {
-		console.info(this.state.hits, result?.[0]?.target?.trim());
 		var disableNew = (_.find(this.state.hits, (o) => { return o[this.props.target]?.trim() == result?.[0]?.target?.trim() })) ? true : false;
 		this.setState({ disableNew });
 		this.props.onChange(this.props.name, result);
@@ -64,7 +63,6 @@ export class Input extends React.Component {
 		const options = hits.map((hit) => {
 			return { target: hit[this.props.target], id: hit[this.props.id] }
 		});
-		console.info(hits, search);
 		var disableNew = (_.find(hits, (o) => { return o[this.props.target]?.trim() == search?.trim() })) ? true : false;
 
 		this.setState({ options, search, hits, isLoading: false, disableNew });
