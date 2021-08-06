@@ -16,6 +16,7 @@ export class Input extends React.Component {
 			error_message: null,
 			search: '',
 			options: [],
+			hits: [],
 			isLoading: false,
 			disableNew: false,
 		};
@@ -45,6 +46,11 @@ export class Input extends React.Component {
 		event.target.value = event.target.value.toLowerCase();
 		this.props.onChange(event);
 	}
+	onTypeaheadChange(result) {
+		var disableNew = (_.find(this.state.hits, (o) => { return o[this.props.target]?.trim() == result?.[0]?.target?.trim() })) ? true : false;
+		this.setState({ disableNew });
+		this.props.onChange(this.props.name, result)
+	}
 	async handleSearch(search) {
 
 		this.setState({ isLoading: true });
@@ -58,9 +64,9 @@ export class Input extends React.Component {
 			return { target: hit[this.props.target], id: hit[this.props.id] }
 		});
 		console.info(hits, search);
-		var disableNew = (_.find(hits, (o) => { return o[this.props.target] == search })) ? true : false;
+		var disableNew = (_.find(hits, (o) => { return o[this.props.target]?.trim() == search?.trim() })) ? true : false;
 
-		this.setState({ options, search, isLoading: false, disableNew });
+		this.setState({ options, search, hits, isLoading: false, disableNew });
 		return false; // prevent <Enter> key from reloading
 	}
 
@@ -138,7 +144,7 @@ export class Input extends React.Component {
 							highlightOnlyResult={ true }
 							minLength={ 2 }
 							onSearch={ this.handleSearch.bind(this) }
-							onChange={ this.props.onChange.bind(this, this.props.name) }
+							onChange={ this.onTypeaheadChange.bind(this, this.props.name) }
 							options={ this.state.options }
 							placeholder={ this.props.placeholder }
 							renderMenuItemChildren={ (options, props) => (
