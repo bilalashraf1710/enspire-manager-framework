@@ -408,7 +408,7 @@ export class Table extends React.Component {
 					} else if (column.type == 'button') {
 						console.error('EM Table: Field of type Button cannot have a Data Link');
 					} else {
-						return (<td key={ 'td' + column_index } { ...inputProps } style={ styles }>{ (items?.length) ? this.formatItem(items[0], column) : '' }</td>); // TODO check for multiple
+						return (<td key={ 'td' + column_index } { ...inputProps } style={ styles } dangerouslySetInnerHTML={ { __html: this.formatItem(items[0], column) } }></td>); // TODO check for multiple
 					}
 
 				} else {
