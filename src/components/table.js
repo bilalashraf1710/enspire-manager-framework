@@ -218,9 +218,24 @@ export class Table extends React.Component {
 
 		var filtered_data = (this.state.search && !this.props.search_callback) ? _.filter(ordered_data, (o) => {
 			var result = false;
-			this.props.columns.forEach((k, index) => {
-				if (typeof o[k.field] === 'string' && o[k.field].toLowerCase().includes(this.state.search.toLowerCase())) result = true;
-				if (typeof o[k.field] === 'number' && o[k.field].toString().startsWith(this.state.search.toLowerCase())) result = true;
+			this.props.columns.forEach((column, index) => {
+
+				if (Array.isArray(column.link)) {
+					var link_data_field = column.link[0];
+					var link_field = column.link[1];
+				} else {
+					var link_data_field = column.link;
+					var link_field = column.link;
+				}
+
+				var record = o;
+				if (link_data_field && link_field) {
+					console.info(link_data_field, o[link_data_field]);
+					record = _.find(column.data, (n) => { return n[link_field] == o[link_data_field] } );
+				}
+
+				if (typeof record[column.field] === 'string' && o[column.field].toLowerCase().includes(this.state.search.toLowerCase())) result = true;
+				if (typeof record[column.field] === 'number' && o[column.field].toString().startsWith(this.state.search.toLowerCase())) result = true;
 			});
 			return result;
 		}) : ordered_data;
