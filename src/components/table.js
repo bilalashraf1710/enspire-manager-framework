@@ -1,6 +1,5 @@
 import React from 'react';
 import DatePicker from "react-datepicker";
-import { Input } from './form-elements/input';
 
 const escapeStringRegexp = require('escape-string-regexp');
 var _ = require('lodash');
@@ -180,7 +179,7 @@ export class Table extends React.Component {
 			} else console.error('EM Table: Format required for Number field');
 
 		} else {
-			let result = (item[column.field]) ? item[column.field].toString().replace(/_/g, " ") : ''; // replace _ with space 
+			let result = (item?.[column.field]) ? item[column.field].toString().replace(/_/g, " ") : ''; // replace _ with space 
 
 			if (this.props.highlight_search) {
 				var highlight_words = (this.props.search_query) ? this.props.search_query.split(" ") : this.state.search.split(" ");
@@ -232,7 +231,7 @@ export class Table extends React.Component {
 				if (link_data_field && link_field) {
 					console.info(link_data_field, o[link_data_field]);
 					record = _.find(column.data, (n) => { return n[link_field] == o[link_data_field] } );
-				}
+				}		
 
 				if (record && typeof record[column.field] === 'string' && record[column.field].toLowerCase().includes(this.state.search.toLowerCase())) result = true;
 				if (record && typeof record[column.field] === 'number' && record[column.field].toString().startsWith(this.state.search.toLowerCase())) result = true;
