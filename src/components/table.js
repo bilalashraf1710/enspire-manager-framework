@@ -234,8 +234,8 @@ export class Table extends React.Component {
 					record = _.find(column.data, (n) => { return n[link_field] == o[link_data_field] } );
 				}
 
-				if (typeof record[column.field] === 'string' && record[column.field].toLowerCase().includes(this.state.search.toLowerCase())) result = true;
-				if (typeof record[column.field] === 'number' && record[column.field].toString().startsWith(this.state.search.toLowerCase())) result = true;
+				if (record && typeof record[column.field] === 'string' && record[column.field].toLowerCase().includes(this.state.search.toLowerCase())) result = true;
+				if (record && typeof record[column.field] === 'number' && record[column.field].toString().startsWith(this.state.search.toLowerCase())) result = true;
 			});
 			return result;
 		}) : ordered_data;
