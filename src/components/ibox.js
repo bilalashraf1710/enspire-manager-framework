@@ -8,11 +8,11 @@ export function Ibox(props) {
 	var styleTitle = (props.mini) ? { padding: '10px', minHeight: 'auto', maxHeight: '34px' } : {};
 	var styleContent = (props.mini) ? { padding: '10px' } : {};
 
-	var options = props.dropdown_array.map((option, index) => {
+	var options = (props.dropdown_array) ? props.dropdown_array.map((option, index) => {
 		return (
 			<option key={ 'option' + index } value={ option }>{ option }</option>
 		);
-	});
+	}) : [];
 
 	return (
 
