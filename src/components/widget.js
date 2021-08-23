@@ -12,6 +12,9 @@ export function Widget(props) {
 		case 3: color_class = 'bg-info'; break;
 		case 4: color_class = 'bg-warning'; break;
 		case 5: color_class = 'bg-danger'; break;
+		case 6: color_class = 'bg-dark'; break;
+		case 7: color_class = 'bg-light'; break;
+		case 8: color_class = 'bg-white'; break;
 	}
 
 	var spinnerColor = (props.spinnerColor) ? props.spinnerColor : '';
