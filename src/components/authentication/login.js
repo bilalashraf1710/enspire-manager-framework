@@ -75,7 +75,7 @@ export class Login extends React.Component {
 								</>
 						}
 
-						<form style={ { marginTop: '40px' } } onSubmit={ this.submitForm.bind(this) }>
+						<form className="login-form" style={ { marginTop: '40px' } } onSubmit={ this.submitForm.bind(this) }>
 							<div className="form-group">
 								<input type="text" name="email" className="form-control" placeholder="Email Address" value={ this.state.email } onChange={ this.handleChange.bind(this) } />
 							</div>

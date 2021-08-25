@@ -42,7 +42,7 @@ export class VerifyHandle extends React.Component {
 							<img src={ 'images/logo.png' } width="100%" alt="Mobile Track Logo" />
 						</div>
 
-						<form style={ { marginTop: '40px' } } onSubmit={ this.submitForm.bind(this) }>
+						<form className="register-company" style={ { marginTop: '40px' } } onSubmit={ this.submitForm.bind(this) }>
 							<div className="form-group">
 								<input type="text" name="handle" className="form-control" placeholder="Company Handle" value={ this.state.handle } onChange={ this.handleChange.bind(this) } />
 							</div>

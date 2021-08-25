@@ -69,7 +69,7 @@ export class PasswordReset extends React.Component {
 						<p>If you have an existing login with our system and cannot remember your password, please enter your Email address below.</p>
 						<p>A link for changing your password will be sent.</p>
 						
-						<form style={ { marginTop: '40px' } } onSubmit={ this.submitForm.bind(this) }>
+						<form className="reset-form" style={ { marginTop: '40px' } } onSubmit={ this.submitForm.bind(this) }>
 							<div className="form-group">
 								<input type="text" name="email" className="form-control" placeholder="Email Address" value={ this.state.email } onChange={ this.handleChange.bind(this) } />
 							</div>

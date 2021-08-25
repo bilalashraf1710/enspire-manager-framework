@@ -88,7 +88,7 @@ export class Register extends React.Component {
 								</>
 						}
 
-						<form style={ { marginTop: '40px' } } onSubmit={ this.submitForm.bind(this) }>
+						<form className="register-form" style={ { marginTop: '40px' } } onSubmit={ this.submitForm.bind(this) }>
                             <div className="form-group">
 								<input type="text" name="first_name" className="form-control" placeholder="First Name" value={ this.state.first_name } onChange={ this.handleChange.bind(this) } />
 							</div>
