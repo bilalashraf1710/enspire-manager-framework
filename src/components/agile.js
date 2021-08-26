@@ -28,7 +28,7 @@ export function Agile(props) {
 	
 	return (
 
-		<li className={ 'agile ui-sortable-handle fadeInDown ' + color_class } onClick={ (typeof props.callback === "function") ? () => { props.onClick(props.id) } : null }>
+		<li className={ 'agile ui-sortable-handle fadeInDown ' + color_class + ' ' + props.className } onClick={ (typeof props.callback === "function") ? () => { props.onClick(props.id) } : null }>
 
 			{ links &&
 				<div className="btn-group float-right">
