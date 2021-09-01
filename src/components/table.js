@@ -493,7 +493,8 @@ export class Table extends React.Component {
 					} else if (column.type == 'select') {
 						console.error('EM Table: field of type Select must have a Data Link');
 					} else {
-						return (<td key={ 'td' + column_index } { ...inputProps } style={ styles } dangerouslySetInnerHTML={ { __html: this.formatItem(item, column) } }></td>);
+						var content = <div style={ { maxHeight: this.props.max_height, overflow: 'hidden' } }><span dangerouslySetInnerHTML={ { __html: this.formatItem(item, column) } }></span></div>
+						return (<td key={ 'td' + column_index } { ...inputProps } style={ styles }>{ content }</td>);
 					}
 				}
 			}) : null;
