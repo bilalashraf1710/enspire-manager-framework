@@ -16,7 +16,7 @@ export function Ibox(props) {
 
 	return (
 
-		<div className={ 'animated fadeInRight p-0 py ' + props.className } style={ props.style }>
+		<div id={ this.props.id } className={ 'animated fadeInRight p-0 py ' + props.className } style={ props.style }>
 			<div className="ibox" style={ styleIbox }>
 				<div className="ibox-title" style={ styleTitle }>
 					<h5>{ props.title }
