@@ -11,10 +11,12 @@ export class Mapbox extends React.Component {
 		this.state = {
 			mapReady: false,
 			mapURL: null,
+			ar: 3,
 		};
 	}
 	componentDidMount() {
 		this.componentDidUpdate();
+		if (this.props.aspect_ratio) this.setState({ ar: this.props.aspect_ratio });
 	}
 	componentDidUpdate(prevProps) {
 		if (this.props.map_address !== prevProps?.map_address) {
@@ -36,7 +38,7 @@ export class Mapbox extends React.Component {
 		}).then(response => {
 			if (response.data?.features[0]?.center) {
 				let coordinates = response.data.features[0].center;
-				const STATIC_IMAGE_URL = `https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/pin-l-embassy+f74e4e(${coordinates[0]},${coordinates[1]})/${coordinates[0]},${coordinates[1]},12/600x300?access_token=${access_token}`;
+				const STATIC_IMAGE_URL = `https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/pin-l-embassy+f74e4e(${coordinates[0]},${coordinates[1]})/${coordinates[0]},${coordinates[1]},12/600x${(600 / this.props.ar)}?access_token=${access_token}`;
 
 				this.setState({ mapURL: STATIC_IMAGE_URL, mapReady: true });
 			} else {
