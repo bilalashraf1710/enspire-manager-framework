@@ -62,10 +62,6 @@ export class Table extends React.Component {
 		}
 	}
 
-	componentWillUnmount() {
-		window.removeEventListener("resize", this.handleResize.bind(this));
-	}
-
 	loadSessionStorage() {
 		if (this.props.savestate) {
 			if (this.props.pathname) {
