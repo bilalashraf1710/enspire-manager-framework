@@ -49,8 +49,6 @@ export class Table extends React.Component {
 		if (this.props.filters) this.setState({ filters: this.props.filters });
 
 		this.updateSessionStorage();
-		this.handleResize();
-		window.addEventListener("resize", this.handleResize.bind(this));
 	}
 	componentDidUpdate() {
 		if (this.props.savestate) {
@@ -89,18 +87,6 @@ export class Table extends React.Component {
 
 	/* HANDLERS --------------------------------------------------------------------*/
 
-	handleResize() {
-		// if (this.props.container_id) {
-		// 	var container_height = 0;
-		// 	var container_width = 0;
-
-		// 	if (document.getElementById(this.props.container_id) && document.getElementById(this.props.container_id).querySelectorAll('tbody')[0]) {
-		// 		container_height = document.getElementById(this.props.container_id).clientHeight;
-		// 		container_width = (document.getElementById(this.props.container_id).querySelectorAll('tbody')[0]).clientWidth;
-		// 	}
-		// 	this.setState({ container_height, container_width });
-		// }
-	}
 	handleLimit(event) {
 		this.setState({ [event.target.name]: parseInt(event.target.value), page: 0 });
 	}
@@ -288,7 +274,7 @@ export class Table extends React.Component {
 			var sort = (sortindex > -1) ? ((this.state.order.direction[sortindex] === 'asc') ? 'sort-up' : 'sort-down') : null;
 
 			var styles = { lineHeight: 1 };
-			if (column.width) styles.width = ((this.state.container_width - 10) * column.width / 100).toString() + 'px';
+			if (column.width) styles.width = column.width.toString() + '%';
 
 			return (
 				<th key={ 'th' + index } style={ styles }>
