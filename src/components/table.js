@@ -157,6 +157,12 @@ export class Table extends React.Component {
 			if (column.format) {
 				if (column.format === 'usd') {
 					return '$ ' + parseFloat(item[column.field]).toFixed(2);
+				} else if (column.format === 'round0') {
+					return Math.round(parseFloat(item[column.field])).toFixed(2);
+				} else if (column.format === 'round2') {
+					return (Math.round(parseFloat(item[column.field]) * 100) / 100).toFixed(2);
+				} else if (column.format === 'round3') {
+					return (Math.round(parseFloat(item[column.field]) * 1000) / 1000).toFixed(3);
 				} else console.error('EM Table: Unknown number format');
 			} else console.error('EM Table: Format required for Number field');
 
