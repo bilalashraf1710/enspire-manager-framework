@@ -20,6 +20,8 @@ export default function FormBuilderComps(props) {
 		case 'number'	:
 		case 'text'		: {
 
+			if (typeof props.props.callbacks?.text !== 'function') console.error('Missing Callback for Text');
+
 			component =	<Input
 				className={ props.field.grid } 
 				form_error={ props.props.form_error } 
@@ -41,6 +43,8 @@ export default function FormBuilderComps(props) {
 		}
 		case 'email'	: {
 
+			if (typeof props.props.callbacks?.text !== 'function') console.error('Missing Callback for Text');
+
 			component =	<Input
 				className={ props.field.grid } 
 				form_error={ props.props.form_error } 
@@ -61,6 +65,8 @@ export default function FormBuilderComps(props) {
 			break;
 		}
 		case 'typeahead'		: {
+
+			if (typeof props.props.callbacks?.typeahead !== 'function') console.error('Missing Callback for TypeAhead');
 
 			component =	<Input
 				className={ props.field.grid } 
@@ -88,6 +94,8 @@ export default function FormBuilderComps(props) {
 		}
 		case 'date'		: {
 
+			if (typeof props.props.callbacks?.date !== 'function') console.error('Missing Callback for Date');
+
 			component =	<Input
 				className={ props.field.grid } 
 				form_error={ props.props.form_error } 
@@ -106,6 +114,8 @@ export default function FormBuilderComps(props) {
 		}
 		case 'select' : {
 
+			if (typeof props.props.callbacks?.select !== 'function') console.error('Missing Callback for Select');
+			
 			component =	<Select
 				className={ props.field.grid } 
 				form_error={ props.props.form_error } 
@@ -123,6 +133,8 @@ export default function FormBuilderComps(props) {
 			break;
 		}
 		case 'multiselect' : {
+			
+			if (typeof props.props.callbacks?.multiselect !== 'function') console.error('Missing Callback for MultiSelect');
 
 			component =	<MultiSelect
 				className={ props.field.grid } 
@@ -140,7 +152,9 @@ export default function FormBuilderComps(props) {
 			break;
 		}
 		case 'textarea' : {
-			
+
+			if (typeof props.props.callbacks?.text !== 'function') console.error('Missing Callback for Text');
+
 			component = <Textarea 
 				className={ props.field.grid } 
 				form_error={ props.props.form_error } 
@@ -157,6 +171,8 @@ export default function FormBuilderComps(props) {
 		}
 		case 'checkbox' : {
 
+			if (typeof props.props.callbacks?.checkbox !== 'function') console.error('Missing Callback for Checkbox');
+
 			component = <Checkbox
 				checked={ (props.props.record[props.field.field]) ? (props.props.record[props.field.field] == 1) : false } 
 				className={ props.field.grid } 
@@ -170,6 +186,7 @@ export default function FormBuilderComps(props) {
 		}
 		case 'checkboxes' : {
 
+			if (typeof props.props.callbacks?.checkbox !== 'function') console.error('Missing Callback for Checkbox');
 			var checkboxes = [];
 
 			props.field.field.map((checkbox, checkbox_index) => {
@@ -196,7 +213,9 @@ export default function FormBuilderComps(props) {
 			break;
 		}
 		case 'dropzone' : {
-			
+
+			if (typeof props.props.callbacks?.dropzone !== 'function') console.error('Missing Callback for DropZone');
+
 			component = <Dropzone
 				className={ props.field.grid }
 				label={ props.field.label }
