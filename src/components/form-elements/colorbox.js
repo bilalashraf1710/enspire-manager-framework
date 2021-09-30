@@ -30,8 +30,6 @@ export class ColorBox extends React.Component {
 
 	render() {
 
-		console.log(this.props);
-
 		return (
 
 			<span className={ 'form-group ' + ((this.props.className) ? this.props.className : '') + ' ' + ((this.state.error) ? 'has-error' : '') }>

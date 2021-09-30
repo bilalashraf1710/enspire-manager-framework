@@ -2,6 +2,7 @@
 
 Version | Description of Changes
 --------|-----------------------
+0.10.8 | Add Colorbox
 0.8.8 | Add parameters hideLabel and noLabel to Form fields.
 0.8.0 | Add Badge Support
 0.7.13 | ModalForm allows prop.visible - defaults to true.

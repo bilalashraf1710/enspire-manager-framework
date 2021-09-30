@@ -16,6 +16,8 @@ export default function FormBuilderComps(props) {
 
 	var component;
 
+	console.info(props.field.type);
+
 	switch (props.field.type) {
 
 		case 'number'	:
@@ -215,10 +217,12 @@ export default function FormBuilderComps(props) {
 		}
 		case 'colorbox' : {
 
-			if (typeof props.props.callbacks?.colorbox !== 'function') console.error('Missing Callback for Color');
+			console.info('Got 1');
+			
+			if (typeof props.props.callbacks?.color !== 'function') console.error('Missing Callback for Color');
 
 			component = <Colorbox
-				className={ props.field.grid } 
+			className={ props.field.grid } 
 				form_error={ props.props.form_error } 
 				label={ label } 
 				hideLabel={ props.field.hideLabel }
@@ -228,6 +232,7 @@ export default function FormBuilderComps(props) {
 				required={ required }
 				value={ this.state.mainStatusType.color }
 			/>
+			console.info('Got 2');
 			break;
 		}
 		case 'dropzone' : {
