@@ -248,7 +248,7 @@ Parameter | Type | Description
           className: 'btn-outline-secondary',
           activeClass: 'btn-success',
           links: [
-            { name: 'Print Work Order', callback: this.printWorkOrder.bind(this) },
+            { name: 'Print Work Order', callback: (event) => { this.printWorkOrder.bind(this); event.stopPropagation(); } },
           ]
         },
       },

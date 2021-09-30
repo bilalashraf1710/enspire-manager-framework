@@ -3,6 +3,7 @@ import { Input } from '../form-elements/input';
 import { Select } from '../form-elements/select';
 import { MultiSelect } from '../form-elements/multiselect';
 import { Checkbox } from '../form-elements/checkbox';
+import { Colorbox } from '../form-elements/colorbox';
 import { Textarea } from '../form-elements/textarea';
 import { Dropzone } from '../form-elements/dropzone';
 
@@ -185,10 +186,10 @@ export default function FormBuilderComps(props) {
 			break;
 		}
 		case 'checkboxes' : {
-
+			
 			if (typeof props.props.callbacks?.checkbox !== 'function') console.error('Missing Callback for Checkbox');
 			var checkboxes = [];
-
+			
 			props.field.field.map((checkbox, checkbox_index) => {
 
 				label = (props.field.label) ? props.field.label[checkbox_index] : checkbox.replace(/_/g, ' ');
@@ -205,11 +206,28 @@ export default function FormBuilderComps(props) {
 						required={ required }
 					/>
 				);
-
+				
 			});
 			component = <span className={ 'form-group '+props.field.grid }>
 							{ checkboxes }
 						</span>
+			break;
+		}
+		case 'colorbox' : {
+
+			if (typeof props.props.callbacks?.colorbox !== 'function') console.error('Missing Callback for Color');
+
+			component = <Colorbox
+				className={ props.field.grid } 
+				form_error={ props.props.form_error } 
+				label={ label } 
+				hideLabel={ props.field.hideLabel }
+				noLabel={ props.field.noLabel }
+				name={ props.field.field }
+				onChange={ props.props.callbacks.color.bind(this, props.field.field) } 
+				required={ required }
+				value={ this.state.mainStatusType.color }
+			/>
 			break;
 		}
 		case 'dropzone' : {
@@ -217,7 +235,7 @@ export default function FormBuilderComps(props) {
 			if (typeof props.props.callbacks?.dropzone !== 'function') console.error('Missing Callback for DropZone');
 
 			component = <Dropzone
-				className={ props.field.grid }
+			className={ props.field.grid }
 				label={ props.field.label }
 				field={ props.field.field }
 				storage={ props.field.dropzone.storage }
