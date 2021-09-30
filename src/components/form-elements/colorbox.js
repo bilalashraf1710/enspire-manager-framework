@@ -1,7 +1,7 @@
 import React from 'react';
 import { CompactPicker } from 'react-color';
 
-export class ColorBox extends React.Component {
+export class Colorbox extends React.Component {
 
 	constructor(props) {
 		super(props);

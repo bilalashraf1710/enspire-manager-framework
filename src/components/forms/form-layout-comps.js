@@ -16,8 +16,6 @@ export default function FormBuilderComps(props) {
 
 	var component;
 
-	console.info(props.field.type);
-
 	switch (props.field.type) {
 
 		case 'number'	:
@@ -166,7 +164,7 @@ export default function FormBuilderComps(props) {
 				onChange={ props.props.callbacks.text } 
 				placeholder={ props.field.placeholder }
 				required={ required }
-				rows={ (props.field.rows) ? fild.rows : '4' }
+				rows={ (props.field.rows) ? props.field.rows : '4' }
 				value={ (props.props.record[props.field.field]) ? props.props.record[props.field.field] : '' } 
 				disabled={ props.field.disabled }
 			/>
@@ -217,22 +215,19 @@ export default function FormBuilderComps(props) {
 		}
 		case 'colorbox' : {
 
-			console.info('Got 1');
-			
 			if (typeof props.props.callbacks?.color !== 'function') console.error('Missing Callback for Color');
 
 			component = <Colorbox
-			className={ props.field.grid } 
+				className={ props.field.grid } 
 				form_error={ props.props.form_error } 
-				label={ label } 
+				label={ props.field.label } 
 				hideLabel={ props.field.hideLabel }
 				noLabel={ props.field.noLabel }
 				name={ props.field.field }
 				onChange={ props.props.callbacks.color.bind(this, props.field.field) } 
 				required={ required }
-				value={ this.state.mainStatusType.color }
+				value={ (props.props.record[props.field.field]) ? props.props.record[props.field.field] : [] }
 			/>
-			console.info('Got 2');
 			break;
 		}
 		case 'dropzone' : {
@@ -240,7 +235,7 @@ export default function FormBuilderComps(props) {
 			if (typeof props.props.callbacks?.dropzone !== 'function') console.error('Missing Callback for DropZone');
 
 			component = <Dropzone
-			className={ props.field.grid }
+				className={ props.field.grid }
 				label={ props.field.label }
 				field={ props.field.field }
 				storage={ props.field.dropzone.storage }
