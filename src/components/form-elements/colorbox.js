@@ -15,15 +15,13 @@ export class Colorbox extends React.Component {
 		this.setState({ color: this.props.value });
 	}
 
-	handleToggle = () => {
+	handleToggle() {
 		this.setState({ displayColorPicker: !this.state.displayColorPicker });
 	};
-
-	handleClose = () => {
+	handleClose() {
 		this.setState({ displayColorPicker: false });
 	};
-
-	handleChangeColor = (color) => {
+	handleChangeColor(color) {
 		this.props.onChange(this.props.name, color.hex.split('#')[1]);
 		this.setState({ displayColorPicker: false });
 	};

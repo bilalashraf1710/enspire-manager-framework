@@ -13,6 +13,7 @@
     "js-base64": "^3.6.0",
     "lodash": "^4.17.11",
     "moment": "^2.24.0",
+    "react-bootstrap": "^1.4.3",
     "react-bootstrap-typeahead": "^5.1.4",
     "react-bootstrap4-modal": "^1.7.5",
     "react-color": "^2.19.3",

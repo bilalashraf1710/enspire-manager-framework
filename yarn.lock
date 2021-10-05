@@ -787,6 +787,12 @@
   dependencies:
     regenerator-runtime "^0.13.4"
 
+"@babel/runtime@^7.13.8", "@babel/runtime@^7.14.0":
+  version "7.15.4"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.15.4.tgz#fd17d16bfdf878e6dd02d19753a39fa8a8d9c84a"
+  dependencies:
+    regenerator-runtime "^0.13.4"
+
 "@babel/runtime@^7.8.7":
   version "7.13.9"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.13.9.tgz#97dbe2116e2630c489f22e0656decd60aaa1fcee"
@@ -894,12 +900,30 @@
   version "2.9.2"
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.9.2.tgz#adea7b6953cbb34651766b0548468e743c6a2353"
 
+"@popperjs/core@^2.8.6":
+  version "2.10.2"
+  resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.10.2.tgz#0798c03351f0dea1a5a4cabddf26a55a7cbee590"
+
+"@restart/context@^2.1.4":
+  version "2.1.4"
+  resolved "https://registry.yarnpkg.com/@restart/context/-/context-2.1.4.tgz#a99d87c299a34c28bd85bb489cb07bfd23149c02"
+
 "@restart/hooks@^0.3.22", "@restart/hooks@^0.3.25":
   version "0.3.26"
   resolved "https://registry.yarnpkg.com/@restart/hooks/-/hooks-0.3.26.tgz#ade155a7b0b014ef1073391dda46972c3a14a129"
   dependencies:
     lodash "^4.17.20"
     lodash-es "^4.17.20"
+
+"@restart/hooks@^0.3.26":
+  version "0.3.27"
+  resolved "https://registry.yarnpkg.com/@restart/hooks/-/hooks-0.3.27.tgz#91f356d66d4699a8cd8b3d008402708b6a9dc505"
+  dependencies:
+    dequal "^2.0.2"
+
+"@types/invariant@^2.2.33":
+  version "2.2.35"
+  resolved "https://registry.yarnpkg.com/@types/invariant/-/invariant-2.2.35.tgz#cd3ebf581a6557452735688d8daba6cf0bd5a3be"
 
 "@types/json-schema@^7.0.5":
   version "7.0.6"
@@ -912,6 +936,24 @@
 "@types/prop-types@*":
   version "15.7.3"
   resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.7.3.tgz#2ab0d5da2e5815f94b0b9d4b95d1e5f243ab2ca7"
+
+"@types/prop-types@^15.7.3":
+  version "15.7.4"
+  resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.7.4.tgz#fcf7205c25dff795ee79af1e30da2c9790808f11"
+
+"@types/react-transition-group@^4.4.1":
+  version "4.4.3"
+  resolved "https://registry.yarnpkg.com/@types/react-transition-group/-/react-transition-group-4.4.3.tgz#b0994da0a7023d67dbb4a8910a62112bc00d5688"
+  dependencies:
+    "@types/react" "*"
+
+"@types/react@*", "@types/react@>=16.14.8":
+  version "17.0.27"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-17.0.27.tgz#6498ed9b3ad117e818deb5525fa1946c09f2e0e6"
+  dependencies:
+    "@types/prop-types" "*"
+    "@types/scheduler" "*"
+    csstype "^3.0.2"
 
 "@types/react@>=16.9.11":
   version "17.0.3"
@@ -1460,7 +1502,7 @@ class-utils@^0.3.5:
     isobject "^3.0.0"
     static-extend "^0.1.1"
 
-classnames@^2.2.0, classnames@^2.2.3:
+classnames@^2.2.0, classnames@^2.2.3, classnames@^2.3.1:
   version "2.3.1"
   resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.3.1.tgz#dfcfa3891e306ec1dad105d0e88f4417b8535e8e"
 
@@ -1696,6 +1738,10 @@ define-property@^2.0.2:
     is-descriptor "^1.0.2"
     isobject "^3.0.1"
 
+dequal@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/dequal/-/dequal-2.0.2.tgz#85ca22025e3a87e65ef75a7a437b35284a7e319d"
+
 des.js@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/des.js/-/des.js-1.0.1.tgz#5382142e1bdc53f85d86d53e5f4aa7deb91e0843"
@@ -1715,7 +1761,7 @@ diffie-hellman@^5.0.0:
     miller-rabin "^4.0.0"
     randombytes "^2.0.0"
 
-dom-helpers@^5.0.1:
+dom-helpers@^5.0.1, dom-helpers@^5.2.1:
   version "5.2.1"
   resolved "https://registry.yarnpkg.com/dom-helpers/-/dom-helpers-5.2.1.tgz#d9400536b2bf8225ad98fe052e029451ac40e902"
   dependencies:
@@ -2955,6 +3001,13 @@ promise-inflight@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/promise-inflight/-/promise-inflight-1.0.1.tgz#98472870bf228132fcbdd868129bad12c3c029e3"
 
+prop-types-extra@^1.1.0:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/prop-types-extra/-/prop-types-extra-1.1.1.tgz#58c3b74cbfbb95d304625975aa2f0848329a010b"
+  dependencies:
+    react-is "^16.3.2"
+    warning "^4.0.0"
+
 prop-types@^15.5.10, prop-types@^15.5.8, prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2, prop-types@^15.7.2:
   version "15.7.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
@@ -3057,6 +3110,28 @@ react-bootstrap4-modal@^1.7.5:
     classnames "^2.2.5"
     prop-types "^15.5.10"
 
+react-bootstrap@^1.4.3:
+  version "1.6.4"
+  resolved "https://registry.yarnpkg.com/react-bootstrap/-/react-bootstrap-1.6.4.tgz#94d5d2422e26bba277656d3529128e14f838b7ca"
+  dependencies:
+    "@babel/runtime" "^7.14.0"
+    "@restart/context" "^2.1.4"
+    "@restart/hooks" "^0.3.26"
+    "@types/invariant" "^2.2.33"
+    "@types/prop-types" "^15.7.3"
+    "@types/react" ">=16.14.8"
+    "@types/react-transition-group" "^4.4.1"
+    "@types/warning" "^3.0.0"
+    classnames "^2.3.1"
+    dom-helpers "^5.2.1"
+    invariant "^2.2.4"
+    prop-types "^15.7.2"
+    prop-types-extra "^1.1.0"
+    react-overlays "^5.1.1"
+    react-transition-group "^4.4.1"
+    uncontrollable "^7.2.1"
+    warning "^4.0.3"
+
 react-color@^2.19.3:
   version "2.19.3"
   resolved "https://registry.yarnpkg.com/react-color/-/react-color-2.19.3.tgz#ec6c6b4568312a3c6a18420ab0472e146aa5683d"
@@ -3101,7 +3176,7 @@ react-input-autosize@^3.0.0:
   dependencies:
     prop-types "^15.5.8"
 
-react-is@^16.6.0, react-is@^16.7.0, react-is@^16.8.1:
+react-is@^16.3.2, react-is@^16.6.0, react-is@^16.7.0, react-is@^16.8.1:
   version "16.13.1"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
 
@@ -3124,6 +3199,19 @@ react-overlays@^4.1.1:
     dom-helpers "^5.2.0"
     prop-types "^15.7.2"
     uncontrollable "^7.0.0"
+    warning "^4.0.3"
+
+react-overlays@^5.1.1:
+  version "5.1.1"
+  resolved "https://registry.yarnpkg.com/react-overlays/-/react-overlays-5.1.1.tgz#2e7cf49744b56537c7828ccb94cfc63dd778ae4f"
+  dependencies:
+    "@babel/runtime" "^7.13.8"
+    "@popperjs/core" "^2.8.6"
+    "@restart/hooks" "^0.3.26"
+    "@types/warning" "^3.0.0"
+    dom-helpers "^5.2.0"
+    prop-types "^15.7.2"
+    uncontrollable "^7.2.1"
     warning "^4.0.3"
 
 react-pdf@^5.2.0:
@@ -3197,7 +3285,7 @@ react-select@^4.3.1:
     react-input-autosize "^3.0.0"
     react-transition-group "^4.3.0"
 
-react-transition-group@^4.3.0:
+react-transition-group@^4.3.0, react-transition-group@^4.4.1:
   version "4.4.2"
   resolved "https://registry.yarnpkg.com/react-transition-group/-/react-transition-group-4.4.2.tgz#8b59a56f09ced7b55cbd53c36768b922890d5470"
   dependencies:
@@ -3757,7 +3845,7 @@ typedarray@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
 
-uncontrollable@^7.0.0:
+uncontrollable@^7.0.0, uncontrollable@^7.2.1:
   version "7.2.1"
   resolved "https://registry.yarnpkg.com/uncontrollable/-/uncontrollable-7.2.1.tgz#1fa70ba0c57a14d5f78905d533cf63916dc75738"
   dependencies:
@@ -3870,7 +3958,7 @@ vm-browserify@^1.0.1:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/vm-browserify/-/vm-browserify-1.1.2.tgz#78641c488b8e6ca91a75f511e7a3b32a86e5dda0"
 
-warning@^4.0.1, warning@^4.0.2, warning@^4.0.3:
+warning@^4.0.0, warning@^4.0.1, warning@^4.0.2, warning@^4.0.3:
   version "4.0.3"
   resolved "https://registry.yarnpkg.com/warning/-/warning-4.0.3.tgz#16e9e077eb8a86d6af7d64aa1e05fd85b4678ca3"
   dependencies:

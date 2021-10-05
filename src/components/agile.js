@@ -1,49 +1,74 @@
 import React from 'react';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 
-export function Agile(props) {
+export class Agile extends React.Component {
 
-	var color_class;
-	switch (props.color_number) {
-		case 0: color_class = 'muted-element'; break;
-		case 1: color_class = 'primary-element'; break;
-		case 2: color_class = 'success-element'; break;
-		case 3: color_class = 'info-element'; break;
-		case 4: color_class = 'warning-element'; break;
-		case 5: color_class = 'danger-element'; break;
+	constructor(props) {
+		super(props);
+		this.state = {
+			show: false,
+		};
 	}
 
-	var links = (props.links) ? props.links.map((link, index) => {
+	handleToggle() {
+		this.setState({ show: !this.state.show });
+	}
 
-		if (link.divider) return (
-			<li className="dropdown-divider"></li>
-		)
+	render() {
+
+		var color_class;
+		switch (this.props.color_number) {
+			case 0: color_class = 'muted-element'; break;
+			case 1: color_class = 'primary-element'; break;
+			case 2: color_class = 'success-element'; break;
+			case 3: color_class = 'info-element'; break;
+			case 4: color_class = 'warning-element'; break;
+			case 5: color_class = 'danger-element'; break;
+		}
+
+		var links = (this.props.links) ? this.props.links.map((link, index) => {
+			if (link.divider) return (
+				<li className="dropdown-divider"></li>
+			)
+
+			return (
+				<li key={ index }><a className="dropdown-item" href={ link.href } onClick={ (typeof link.callback === "function") ? () => { link.callback(this.props.id) } : null }>{ link.title }</a></li>
+			);
+		}) : null;
+
+		var dropdown = (
+			<ul className="dropdown-menu dropdown-menu-right" x-placement="bottom-start">
+				{ links }
+			</ul>
+		);
+
+
+		let style = (typeof this.props.onClick === "function") ? { cursor: 'pointer' } : null;
+		let TitleTag = (this.props.titleTag) ? this.props.titleTag : 'p';
+
 
 		return (
-			<li key={ index }><a className="dropdown-item" href={ link.href } onClick={ (typeof link.callback === "function") ? () => { link.callback(props.id) } : null }>{ link.title }</a></li>
-		);
-	}) : null;
 
-	let style = (typeof props.onClick === "function") ? { cursor: 'pointer' } : null;
-	let TitleTag = (props.titleTag) ? props.titleTag : 'p';
-	
-	return (
+			<li className={ 'agile ui-sortable-handle fadeInDown ' + color_class + ' ' + this.props.className } onClick={ (typeof this.props.callback === "function") ? () => { this.props.onClick(this.props.id) } : null }>
 
-		<li className={ 'agile ui-sortable-handle fadeInDown ' + color_class + ' ' + props.className } onClick={ (typeof props.callback === "function") ? () => { props.onClick(props.id) } : null }>
-
-			{ links &&
-				<div className="btn-group float-right">
-					<button data-toggle="dropdown" className="dropdown-toggle btn btn-white" aria-expanded="false" style={{ padding: '0px 10px', marginTop: '-2px', border: 'none' }}></button>
-					<ul className="dropdown-menu dropdown-menu-right" x-placement="bottom-start" style={ { position: 'absolute', top: '33px', right: '0px', willChange: 'top, right' } }>
-						{ links }
-					</ul>
+				{ links &&
+					<div className="btn-group float-right">
+						<OverlayTrigger
+							trigger={ 'click' }
+							placement="bottom"
+							overlay={ dropdown }
+							show={ this.state.show }
+							onToggle={ this.handleToggle.bind(this) }
+						>
+							<button className="dropdown-toggle btn btn-white" aria-expanded="false" style={ { padding: '0px 10px', marginTop: '-2px', border: 'none' } }></button>
+						</OverlayTrigger>
+					</div>
+				}
+				<TitleTag className="m-0 p-0"><strong>{ this.props.title }</strong></TitleTag>
+				<div className="agile-detail" style={ { fontSize: '11px' } }>
+					{ this.props.detail } {/*<i className="far fa-clock"></i> 12.10.2015 */ }
 				</div>
-			}
-			{}
-			<TitleTag className="m-0 p-0"><strong>{ props.title }</strong></TitleTag>
-			<div className="agile-detail" style={{ fontSize: '11px' }}>
-				{ props.detail } {/*<i className="far fa-clock"></i> 12.10.2015 */}
-			</div>
-		</li>
-
-	);
+			</li>
+		);
+	}
 }
