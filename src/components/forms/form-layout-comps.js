@@ -224,8 +224,7 @@ export default function FormBuilderComps(props) {
 				hideLabel={ props.field.hideLabel }
 				noLabel={ props.field.noLabel }
 				name={ props.field.field }
-				onChange={ props.props.callbacks.color.bind(this, props.field.field) } 
-				required={ required }
+				onChange={ props.props.callbacks.color.bind(this) } 
 				value={ (props.props.record[props.field.field]) ? props.props.record[props.field.field] : [] }
 			/>
 			break;
