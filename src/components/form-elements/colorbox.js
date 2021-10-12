@@ -55,7 +55,7 @@ export class Colorbox extends React.Component {
 				{ this.state.displayColorPicker &&
 					<div style={ { zIndex: '2', position: 'absolute', left: '10px', top: '70px' } }>
 						<div style={ { position: 'absolute' } } onClick={ this.handleClose } />
-						<CompactPicker color={ '#' + this.props.value } onChange={ this.handleChangeColor } />
+						<CompactPicker color={ '#' + this.props.value } onChange={ this.handleChangeColor.bind(this) } />
 					</div>
 				}
 			</span>
