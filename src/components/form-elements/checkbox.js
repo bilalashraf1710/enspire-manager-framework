@@ -46,7 +46,7 @@ export class Checkbox extends React.Component {
 					{ this.props.prelabel &&
 						<span style={{ padding: '0 8px 0 25px' }}>{ this.props.prelabel }</span> 
 					}
-					<div className={ 'icheckbox_square-green '+((this.props.checked) ? 'checked':'') } style={{ position: 'relative' }}>
+					<div className={ 'icheckbox_square-green ' + ((this.props.checked) ? 'checked' : '') } style={{ position: 'relative' }} ref={ this.field_ref }>
 						<ins className="iCheck-helper" style={{ position: 'absolute', top: '0%', left: '0%', display: 'block', width: '100%', height: '100%', margin: '0px', padding: '0px', background: 'rgb(255, 255, 255)', border: '0px', opacity: 0 }} />
 					</div>
 					{ this.props.label &&

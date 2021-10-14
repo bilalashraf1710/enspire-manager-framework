@@ -34,7 +34,7 @@ export class ModalForm extends React.Component {
 								{ this.props.children }
 							</div>
 							<div className="col-3 py-3 d-flex flex-column" style={{ backgroundColor: '#eeeeee' }}>
-								<h2 className="mt-0"></h2>
+								{ this.props.right_column }
 								<p className="mb-auto">&nbsp;</p>
 								{ this.props.delete_button_callback && 
 									<button className="btn btn-warning btn-sm btn-block mb-2" type="button" onClick={ () => this.props.delete_button_callback() }>{ (this.props.delete_button_title) ? this.props.delete_button_title.toUpperCase() : 'DELETE' }</button>

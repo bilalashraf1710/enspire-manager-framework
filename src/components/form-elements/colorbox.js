@@ -7,6 +7,8 @@ export class Colorbox extends React.Component {
 		super(props);
 		this.state = {
 			displayColorPicker: false,
+			error: false,
+			error_message: null,
 		};
 		this.field_ref = React.createRef();
 	}
@@ -14,7 +16,27 @@ export class Colorbox extends React.Component {
 	componentDidMount() {
 		this.setState({ color: this.props.value });
 	}
+	componentDidUpdate() {
+		if (this.props.form_error !== undefined) {
 
+			var error = _.find(this.props.form_error, { field: this.props.name })
+
+			if (error && !this.state.error) {
+
+				var error_message = ValidateMessage(error);
+
+				if (this.props.form_error[0].field === this.props.name) {
+					this.field_ref.current.focus();
+					window.toastr.error('Please update your value for <em>' + this.props.label + '</em>', error_message);
+				}
+
+				this.setState({ error: true, error_message });
+
+			} else if (!error && this.state.error) {
+				this.setState({ error: false, error_message: null });
+			}
+		}
+	}
 	handleToggle() {
 		this.setState({ displayColorPicker: !this.state.displayColorPicker });
 	};
@@ -55,7 +77,12 @@ export class Colorbox extends React.Component {
 				{ this.state.displayColorPicker &&
 					<div style={ { zIndex: '2', position: 'absolute', left: '10px', top: '70px' } }>
 						<div style={ { position: 'absolute' } } onClick={ this.handleClose } />
-						<CompactPicker color={ '#' + this.props.value } onChange={ this.handleChangeColor.bind(this) } />
+					<CompactPicker color={ '#' + this.props.value } onChange={ this.handleChangeColor.bind(this) } ref={ this.field_ref } />
+					</div>
+				}
+				{ this.state.error_message &&
+					<div className="invalid-feedback" style={ { display: 'block' } }>
+						{ this.state.error_message }
 					</div>
 				}
 			</span>
