@@ -1,5 +1,7 @@
 import React from 'react';
+import _ from 'lodash';
 import { CompactPicker } from 'react-color';
+import { ValidateMessage } from './validate-message';
 
 export class Colorbox extends React.Component {
 
