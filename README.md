@@ -2,6 +2,7 @@
 
 Version | Description of Changes
 --------|-----------------------
+0.10.93 | Add Label type to Table
 0.10.8 | Add Colorbox
 0.8.8 | Add parameters hideLabel and noLabel to Form fields.
 0.8.0 | Add Badge Support
@@ -191,14 +192,14 @@ Parameters | Type | Description
 **data:** | (object) | Additional dataset for linking
 **format:** | (string) | Format based on Type e.g. ``{ type: 'date', format: 'MMMM Do, YYYY' }`` or ``{ type: 'number', format: 'usd' }``
 **link:** | (string \|\| array) | Field on which to link another data set. If array, the first is the field for the additional data set, the second is the original dataset.  _Field_ above referrs to linked dataset.
-**badge:** | (array) | An array of String labels for matching badge values 0 - 4 (1 - success, 2 - info, 3 - warning, 4 - danger)
+**badge:** | (array) | An array of String labels for matching badge values 0 - 5 (1 - success, 2 - info, 3 - warning, 4 - danger, 5 - default)
 **max:** | (bool) | Sets column width to 100%, other columns take minimal space
 **nowarp:** | (bool) | Ensure the column does not wrap
 **prepend:** | (string) | Input Group Prepend
 **append:** | (string) | Input Group Append
 **postfix:** | (string) | String to append to column value
 **prefix:** | (string) | String to prepend to column value
-**type:** | (string) | One of the following: _badge, date, timestamp, number, select, datepicker, button, actions._ _Action_ requires the use of _button_ below to define button actions.  _Select_ requires the use of a linked dataset for the selection options.
+**type:** | (string) | One of the following: _badge, label, date, timestamp, number, select, datepicker, button, actions._ _Action_ requires the use of _button_ below to define button actions.  _Select_ requires the use of a linked dataset for the selection options.
 **width:** | (int) | fixed column width in percent
 
 ### ORDER OBJECT

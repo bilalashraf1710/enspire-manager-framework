@@ -451,9 +451,18 @@ export class Table extends React.Component {
 						if (item[column.field] == 4) badgestyle = 'badge-danger';
 						if (item[column.field] == 5) badgestyle = 'badge-default';
 
-						let badge_title = (column.label) ? column.label : column.badge[item[column.field]];
+						return (<td key={ 'td' + column_index }><span className={ 'badge ' + badgestyle + ' mt-2' }>{ column.badge[item[column.field]] }</span></td>);
 
-						return (<td key={ 'td' + column_index }><span className={ 'badge ' + badgestyle + ' mt-2' }>{ badge_title }</span></td>);
+					} else if (column.type == 'label') {
+
+						var badgestyle = '';
+						if (column.style == 1) badgestyle = 'badge-success';
+						if (column.style == 2) badgestyle = 'badge-info';
+						if (column.style == 3) badgestyle = 'badge-warning';
+						if (column.style == 4) badgestyle = 'badge-danger';
+						if (column.style == 5) badgestyle = 'badge-default';
+
+						return (<td key={ 'td' + column_index }><span className={ 'badge ' + badgestyle + ' mt-2' }>{ item[column.field] }</span></td>);
 
 					} else if (column.type == 'actions') {
 
