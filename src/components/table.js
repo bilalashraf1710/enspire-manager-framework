@@ -449,6 +449,7 @@ export class Table extends React.Component {
 						if (item[column.field] == 2) badgestyle = 'badge-info';
 						if (item[column.field] == 3) badgestyle = 'badge-warning';
 						if (item[column.field] == 4) badgestyle = 'badge-danger';
+						if (item[column.field] == 5) badgestyle = 'badge-default';
 
 						return (<td key={ 'td' + column_index }><span className={ 'badge ' + badgestyle + ' mt-2' }>{ column.badge[item[column.field]] }</span></td>);
 
