@@ -3,7 +3,8 @@ import axios from 'axios';
 export async function elasticSearch(search, config) {
 
     // TODO:  figure out the most efficient case-insensitive search on all terms.
-
+    // https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html
+    
     var searchQuery = '';
     let searchArray = search.split(' ');
     searchArray.forEach((term, index) => {
