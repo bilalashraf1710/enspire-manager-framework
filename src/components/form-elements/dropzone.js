@@ -168,7 +168,7 @@ export class Dropzone extends React.Component {
 						{ (this.props.image.includes('.jpg') || this.props.image.includes('.jpeg') || this.props.image.includes('.png')) &&
 							<div>
 								<img src={ this.props.image  } width={ this.props.width } style={{ width: '100%' }} />
-								<p><a href="this.props.image" target="_blank">Open in Browser</a></p>
+								<p><a href={ this.props.image } target="_blank">Open in Browser</a></p>
 							</div>
 						}
 						{ this.props.image.includes('.pdf') &&
