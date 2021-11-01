@@ -260,6 +260,11 @@ export default function FormBuilderComps(props) {
 			component = <span className={ props.field.grid }></span>
 			break;
 		}
+		case 'skip' : {
+			
+			component = <span></span>
+			break;
+		}
 	}
 
 	return (
