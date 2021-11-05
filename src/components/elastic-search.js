@@ -5,6 +5,11 @@ export async function elasticSearch(search, config) {
     // TODO:  figure out the most efficient case-insensitive search on all terms.
     // https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html
     
+    if (config.appId == null || config.appId == undefined) {
+        console.error('You must include an appId in the config object');
+        return null;
+    }
+    
     var searchQuery = '';
     let searchArray = search.split(' ');
     searchArray.forEach((term, index) => {
@@ -12,7 +17,7 @@ export async function elasticSearch(search, config) {
         if (term[0]) searchQuery += '((*' + term.toLowerCase() + '*) OR (*' + term[0].toUpperCase() + term.slice(1) + '*))';
     });
     if (searchQuery == '') searchQuery = '(*)';
-    // searchQuery += ' AND appIds:0'; // 0 - ID for Dispatch
+    searchQuery += ' AND appIds:' + config.appId; // { id: 0 } for Dispatch
 
     try {
         const response = await axios({

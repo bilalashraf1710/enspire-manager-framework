@@ -51,13 +51,14 @@ export class Input extends React.Component {
 		this.setState({ disableNew });
 		this.props.onChange(this.props.name, result);
 	}
-	async handleSearch(search) {
+	async handleSearch(appId, search) {
 
 		this.setState({ isLoading: true });
 		var config = {
 			table: this.props.table,
 			fields: this.props.fields,
 			sort: this.props.sort,
+			// appId: appId, // waiting to add appId to Service Items index.
 		}
 		var hits = await elasticSearch(search, config);
 		const options = hits.map((hit) => {
@@ -142,7 +143,7 @@ export class Input extends React.Component {
 							labelKey="target"
 							highlightOnlyResult={ true }
 							minLength={ 2 }
-							onSearch={ this.handleSearch.bind(this) }
+							onSearch={ this.handleSearch.bind(this, this.props.appId) }
 							onChange={ this.onTypeaheadChange.bind(this) }
 							options={ this.state.options }
 							placeholder={ this.props.placeholder }
