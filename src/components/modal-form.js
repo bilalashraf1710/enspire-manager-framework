@@ -45,7 +45,7 @@ export class ModalForm extends React.Component {
 					{ this.props.show_spinner &&
 						<Spinner />
 					}
-					<div className="container">
+					<div className="container" style={{ height: '80vh' }}>
 						<div className="row">
 							<div className="col-9">
 								{ this.props.children }

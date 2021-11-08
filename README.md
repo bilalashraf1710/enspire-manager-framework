@@ -2,6 +2,7 @@
 
 Version | Description of Changes
 --------|-----------------------
+0.11.0 | ModalForm add expand prop and onExpand prop, height: 80vh
 0.10.93 | Add Label type to Table
 0.10.8 | Add Colorbox
 0.8.8 | Add parameters hideLabel and noLabel to Form fields.
