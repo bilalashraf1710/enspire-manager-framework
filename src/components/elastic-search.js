@@ -2,10 +2,27 @@ import axios from 'axios';
 
 export async function elasticSearch(search, config) {
 
-    // TODO:  figure out the most efficient case-insensitive search on all terms.
     // https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html
-    
-    if (config.appId == null || config.appId == undefined) {
+
+    search = search.replace("+", "\\+");
+    search = search.replace("-", "\\-");
+    search = search.replace("=", "\\=");
+    search = search.replace("!", "\\!");
+    search = search.replace("(", "\\(");
+    search = search.replace(")", "\\)");
+    search = search.replace("{", "\\{");
+    search = search.replace("}", "\\}");
+    search = search.replace("[", "\\[");
+    search = search.replace("]", "\\]");
+    search = search.replace("^", "\\^");
+    search = search.replace('"', '\\"');
+    search = search.replace("~", "\\~");
+    search = search.replace("*", "\\*");
+    search = search.replace("?", "\\?");
+    search = search.replace(":", "\\:");
+    search = search.replace("/", "\\/");
+
+    if (config.table.endsWith('-customers') && (config.appId == null || config.appId == undefined)) {
         console.error('You must include an appId in the config object');
         return null;
     }
@@ -14,10 +31,10 @@ export async function elasticSearch(search, config) {
     let searchArray = search.split(' ');
     searchArray.forEach((term, index) => {
         if (term[0] && index) searchQuery += ' AND ';
-        if (term[0]) searchQuery += '((*' + term.toLowerCase() + '*) OR (*' + term[0].toUpperCase() + term.slice(1) + '*))';
+        if (term[0]) searchQuery += '((' + term.toLowerCase() + ') OR (*' + term.toLowerCase() + '*) OR (*' + term[0].toUpperCase() + term.slice(1) + '*))';
     });
     if (searchQuery == '') searchQuery = '(*)';
-    searchQuery += ' AND appIds:' + config.appId; // { id: 0 } for Dispatch
+    if (config.appId) searchQuery += ' AND appIds:' + config.appId; // { id: 0 } for Dispatch
 
     try {
         const response = await axios({
