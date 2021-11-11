@@ -49,6 +49,8 @@ export class Table extends React.Component {
 		if (this.props.filters) this.setState({ filters: this.props.filters });
 
 		this.updateSessionStorage();
+		this.handleResize();
+		window.addEventListener("resize", this.handleResize.bind(this));
 	}
 	componentDidUpdate() {
 		if (this.props.savestate) {
@@ -60,6 +62,9 @@ export class Table extends React.Component {
 				this.updateSessionStorage();
 			} else console.error('EM Table: page Pathname required for savestate');
 		}
+	}
+	componentWillUnmount() {
+		window.removeEventListener("resize", this.handleResize.bind(this));
 	}
 
 	loadSessionStorage() {
@@ -83,6 +88,17 @@ export class Table extends React.Component {
 
 	/* HANDLERS --------------------------------------------------------------------*/
 
+	handleResize() {
+		if (this.props.container_id) {
+			var container_height = (document.getElementById(this.props.container_id)) ? document.getElementById(this.props.container_id).clientHeight : 0;
+			var container_width = (document.getElementById(this.props.container_width_id))
+				? (document.getElementById(this.props.container_width_id).querySelectorAll('tbody')[0]).clientWidth
+				: (document.getElementById(this.props.container_id))
+					? (document.getElementById(this.props.container_id).querySelectorAll('tbody')[0]).clientWidth
+					: 0;
+			this.setState({ container_height, container_width });
+		}
+	}
 	handleLimit(event) {
 		this.setState({ [event.target.name]: parseInt(event.target.value), page: 0 });
 	}
@@ -218,8 +234,8 @@ export class Table extends React.Component {
 				var record = o;
 				if (link_data_field && link_field) {
 					console.info(link_data_field, o[link_data_field]);
-					record = _.find(column.data, (n) => { return n[link_field] == o[link_data_field] } );
-				}		
+					record = _.find(column.data, (n) => { return n[link_field] == o[link_data_field] });
+				}
 
 				if (record && typeof record[column.field] === 'string' && record[column.field].toLowerCase().includes(this.state.search.toLowerCase())) result = true;
 				if (record && typeof record[column.field] === 'number' && record[column.field].toString().startsWith(this.state.search.toLowerCase())) result = true;
@@ -320,7 +336,7 @@ export class Table extends React.Component {
 
 			var fields = (this.props.columns?.length) ? this.props.columns.map((column, column_index) => {
 
-				var styles = {};
+				var styles = { overflowWrap: 'anywhere' };
 
 				/* NoWrap & Width ------------------------------------*/
 
@@ -561,9 +577,9 @@ export class Table extends React.Component {
 
 		/* Fixed height scrollable ---------------------------*/
 
-		var header_style = (this.state.container_height > 0 && this.props.container_margin > 0) ? { display: 'block' } : {};
+		var header_style = (this.state.container_height > 0 && this.props.container_margin > 0) ? { display: 'table' } : {};
 		var tbody_style = (this.state.container_height > 0 && this.props.container_margin > 0) ? { display: 'block', height: (this.state.container_height - this.props.container_margin), overflowY: 'scroll' } : {};
-		var tr_style = (this.state.container_width > 0) ? { width: this.state.container_width } : {};
+		var tr_style = (this.state.container_width > 0) ? { display: 'table', width: this.state.container_width } : {};
 
 		return (
 

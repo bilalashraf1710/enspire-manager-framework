@@ -7,13 +7,10 @@ export class ModalForm extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			expand: false,
+			expand: (this.props.expand) ? true : false,
 		};
 	}
 
-	componentDidMount() {
-		this.setState({ expand: ((this.props.expand) ? true : false) });
-	}
 	handleExpand() {
 		this.setState({ expand: !this.state.expand }, () => {
 			if (typeof this.props.onExpand === 'function') this.props.onExpand(this.state.expand);
@@ -34,9 +31,11 @@ export class ModalForm extends React.Component {
 			<Modal dialogClassName="modal-md" visible={ (this.props.visible === undefined) ? true : this.props.visible } className={ "animated fadeInDown " + (this.state.expand ? "expand-modal" : "shrink-modal") }>
 				<div className="modal-header">
 					<h3 className="modal-title">{ this.props.modal_header }</h3>
-					<div className="expand-icon-position expand-icon-style">
-						<i className="fas fa-expand-alt" onClick={ this.handleExpand.bind(this) }></i>
-					</div>
+					{ this.props.expandable &&
+						<div className="expand-icon-position expand-icon-style">
+							<i className="fas fa-expand-alt" onClick={ this.handleExpand.bind(this) }></i>
+						</div>
+					}
 					<div className="close-icon-position close-icon-style">
 						<i className="fas fa-times" onClick={ () => cancel_callback() }></i>
 					</div>
@@ -45,19 +44,19 @@ export class ModalForm extends React.Component {
 					{ this.props.show_spinner &&
 						<Spinner />
 					}
-					<div className="container">
+					<div className="container-fluid">
 						<div className="row">
-							<div className="col-9" style={{ height: '80vh' }}>
+							<div className={ 'col-' + ((this.state.expand) ? 10 : 9) } style={ { height: '80vh' } }>
 								{ this.props.children }
 							</div>
-							<div className="col-3 py-3 d-flex flex-column" style={ { backgroundColor: '#eeeeee' } }>
+							<div className={ 'py-3 d-flex flex-column col-' + ((this.state.expand) ? 2 : 3) } style={ { backgroundColor: '#eeeeee' } }>
 								{ this.props.right_column }
 								<p className="mb-auto">&nbsp;</p>
 								{ this.props.delete_button_callback &&
 									<button className="btn btn-warning btn-sm btn-block mb-2" type="button" onClick={ this.handleDelete.bind(this) }>{ (this.props.delete_button_title) ? this.props.delete_button_title.toUpperCase() : 'DELETE' }</button>
 								}
 								<button className="btn btn-white btn-sm btn-block" type="button" onClick={ () => cancel_callback() }>{ this.props.cancel_button_title.toUpperCase() }</button>
-								<button className="btn btn-primary btn-lg btn-block" type="button" onClick={ this.handleSubmit.bind(this) }>{ (this.props.save_button_title) ? this.props.save_button_title.toUpperCase() : 'SAVE CHANGES' }</button>
+								<button className="btn btn-primary btn-sm btn-block" type="button" onClick={ this.handleSubmit.bind(this) }>{ (this.props.save_button_title) ? this.props.save_button_title.toUpperCase() : 'SAVE CHANGES' }</button>
 							</div>
 						</div>
 					</div>
