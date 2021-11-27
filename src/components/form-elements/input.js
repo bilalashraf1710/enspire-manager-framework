@@ -24,6 +24,8 @@ export class Input extends React.Component {
 	}
 
 	componentDidUpdate() {
+		if (typeof this.props.onChange !== 'function') console.error('Missing onChange callback');
+
 		if (this.props.form_error !== undefined) {
 
 			var error = _.find(this.props.form_error, { field: this.props.name })

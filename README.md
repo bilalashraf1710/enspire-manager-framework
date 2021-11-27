@@ -242,6 +242,7 @@ Parameter | Type | Description
       { name: 'Date/Time', field: 'datetime', type: 'date', format: 'MMMM Do, YYYY', width: 50 },
       { name: 'User', field: 'user', width: 50 },
       { name: 'Ticket', field: 'badge', type: 'badge', badge: [ '', 'Uploaded', '', '', 'Needed' ], width: 10 },
+	  { name: 'Approve', field: 'id', type: 'button', button: { name: 'Approve', className: 'btn-primary btn-xs' }, callback: this.handleApproved.bind(this), width: 20}
       {
         name: 'Action',
         field: 'work_order_id',

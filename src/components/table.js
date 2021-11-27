@@ -330,7 +330,7 @@ export class Table extends React.Component {
 
 			if (this.props.click_callback && typeof this.props.click_callback === 'function') {
 				inputProps.onClick = () => {
-					this.props.click_callback(item);
+					this.props.click_callback(item, row_index);
 				}
 			}
 
