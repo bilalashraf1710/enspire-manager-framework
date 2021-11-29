@@ -12,7 +12,6 @@ export class Colorbox extends React.Component {
 			error: false,
 			error_message: null,
 		};
-		this.field_ref = React.createRef();
 	}
 
 	componentDidMount() {
@@ -28,7 +27,7 @@ export class Colorbox extends React.Component {
 				var error_message = ValidateMessage(error);
 
 				if (this.props.form_error[0].field === this.props.name) {
-					this.field_ref.current.focus();
+                    this.setState({ displayColorPicker: true });
 					window.toastr.error('Please update your value for <em>' + this.props.label + '</em>', error_message);
 				}
 
@@ -79,7 +78,7 @@ export class Colorbox extends React.Component {
 				{ this.state.displayColorPicker &&
 					<div style={ { zIndex: '2', position: 'absolute', left: '10px', top: '70px' } }>
 						<div style={ { position: 'absolute' } } onClick={ this.handleClose } />
-					<CompactPicker color={ '#' + this.props.value } onChange={ this.handleChangeColor.bind(this) } ref={ this.field_ref } />
+                        <CompactPicker color={ '#' + this.props.value } onChange={ this.handleChangeColor.bind(this) } ref={ this.field_ref } />
 					</div>
 				}
 				{ this.state.error_message &&
