@@ -46,7 +46,7 @@ export class ModalForm extends React.Component {
 					}
 					<div className="container-fluid">
 						<div className="row">
-							<div className={ 'col-' + ((this.state.expand) ? 10 : 9) } style={ { maxHeight: '80vh' } }>
+							<div className={ 'col-' + ((this.state.expand) ? 10 : 9) } style={ { maxHeight: '80vh', overflowY: 'scroll' } }>
 								{ this.props.children }
 							</div>
 							<div className={ 'py-3 d-flex flex-column col-' + ((this.state.expand) ? 2 : 3) } style={ { backgroundColor: '#eeeeee' } }>

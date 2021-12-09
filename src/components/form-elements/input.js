@@ -60,7 +60,7 @@ export class Input extends React.Component {
 			table: this.props.table,
 			fields: this.props.fields,
 			sort: this.props.sort,
-			// appId: appId, // waiting to add appId to Service Items index.
+			appId: appId, // waiting to add appId to Service Items index.
 		}
 		var hits = await elasticSearch(search, config);
 		const options = hits.map((hit) => {
