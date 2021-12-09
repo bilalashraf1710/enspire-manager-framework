@@ -87,6 +87,7 @@ export default function FormBuilderComps(props) {
 				fields={ props.field.fields }
 				sort={ props.field.sort }
 				target={ props.field.target }
+                appId={ props.field.appId }
 				id={ props.field.id }
 				type="typeahead" 
 				disabled={ props.field.disabled }
