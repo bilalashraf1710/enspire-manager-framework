@@ -25,6 +25,8 @@ export class ModalForm extends React.Component {
 
 	render() {
 
+        var height = (this.props.full_height) ? { height: '80vh' } : { maxHeight: '80vh' };
+
 		var cancel_callback = (this.props.cancel_button_callback) ? this.props.cancel_button_callback : this.props.history.goBack;
 
 		return (
@@ -46,7 +48,7 @@ export class ModalForm extends React.Component {
 					}
 					<div className="container-fluid">
 						<div className="row">
-							<div className={ 'col-' + ((this.state.expand) ? 10 : 9) } style={ { maxHeight: '80vh', overflowY: 'scroll' } }>
+							<div className={ 'col-' + ((this.state.expand) ? 10 : 9) } style={ { ...height, overflowY: 'scroll' } }>
 								{ this.props.children }
 							</div>
 							<div className={ 'py-3 d-flex flex-column col-' + ((this.state.expand) ? 2 : 3) } style={ { backgroundColor: '#eeeeee' } }>
