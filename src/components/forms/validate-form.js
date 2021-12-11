@@ -1,5 +1,5 @@
 import isEmail from 'validator/lib/isEmail';
-import isNumeric from 'validator/lib/isNumeric';
+import isMobilePhone from 'validator/lib/isMobilePhone';
 
 export function ValidateForm(record, form_builder_layout) {
 
@@ -56,6 +56,14 @@ export function ValidateForm(record, form_builder_layout) {
                 value = (typeof record[field.field] == 'string') ? record[field.field].trim() : record[field.field];
                 if (value && !isEmail(value)) {
                     form_error.push({ field: field.field, type: 'email' });
+                }
+            }
+
+            /* phone -----------------------------------------*/
+            if (field.valid && field.valid.includes('phone') && !field.disabled) {
+                value = (typeof record[field.field] == 'string') ? record[field.field].trim() : record[field.field];
+                if (value && !isMobilePhone(value)) {
+                    form_error.push({ field: field.field, type: 'phone' });
                 }
             }
 
