@@ -48,6 +48,10 @@ export class Input extends React.Component {
 		event.target.value = event.target.value.toLowerCase();
 		this.props.onChange(event);
 	}
+	onBlurEmail(event) {
+		event.target.value = event.target.value.toLowerCase();
+		this.props.onBlur?.(event);
+	}
 	onTypeaheadChange(result) {
 		var disableNew = (_.find(this.state.hits, (o) => { return o[this.props.target]?.trim() == result?.[0]?.target?.trim() })) ? true : false;
 		this.setState({ disableNew });
@@ -112,7 +116,7 @@ export class Input extends React.Component {
 							className="form-control form-control-sm" 
 							name={ this.props.name } 
 							onChange={ this.props.onChange.bind(this) } 
-							onBlur={ this.props.onBlur.bind(this) } 
+							onBlur={ this.props.onBlur?.bind(this) } 
 							placeholder={ this.props.placeholder } 
 							readOnly={ this.props.readOnly }
 							ref={ this.field_ref } 
@@ -127,6 +131,7 @@ export class Input extends React.Component {
 							className="form-control form-control-sm" 
 							name={ this.props.name } 
 							onChange={ this.onChangeEmail.bind(this) } 
+							onBlur={ this.onBlurEmail.bind(this) } 
 							placeholder={ this.props.placeholder } 
 							readOnly={ this.props.readOnly }
 							ref={ this.field_ref } 
