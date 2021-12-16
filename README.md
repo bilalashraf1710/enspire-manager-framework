@@ -161,20 +161,24 @@ Prop | Type | Description
 -----|------|------------
 **columns: \*** |(object array) | Column Object (See Column Object below)
 **data: \*** | (object) | Data from which table data is drawn. A field with name *_accent* can contain CSS key/value pairs for accenting a particular row.
+*ACTIVE ROW:*
 **active_id:** | (string) | id for active_field in which to set class active for the row 
 **active_field:** | (string) | field in which to check for active_id
+*BUTTON:*
 **button:** | (string) | Label for button
 **button_callback:** | (function) | A callback function to be called when Button is clicked.
 **button_in_ibox:** | (boolean) | If the table is rendered in an iBox, this will position the button up into the iBox header
-**click_callback:** | (function) | A callback function with _item_ entire record parameter to be called when a Row is clicked.
+*ROW DELETE:*
+**delete:** | (boolean) | Enable row delete
+**on_delete:** | (function) | function to which *id* is sent upon delete
+*FIXED HEIGHT*
 **container_id:** | (string) | dom id for container for fixed height vertical table scrolling 
 **container_margin:** | (int) | vertical margin in pixels for determining column height
-**delete:** | (boolean) | Enable row delete
+**click_callback:** | (function) | A callback function with _item_ entire record parameter to be called when a Row is clicked.
 **filters:** | (object) | Filter Object (See Filter Object below)
 **hide_header:** | (boolean) | Hide table header
 **highlight_search** | (boolean) | Enclose search results with *\<mark>* tags.
 **limit:** | (numeric) | Initial setting for the record limit dropdown
-**on_delete:** | (function) | function to which *id* is sent upon delete
 **order:** | (object) | Order Object (See Order Object below)
 **pathname:** | (string) | Current page pathname required for savestate
 **savestate:** | (boolean) | State state across screen instances
@@ -192,8 +196,8 @@ Parameters | Type | Description
 **button:** | (object) | Button Object used with Types _button_ and _action_ (See Button Object below)
 **callback:** | (function) | Function to be called by Types _datepicker_ and _button._
 **data:** | (object) | Additional dataset for linking
-**format:** | (string) | Format based on Type e.g. ``{ type: 'date', format: 'MMMM Do, YYYY' }`` or ``{ type: 'number', format: 'usd' }``
 **link:** | (string \|\| array) | Field on which to link another data set. If array, the first is the field for the additional data set, the second is the original dataset.  _Field_ above referrs to linked dataset.
+**format:** | (string) | Format based on Type e.g. ``{ type: 'date', format: 'MMMM Do, YYYY' }`` or ``{ type: 'number', format: 'usd' }``
 **badge:** | (array) | An array of String labels for matching badge values 0 - 5 (1 - success, 2 - info, 3 - warning, 4 - danger, 5 - default)
 **max:** | (bool) | Sets column width to 100%, other columns take minimal space
 **nowarp:** | (bool) | Ensure the column does not wrap

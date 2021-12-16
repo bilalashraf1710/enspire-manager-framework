@@ -33,6 +33,7 @@ export default function FormBuilderComps(props) {
 				prepend={ props.field.prepend }
 				append={ props.field.append }
 				onChange={ props.props.callbacks.text } 
+				onBlur={ props.props.callbacks.blur } 
 				placeholder={ props.field.placeholder }
 				required={ required }
 				readOnly={ props.field.readOnly }
@@ -56,6 +57,7 @@ export default function FormBuilderComps(props) {
 				prepend={ props.field.prepend }
 				append={ props.field.append }
 				onChange={ props.props.callbacks.text } 
+                onBlur={ props.props.callbacks.blur } 
 				placeholder={ props.field.placeholder }
 				required={ required }
 				readOnly={ props.field.readOnly }
@@ -110,6 +112,8 @@ export default function FormBuilderComps(props) {
 				onChange={ props.props.callbacks.date } 
 				required={ required }
 				type="date" 
+				selectsStart={ props.field.selectsStart }
+				selectsEnd={ props.field.selectsEnd }
 				selected={ (props.props.record[props.field.field]) ? props.props.record[props.field.field] : null }
 			/>
 			break;
@@ -163,6 +167,7 @@ export default function FormBuilderComps(props) {
 				label={ label } 
 				name={ props.field.field } 
 				onChange={ props.props.callbacks.text } 
+                onBlur={ props.props.callbacks.blur } 
 				placeholder={ props.field.placeholder }
 				required={ required }
 				rows={ (props.field.rows) ? props.field.rows : '4' }

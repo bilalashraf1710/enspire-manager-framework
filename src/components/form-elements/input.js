@@ -112,6 +112,7 @@ export class Input extends React.Component {
 							className="form-control form-control-sm" 
 							name={ this.props.name } 
 							onChange={ this.props.onChange.bind(this) } 
+							onBlur={ this.props.onBlur.bind(this) } 
 							placeholder={ this.props.placeholder } 
 							readOnly={ this.props.readOnly }
 							ref={ this.field_ref } 
