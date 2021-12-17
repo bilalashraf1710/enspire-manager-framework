@@ -228,11 +228,12 @@ Parameter | Type | Description
 
 Parameter | Type | Description
 ----------|------|------------
-**activeClass:** | (string) Classname for active button
+**name:** | (string) Label to appear on button
 **className:** | (string) Classname for button
+**activeClass:** | (string) Classname for active button
 **links:** | (object array) | For _action_ button, array of key/value pair: `name` and `callback`
 **multiple:** | (boolean) | enable multiple selection mode in _Action._
-**name:** | (string) Label to appear on button
+**callback:**|N/A|use callback in column parameters
 
 ### EXAMPLE:
 
