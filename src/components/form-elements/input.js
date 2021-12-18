@@ -172,6 +172,9 @@ export class Input extends React.Component {
 							className="form-control form-control-sm" 
 							dateFormat="MM-dd-yyyy"
 							isClearable={ false }
+                            dateFormat={ this.props.dateFormat }
+                            showTimeSelect={ this.props.showTimeSelect }
+                            timeFormat={ this.props.timeFormat }
 							onChange={ this.props.onChange.bind(this, this.props.name) }
 							{ ...inputProps }
 						/>
