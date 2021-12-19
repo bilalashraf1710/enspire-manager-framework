@@ -112,9 +112,9 @@ export default function FormBuilderComps(props) {
 				onChange={ props.props.callbacks.date } 
 				required={ required }
 				type="date" 
-                dateFormat={ props.props.dateFormat }
-                showTimeSelect={ props.props.showTimeSelect }
-                timeFormat={ props.props.timeFormat }
+                dateFormat={ props.field.dateFormat }
+                showTimeSelect={ props.field.showTimeSelect }
+                timeFormat={ props.field.timeFormat }
 				selectsStart={ props.field.selectsStart }
 				selectsEnd={ props.field.selectsEnd }
 				selected={ (props.props.record[props.field.field]) ? props.props.record[props.field.field] : null }
