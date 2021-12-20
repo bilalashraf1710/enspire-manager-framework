@@ -74,7 +74,7 @@ export class Input extends React.Component {
                 target = hit[this.props.target];
             } else {
                 this.props.target.forEach((item) => {
-                    target += item + ' ';
+                    target += hit[item] + ' ';
                 });
             }
             target = target.trim();
