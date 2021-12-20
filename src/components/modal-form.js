@@ -25,7 +25,7 @@ export class ModalForm extends React.Component {
 
 	render() {
 
-        var height = (this.props.full_height) ? { height: '80vh' } : { maxHeight: '80vh' };
+        var height = (this.props.full_height) ? { height: '80vh' } : { maxHeight: '80vh', minHeight: '300px' };
 
 		var cancel_callback = (this.props.cancel_button_callback) ? this.props.cancel_button_callback : this.props.history.goBack;
 

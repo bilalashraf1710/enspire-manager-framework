@@ -57,18 +57,29 @@ export class Input extends React.Component {
 		this.setState({ disableNew });
 		this.props.onChange(this.props.name, result);
 	}
-	async handleSearch(appId, search) {
+	async handleSearch(search) {
 
 		this.setState({ isLoading: true });
 		var config = {
 			table: this.props.table,
 			fields: this.props.fields,
 			sort: this.props.sort,
-			appId: appId, // waiting to add appId to Service Items index.
 		}
+        if (this.props.appId) config.appId = this.props.appId;
+
 		var hits = await elasticSearch(search, config);
 		const options = hits.map((hit) => {
-			return { target: hit[this.props.target], id: hit[this.props.id] }
+            var target = '';
+            if (!Array.isArray(this.props.target)) {
+                target = hit[this.props.target];
+            } else {
+                this.props.target.forEach((item) => {
+                    target += item + ' ';
+                });
+            }
+            target = target.trim();
+            
+			return { target: target, id: hit[this.props.id] }
 		});
 		var disableNew = (_.find(hits, (o) => { return o[this.props.target]?.trim() == search?.trim() })) ? true : false;
 
@@ -151,7 +162,7 @@ export class Input extends React.Component {
 							labelKey="target"
 							highlightOnlyResult={ true }
 							minLength={ 2 }
-							onSearch={ this.handleSearch.bind(this, this.props.appId) }
+							onSearch={ this.handleSearch.bind(this) }
 							onChange={ this.onTypeaheadChange.bind(this) }
 							options={ this.state.options }
 							placeholder={ this.props.placeholder }
