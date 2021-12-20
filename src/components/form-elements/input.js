@@ -1,7 +1,6 @@
 import DatePicker from "react-datepicker";
 import React, { Fragment } from 'react';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
-import { Portal } from "react-overlays";
 import { ValidateMessage } from './validate-message';
 import { elasticSearch } from '../elastic-search';
 
@@ -91,10 +90,6 @@ export class Input extends React.Component {
 		if (this.props.defaultValue) inputProps.defaultValue = this.props.defaultValue;
 		else if (this.props.value !== undefined) inputProps.value = this.props.value;
 
-        const CalendarContainer = ({ children }) => {
-            return <Portal container={ document.getElementById("root") }>{ children }</Portal>;
-        };
-
 		return (
 
 			<div className={ 'form-group '+this.props.className+' '+((this.state.error)?'has-error':'') }>
@@ -175,12 +170,10 @@ export class Input extends React.Component {
 					{ this.props.type == 'date' &&
 						<DatePicker
 							className="form-control form-control-sm" 
-							dateFormat="MM-dd-yyyy"
 							isClearable={ false }
-                            dateFormat={ this.props.dateFormat }
+							dateFormat={ (this.props.dateFormat) ? this.props.dateFormat : "MM-dd-yyyy" }
                             showTimeSelect={ this.props.showTimeSelect }
                             timeFormat={ this.props.timeFormat }
-                            popperContainer={ CalendarContainer }
 							onChange={ this.props.onChange.bind(this, this.props.name) }
 							{ ...inputProps }
 						/>
