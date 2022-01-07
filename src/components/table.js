@@ -57,7 +57,7 @@ export class Table extends React.Component {
 
         this.updateSessionStorage();
         this.handleResize();
-        window.addEventListener("resize", this.handleResize.bind(this));
+        window.addEventListener("resize", _.debounce(this.handleResize.bind(this), 250));
         document.addEventListener("keydown", this.onKeyDown.bind(this), false);
     }
     componentDidUpdate() {
@@ -72,7 +72,7 @@ export class Table extends React.Component {
         }
     }
     componentWillUnmount() {
-        window.removeEventListener("resize", this.handleResize.bind(this));
+        window.removeEventListener("resize", _.debounce(this.handleResize.bind(this), 250));
         document.removeEventListener("keydown", this.onKeyDown.bind(this), false);
     }
 
@@ -141,9 +141,9 @@ export class Table extends React.Component {
         if (this.props.container_id) {
             var container_height = (document.getElementById(this.props.container_id)) ? document.getElementById(this.props.container_id).clientHeight : 0;
             var container_width = (document.getElementById(this.props.container_width_id))
-                ? (document.getElementById(this.props.container_width_id).querySelectorAll('tbody')[0]).clientWidth
+                ? (document.getElementById(this.props.container_width_id).querySelectorAll('tbody')[0])?.clientWidth
                 : (document.getElementById(this.props.container_id))
-                    ? (document.getElementById(this.props.container_id).querySelectorAll('tbody')[0]).clientWidth
+                    ? (document.getElementById(this.props.container_id).querySelectorAll('tbody')[0])?.clientWidth
                     : 0;
             this.setState({ container_height, container_width });
         }
@@ -476,7 +476,25 @@ export class Table extends React.Component {
                     } else if (column.type == 'button') {
                         console.error('EM Table: Field of type Button cannot have a Data Link');
                     } else {
-                        return (<td key={ 'td' + column_index } { ...inputProps } style={ styles } dangerouslySetInnerHTML={ { __html: this.formatItem(items[0], column) } }></td>); // TODO check for multiple
+                        if (!items[0]?.[column.field]) {
+
+                            var nullfield = '';
+                            if (column.nullLabel) {
+
+                                var badgestyle = '';
+                                if (column.style == 1) badgestyle = 'badge-success';
+                                if (column.style == 2) badgestyle = 'badge-info';
+                                if (column.style == 3) badgestyle = 'badge-warning';
+                                if (column.style == 4) badgestyle = 'badge-danger';
+                                if (column.style == 5) badgestyle = 'badge-default';
+
+                                nullfield = <span className={ 'badge ' + badgestyle }>{ column.nullLabel }</span>
+                            }
+
+                            return (<td key={ 'td' + column_index } { ...inputProps } style={ styles }>{ nullfield }</td>); // TODO check for multiple
+                        } else {
+                            return (<td key={ 'td' + column_index } { ...inputProps } style={ styles } dangerouslySetInnerHTML={ { __html: this.formatItem(items[0], column) } }></td>); // TODO check for multiple
+                        }
                     }
 
                 } else {
@@ -663,7 +681,27 @@ export class Table extends React.Component {
 
                         } else {
 
-                            var content = <div style={ { maxHeight: this.props.max_height, overflow: 'hidden' } }><span dangerouslySetInnerHTML={ { __html: this.formatItem(item, column) } }></span></div>
+                            var content;
+                            if (item[column.field] == null) {
+
+                                var nullfield = '';
+                                if (column.nullLabel) {
+
+                                    var badgestyle = '';
+                                    if (column.style == 1) badgestyle = 'badge-success';
+                                    if (column.style == 2) badgestyle = 'badge-info';
+                                    if (column.style == 3) badgestyle = 'badge-warning';
+                                    if (column.style == 4) badgestyle = 'badge-danger';
+                                    if (column.style == 5) badgestyle = 'badge-default';
+
+                                    nullfield = <span className={ 'badge ' + badgestyle }>{ column.nullLabel }</span>
+                                }
+
+                                content = <div style={ { maxHeight: this.props.max_height, overflow: 'hidden' } }>{ nullfield }</div>
+                            } else {
+                                content = <div style={ { maxHeight: this.props.max_height, overflow: 'hidden' } }><span dangerouslySetInnerHTML={ { __html: this.formatItem(item, column) } }></span></div>
+                            }
+
                             return (<td key={ 'td' + column_index } { ...inputProps } style={ styles }>{ content }</td>);
                         }
                     }

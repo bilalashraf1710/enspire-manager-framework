@@ -2,6 +2,7 @@
 
 Version | Description of Changes
 --------|-----------------------
+0.12.8 | Add nullLabel
 0.11.2 | Add type 'jsx' to table
 0.11.0 | ModalForm add expand prop and onExpand prop, height: 80vh
 0.10.93 | Add Label type to Table
@@ -198,6 +199,8 @@ Parameters | Type | Description
 **data:** | (object) | Additional dataset for linking
 **link:** | (string \|\| array) | Field on which to link another data set. If array, the first is the field for the additional data set, the second is the original dataset.  _Field_ above referrs to linked dataset.
 **format:** | (string) | Format based on Type e.g. ``{ type: 'date', format: 'MMMM Do, YYYY' }`` or ``{ type: 'number', format: 'usd' }``
+**label:** | |
+**nullLabel:** | | 
 **badge:** | (array) | An array of String labels for matching badge values 0 - 5 (1 - success, 2 - info, 3 - warning, 4 - danger, 5 - default)
 **max:** | (bool) | Sets column width to 100%, other columns take minimal space
 **nowarp:** | (bool) | Ensure the column does not wrap
