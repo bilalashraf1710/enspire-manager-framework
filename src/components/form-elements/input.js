@@ -91,14 +91,14 @@ export class Input extends React.Component {
 	render() {
 
 		var inputProps = {};
-		if (this.props.selectsStart) inputProps.selectsStart = this.props.selectsStart;
-		if (this.props.selectsEnd) inputProps.selectsEnd = this.props.selectsEnd;
-		if (this.props.startDate) inputProps.startDate = this.props.startDate;
+		if (this.props.defaultValue) inputProps.defaultValue = this.props.defaultValue;
 		if (this.props.endDate) inputProps.endDate = this.props.endDate;
 		if (this.props.minDate) inputProps.minDate = this.props.minDate;
 		if (this.props.name) inputProps.name = this.props.name;
 		if (this.props.selected) inputProps.selected = this.props.selected;
-		if (this.props.defaultValue) inputProps.defaultValue = this.props.defaultValue;
+		if (this.props.selectsEnd) inputProps.selectsEnd = this.props.selectsEnd;
+		if (this.props.selectsStart) inputProps.selectsStart = this.props.selectsStart;
+		if (this.props.startDate) inputProps.startDate = this.props.startDate;
 		else if (this.props.value !== undefined) inputProps.value = this.props.value;
 
 		return (
@@ -125,14 +125,14 @@ export class Input extends React.Component {
 						<input 
 							autoComplete="off" 
 							className="form-control form-control-sm" 
+							disabled={ this.props.disabled }
 							name={ this.props.name } 
-							onChange={ this.props.onChange.bind(this) } 
 							onBlur={ this.props.onBlur?.bind(this) } 
+							onChange={ this.props.onChange.bind(this) } 
 							placeholder={ this.props.placeholder } 
 							readOnly={ this.props.readOnly }
 							ref={ this.field_ref } 
 							type="text"
-							disabled={ this.props.disabled }
 							{ ...inputProps }
 						/>
 					}
@@ -140,32 +140,32 @@ export class Input extends React.Component {
 						<input 
 							autoComplete="off" 
 							className="form-control form-control-sm" 
+							disabled={ this.props.disabled }
 							name={ this.props.name } 
-							onChange={ this.onChangeEmail.bind(this) } 
 							onBlur={ this.onBlurEmail.bind(this) } 
+							onChange={ this.onChangeEmail.bind(this) } 
 							placeholder={ this.props.placeholder } 
 							readOnly={ this.props.readOnly }
 							ref={ this.field_ref } 
 							type="text"
-							disabled={ this.props.disabled }
 							{ ...inputProps }
 						/>
 					}
 					{ this.props.type == 'typeahead' &&
 						<AsyncTypeahead
-							id="async-lookahead"
-							style={ { width: (this.props.allowNew) ? '88%' : '100%' } }
 							allowNew={ this.props.allowNew }
-							newSelectionPrefix={ 'ADD NEW: ' }
 							filterBy={ () => true }
+							highlightOnlyResult={ true }
+							id="async-lookahead"
 							isLoading={ this.state.isLoading }
 							labelKey="target"
-							highlightOnlyResult={ true }
 							minLength={ 2 }
-							onSearch={ this.handleSearch.bind(this) }
+							newSelectionPrefix={ 'ADD NEW: ' }
 							onChange={ this.onTypeaheadChange.bind(this) }
+							onSearch={ this.handleSearch.bind(this) }
 							options={ this.state.options }
 							placeholder={ this.props.placeholder }
+							style={ { width: (this.props.allowNew) ? '88%' : '100%' } }
 							renderMenuItemChildren={ (options, props) => (
 								<Fragment>
 									<span>{ options.target }</span>
@@ -181,11 +181,12 @@ export class Input extends React.Component {
 					{ this.props.type == 'date' &&
 						<DatePicker
 							className="form-control form-control-sm" 
-							isClearable={ false }
 							dateFormat={ (this.props.dateFormat) ? this.props.dateFormat : "MM-dd-yyyy" }
+							isClearable={ false }
+							onChange={ this.props.onChange.bind(this, this.props.name) }
+                            readOnly={ this.props.readOnly }
                             showTimeSelect={ this.props.showTimeSelect }
                             timeFormat={ this.props.timeFormat }
-							onChange={ this.props.onChange.bind(this, this.props.name) }
 							{ ...inputProps }
 						/>
 					}
