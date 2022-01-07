@@ -23,7 +23,10 @@ export class Input extends React.Component {
 		this.field_ref = React.createRef();
 	}
 
-	componentDidUpdate() {
+	componentDidMount() {
+        console.log(this.props);
+    }
+    componentDidUpdate() {
 		if (typeof this.props.onChange !== 'function') console.error('Missing onChange callback');
 
 		if (this.props.form_error !== undefined) {
@@ -100,6 +103,8 @@ export class Input extends React.Component {
 		if (this.props.selectsStart) inputProps.selectsStart = this.props.selectsStart;
 		if (this.props.startDate) inputProps.startDate = this.props.startDate;
 		else if (this.props.value !== undefined) inputProps.value = this.props.value;
+
+        console.log(this.props);
 
 		return (
 
