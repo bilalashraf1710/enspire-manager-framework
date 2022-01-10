@@ -4,6 +4,7 @@ import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { ValidateMessage } from './validate-message';
 import { elasticSearch } from '../elastic-search';
 
+const escapeStringRegexp = require('escape-string-regexp');
 var _ = require('lodash');
 var moment = require('moment'); 
 
