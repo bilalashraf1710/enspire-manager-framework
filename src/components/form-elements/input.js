@@ -174,7 +174,7 @@ export class Input extends React.Component {
 							style={ { width: (this.props.allowNew) ? '88%' : '100%' } }
 							renderMenuItemChildren={ (options, props) => (
 								<Fragment>
-									<span>{ options.target }</span>
+                                    <span dangerouslySetInnerHTML={{ __html: options.target }} />
 								</Fragment>
 							) }
 						/>
