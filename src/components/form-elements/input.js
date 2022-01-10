@@ -54,6 +54,10 @@ export class Input extends React.Component {
 		this.props.onBlur?.(event);
 	}
 	onTypeaheadChange(result) {
+        if (result?.[0]?.target) {
+            result[0].target = result[0].target.replace(new RegExp('<mark>', 'g'), '');
+            result[0].target = result[0].target.replace(new RegExp('</mark>', 'g'), '');
+        }
 		var disableNew = (_.find(this.state.hits, (o) => { return o[this.props.target]?.trim() == result?.[0]?.target?.trim() })) ? true : false;
 		this.setState({ disableNew });
 		this.props.onChange(this.props.name, result);
