@@ -23,8 +23,8 @@ export class Input extends React.Component {
 		this.field_ref = React.createRef();
 	}
 
-	componentDidMount() {
-        console.log(this.props);
+    componentDidMount() {
+        console.info(this.props);
     }
     componentDidUpdate() {
 		if (typeof this.props.onChange !== 'function') console.error('Missing onChange callback');
@@ -103,8 +103,6 @@ export class Input extends React.Component {
 		if (this.props.selectsStart) inputProps.selectsStart = this.props.selectsStart;
 		if (this.props.startDate) inputProps.startDate = this.props.startDate;
 		else if (this.props.value !== undefined) inputProps.value = this.props.value;
-
-        console.log(this.props);
 
 		return (
 
@@ -185,6 +183,7 @@ export class Input extends React.Component {
 					}
 					{ this.props.type == 'date' &&
 						<DatePicker
+							autoComplete="off" 
 							className="form-control form-control-sm" 
 							dateFormat={ (this.props.dateFormat) ? this.props.dateFormat : "MM-dd-yyyy" }
 							isClearable={ false }

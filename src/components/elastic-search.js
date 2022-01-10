@@ -22,6 +22,8 @@ export async function elasticSearch(search, config) {
     search = search.replace(":", "\\:");
     search = search.replace("/", "\\/");
 
+    console.info(config);
+
     if (config.table.endsWith('-customers') && (config.appId == null || config.appId == undefined)) {
         console.error('You must include an appId in the config object');
         return null;
@@ -64,6 +66,6 @@ export async function elasticSearch(search, config) {
         return hits;
 
     } catch (error) {
-        console.log(error);
+        console.error(error);
     }
 }
