@@ -77,8 +77,13 @@ export class Input extends React.Component {
                     target += hit[item] + ' ';
                 });
             }
-            target = target.replace(new RegExp(escapeStringRegexp(search), "i"), (match) => { return '<mark>' + match + '</mark>' }).trim();
-            
+            target = target.trim();
+   
+            var highlight_words = search.split(" ");
+            if (Array.isArray(highlight_words)) highlight_words.forEach((word) => {
+                if (word) target = target.replace(new RegExp(escapeStringRegexp(word), "i"), (match) => { return '<mark>' + match + '</mark>' });
+            });
+
 			return { target: target, id: hit[this.props.id] }
 		});
 		var disableNew = (_.find(hits, (o) => { return o[this.props.target]?.trim() == search?.trim() })) ? true : false;
