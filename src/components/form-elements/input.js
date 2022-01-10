@@ -77,7 +77,7 @@ export class Input extends React.Component {
                     target += hit[item] + ' ';
                 });
             }
-            target = target.trim();
+            target = target.replace(new RegExp(escapeStringRegexp(search), "i"), (match) => { return '<mark>' + match + '</mark>' }).trim();
             
 			return { target: target, id: hit[this.props.id] }
 		});
