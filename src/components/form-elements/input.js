@@ -23,9 +23,6 @@ export class Input extends React.Component {
 		this.field_ref = React.createRef();
 	}
 
-    componentDidMount() {
-        console.info(this.props);
-    }
     componentDidUpdate() {
 		if (typeof this.props.onChange !== 'function') console.error('Missing onChange callback');
 
@@ -68,7 +65,7 @@ export class Input extends React.Component {
 			fields: this.props.fields,
 			sort: this.props.sort,
 		}
-        if (this.props.appId) config.appId = this.props.appId;
+        if (parseInt(this.props.appId) >= 0) config.appId = this.props.appId;
 
 		var hits = await elasticSearch(search, config);
 		const options = hits.map((hit) => {
