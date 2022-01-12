@@ -248,8 +248,9 @@ export class Table extends React.Component {
                     if (word) result = result.replace(new RegExp(escapeStringRegexp(word), "i"), (match) => { return '<mark>' + match + '</mark>' });
                 });
             }
-            return ((column.prefix) ? column.prefix : '') + result +
-                ((column.postfix) ? column.postfix : '');
+            return (result) 
+                ? ((column.prefix) ? column.prefix : '') + result + ((column.postfix) ? column.postfix : '')
+                : '';
         }
     }
     columnSort(column) {
