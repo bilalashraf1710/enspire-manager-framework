@@ -1,5 +1,7 @@
 import React from 'react';
+import _ from 'lodash';
 import { PdfPreview } from '../pdf-preview';
+import { ValidateMessage } from './validate-message';
 import { pdfjs, Document, Page } from 'react-pdf';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
@@ -41,12 +43,12 @@ export class Dropzone extends React.Component {
 
 		if (this.props.form_error !== undefined) {
 
-			var error = _.find(this.props.form_error, { field: this.props.name })
+			var error = _.find(this.props.form_error, { field: this.props.field })
 
 			if (error && !this.state.error) {
 
 				var error_message = ValidateMessage(error);
-				if (this.props.form_error[0].field === this.props.name) {
+				if (this.props.form_error[0].field === this.props.field) {
 					window.toastr.error('Please upload a File', error_message);
 				}
 				this.setState({ error: true, error_message });
