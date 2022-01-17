@@ -113,7 +113,7 @@ export class Input extends React.Component {
 
 		return (
 
-			<div className={ 'form-group '+this.props.className+' '+((this.state.error)?'has-error':'') }>
+			<div className={ 'form-group '+this.props.className+' '+((this.state.error)?' has-error':'') }>
 				
 				{ this.props.hideLabel
 					? 	<label>&nbsp;</label>

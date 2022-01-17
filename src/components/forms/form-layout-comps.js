@@ -248,6 +248,7 @@ export default function FormBuilderComps(props) {
 				directory={ props.field.dropzone.directory } 
 				field={ props.field.field }
 				filename={ props.field.dropzone.filename }
+				form_error={ props.props.form_error } 
 				image={ (props.props.record[props.field.field]) ? props.props.record[props.field.field] : '' } 
 				label={ props.field.label }
 				maxHeight={ props.field.dropzone.height }

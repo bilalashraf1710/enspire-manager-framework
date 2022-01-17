@@ -36,6 +36,27 @@ export class Dropzone extends React.Component {
 			e.stopPropagation();
 		}
 	}
+    componentDidUpdate() {
+		if (typeof this.props.onChange !== 'function') console.error('Missing onChange callback');
+
+		if (this.props.form_error !== undefined) {
+
+			var error = _.find(this.props.form_error, { field: this.props.name })
+
+			if (error && !this.state.error) {
+
+				var error_message = ValidateMessage(error);
+				if (this.props.form_error[0].field === this.props.name) {
+					window.toastr.error('Please upload a File', error_message);
+				}
+				this.setState({ error: true, error_message });
+
+			} else if (!error && this.state.error) {
+				this.setState({ error: false, error_message: null });
+			}
+		}
+	}
+
 	dragenter() {
 		this.setState({ counter: this.state.counter+1 });
 		this.highlight(true);
@@ -146,7 +167,7 @@ export class Dropzone extends React.Component {
 
 			<div className={ this.props.className } style={{ width: '100%', paddingLeft: '5px', paddingRight: '5px', margin: '8px 0' }}>
 				
-				{ this.props.label && <p>{ this.props.label }</p> }
+				{ this.props.label && <p>{ this.props.label + ((this.props.required)?' *':'') }</p> }
 
 				{ this.props.image &&
 					<div style={{ position: 'relative', textAlign: 'center', border: '1px solid #e5e6e7', padding: '10px' }}>
@@ -181,44 +202,51 @@ export class Dropzone extends React.Component {
 
 					<>
 						{ this.props.readOnly
-						? <div style={ { padding: '20px', textAlign: 'center', border: '1px solid #e5e6e7' }}>
-									<h3>No File Available</h3>
-								</div>
-							: 	<div id={ 'dropzone' }>
-									<div className={ (this.state.hover ? ' highlight' : '') } 
-										style={ { height: (this.props.maxHeight) ? this.props.maxHeight : '250px' }}
-									>
-										<>
-											{ this.state.uploading
+						?   <div style={ { padding: '20px', textAlign: 'center', border: '1px solid #e5e6e7' }}>
+                                <h3>No File Available</h3>
+                            </div>
+                        : 	<>
+                                <div id={ 'dropzone' } className={ ((this.state.error)?'has-error':'') }>
+                                    <div className={ (this.state.hover ? ' highlight' : '') } 
+                                        style={ { height: (this.props.maxHeight) ? this.props.maxHeight : '250px' }}
+                                    >
+                                        <>
+                                            { this.state.uploading
 
-												?	<div>
-														<h3><span>Uploading...</span></h3>
-														{ this.state.progress > 0 &&
-															<div className="progress mt-3 mb-3" style={{ backgroundColor: 'white' }}>
-																<div className="progress-bar" style={{ width: this.state.progress+'%' }} role="progressbar"></div>
-															</div>
-														}
-													</div>
+                                                ?	<div>
+                                                        <h3><span>Uploading...</span></h3>
+                                                        { this.state.progress > 0 &&
+                                                            <div className="progress mt-3 mb-3" style={{ backgroundColor: 'white' }}>
+                                                                <div className="progress-bar" style={{ width: this.state.progress+'%' }} role="progressbar"></div>
+                                                            </div>
+                                                        }
+                                                    </div>
 
-												: 	<h3 style={{ backgroundColor: 'transparent' }}>
-														<i className="fa fa-upload fa-3x mb-3" style={{ color: '#cccccc', marginTop: '15px' }}></i>
-														<br/>
-														{ this.state.hover
-															? 	<span>
-																	<strong>Drop Here!!</strong>
-																</span>
-															: 	<span>
-																	<label style={{ cursor: 'pointer' }}>
-																		<strong>Choose a file</strong>
-																		<input type="file" accept="image/png, image/jpeg, .pdf" style={{ display: 'none' }} onChange={ this.chooseFile.bind(this) } />
-																	</label>&nbsp;or Drag here
-																</span>
-														}
-													</h3>
-											}
-										</>
-									</div>
-								</div>
+                                                : 	<h3 style={{ backgroundColor: 'transparent' }}>
+                                                        <i className="fa fa-upload fa-3x mb-3" style={{ color: '#cccccc', marginTop: '15px' }}></i>
+                                                        <br/>
+                                                        { this.state.hover
+                                                            ? 	<span>
+                                                                    <strong>Drop Here!!</strong>
+                                                                </span>
+                                                            : 	<span>
+                                                                    <label style={{ cursor: 'pointer' }}>
+                                                                        <strong>Choose a file</strong>
+                                                                        <input type="file" accept="image/png, image/jpeg, .pdf" style={{ display: 'none' }} onChange={ this.chooseFile.bind(this) } />
+                                                                    </label>&nbsp;or Drag here
+                                                                </span>
+                                                        }
+                                                    </h3>
+                                            }
+                                        </>
+                                    </div>
+                                </div>
+                                { this.state.error_message &&
+                                    <div className="invalid-feedback" style={{ display: 'block' }}>
+                                        { this.state.error_message }
+                                    </div>
+                                }
+                            </>
 						}
 					</>
 				}
