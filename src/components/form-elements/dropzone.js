@@ -124,7 +124,7 @@ export class Dropzone extends React.Component {
 			console.error(error);
 		}, () => {
 			uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
-				this.props.onChange(this.props.field, downloadURL);
+				this.props.onChange(this.props.field, downloadURL, filename, file.type);
 			});
 			setTimeout(() => {
 				this.setState({ progress: 1, hover: false, uploading: false });
