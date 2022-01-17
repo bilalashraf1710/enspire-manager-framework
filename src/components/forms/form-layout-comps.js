@@ -255,6 +255,7 @@ export default function FormBuilderComps(props) {
 				multiple={ false }
 				onChange={ props.props.callbacks.dropzone.bind(this) } 
 				readOnly={ props.field.readOnly }
+				required={ required }
 				storage={ props.field.dropzone.storage }
 				storageRef={ props.field.dropzone.storageRef }
 			/>
