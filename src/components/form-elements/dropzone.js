@@ -2,9 +2,6 @@ import React from 'react';
 import _ from 'lodash';
 import { PdfPreview } from '../pdf-preview';
 import { ValidateMessage } from './validate-message';
-import { pdfjs, Document, Page } from 'react-pdf';
-
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 export class Dropzone extends React.Component {
 
@@ -111,6 +108,9 @@ export class Dropzone extends React.Component {
 		if (file.type.endsWith('pdf')) ext = '.pdf';
 		if (file.type.endsWith('jpeg')) ext = '.jpg';
 		if (file.type.endsWith('png')) ext = '.png';
+		if (file.type.endsWith('pdf')) ext = '.pdf';
+		if (file.type.endsWith('xlsx')) ext = '.xlsx';
+		if (file.type.endsWith('sheet')) ext = '.xlsx';
 
 		var filename = ((this.props.directory) ? this.props.directory + '/' : '') + ((this.props.filename) ? this.props.filename : (Date.now()) + ext);
 		var uploadTask = this.props.storageRef.child(this.props.bin + '/' + filename).put(file, metadata);

@@ -1,21 +1,22 @@
+const Swal = require('sweetalert2')
+
 export function ModalAlert(options) {
 
-	window.swal({
+    Swal.fire({
 		title: options.title,
 		text: options.text,
-		type: options.type,
-		showCancelButton: (options.show_cancel !== undefined) ? options.show_cancel : true,
-		confirmButtonColor: (options.confirm_color !== undefined) ? options.confirm_color : "#DD6B55",
-		confirmButtonText: (options.confirm_text !== undefined) ? options.confirm_text : "Yes, delete it!",
-		cancelButtonText: (options.cancel_text !== undefined) ? options.cancel_text : "Cancel",
-		closeOnConfirm: true,
-	}, (result) => {
-		if (result) {
-			if (typeof options.callback_success === 'function') options.callback_success();
-		} else {
-			if (typeof options.callback_cancel === 'function') options.callback_cancel();
-		}
-	});
+        icon:options.icon, // success, error, warning, info, question
+		showCancelButton: (options.show_cancel) ? true : false,
+		confirmButtonColor: (options.confirm_color) ? options.confirm_color : "#DD6B55",
+        cancelButtonColor: '#dddddd',
+		confirmButtonText: (options.confirm_text) ? options.confirm_text : "Okay",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            if (typeof options.callback_success === 'function') options.callback_success();
+        } else {
+            if (typeof options.callback_cancel === 'function') options.callback_cancel();
+        }
+    });
 
 	return null;
 }
