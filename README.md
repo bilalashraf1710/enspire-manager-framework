@@ -194,7 +194,7 @@ Parameters | Type | Description
 -----------|------|------------
 **field: \*** | (string) | The field name within the *data* block (or linked data block)
 **name: \*** | (string) | The name to represent the column in the header
-**button:** | (object) | Button Object used with Types _button_ and _action_ (See Button Object below)
+**button:** | (object) | Button Object used with Types _button_, _toggle_, and _action_ (See Button Object below)
 **callback:** | (function) | Function to be called by Types _datepicker_ and _button._
 **data:** | (object) | Additional dataset for linking
 **link:** | (string \|\| array) | Field on which to link another data set. If array, the first is the field for the additional data set, the second is the original dataset.  _Field_ above referrs to linked dataset.
@@ -208,7 +208,7 @@ Parameters | Type | Description
 **append:** | (string) | Input Group Append
 **postfix:** | (string) | String to append to column value
 **prefix:** | (string) | String to prepend to column value
-**type:** | (string) | One of the following: _badge, label, date, timestamp, number, select, datepicker, button, actions._ _Action_ requires the use of _button_ below to define button actions.  _Select_ requires the use of a linked dataset for the selection options.
+**type:** | (string) | One of the following: _badge, label, date, timestamp, number, select, datepicker, button, toggle, actions._ _Action_ requires the use of _button_ below to define button actions.  _Select_ requires the use of a linked dataset for the selection options.
 **width:** | (int) | fixed column width in percent
 
 ### ORDER OBJECT
@@ -236,7 +236,8 @@ Parameter | Type | Description
 **activeClass:** | (string) Classname for active button
 **links:** | (object array) | For _action_ button, array of key/value pair: `name` and `callback`
 **multiple:** | (boolean) | enable multiple selection mode in _Action._
-**callback:**|N/A|use callback in column parameters
+**callback:** | N/A | use callback in column parameters
+**toggle:** | N/A | In the case of type _toggle_, the button object will be an array of two button objects.
 
 ### EXAMPLE:
 
