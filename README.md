@@ -210,6 +210,7 @@ Parameters | Type | Description
 **prefix:** | (string) | String to prepend to column value
 **type:** | (string) | One of the following: _badge, label, date, timestamp, number, select, datepicker, button, toggle, actions._ _Action_ requires the use of _button_ below to define button actions.  _Select_ requires the use of a linked dataset for the selection options.
 **width:** | (int) | fixed column width in percent
+**utc:** | (bool) | for types _timestamp_ and _date_, express date in UTC time.
 
 ### ORDER OBJECT
 

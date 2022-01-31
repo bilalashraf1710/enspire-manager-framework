@@ -218,11 +218,13 @@ export class Table extends React.Component {
     formatItem(item, column) {
         if (column.type === 'timestamp') {
             if (column.format) {
+                if (item[column.utc]) return moment.utc(item[column.field], 'X').format(column.format);
                 return moment(item[column.field], 'X').format(column.format);
-            } else console.error('EM Table: Format required for Date field');
+            } else console.error('EM Table: Format required for Timestamp field');
 
         } else if (column.type === 'date') {
             if (column.format) {
+                if (item[column.utc]) return (item[column.field]?.seconds) ? moment.utc(item[column.field].seconds, 'X').format(column.format) : '';
                 return (item[column.field]?.seconds) ? moment(item[column.field].seconds, 'X').format(column.format) : '';
             } else console.error('EM Table: Format required for Date field');
 
