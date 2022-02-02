@@ -218,7 +218,7 @@ export class Table extends React.Component {
     formatItem(item, column) {
         if (column.type === 'timestamp') {
             if (column.format) {
-                if (item[column.utc]) return moment.utc(item[column.field], 'X').format(column.format);
+                if (column.utc) return moment.utc(item[column.field], 'X').format(column.format);
                 return moment(item[column.field], 'X').format(column.format);
             } else console.error('EM Table: Format required for Timestamp field');
 
