@@ -545,9 +545,13 @@ export class Table extends React.Component {
                         {/* TOGGLE ---------------------------------------------------------------------------------------------*/ }
 
                     } else if (column.type == 'toggle') {
-                        let toggle_index = (item[column.field]) ? 1 : 0;
-                        if (!column.callback) console.error('Toggle requires a callback');
-                        return (<td key={ 'td' + column_index } { ...inputProps } style={ styles }><button className={ 'btn ' + column.button[toggle_index].className } onClick={ column.callback.bind(this, item) }>{ column.button[toggle_index].name }</button></td>);
+                        if (item[column.field] != null) {
+                            let toggle_index = (item[column.field]) ? 1 : 0;
+                            if (!column.callback) console.error('Toggle requires a callback');
+                            return (<td key={ 'td' + column_index } { ...inputProps } style={ styles }><button className={ 'btn ' + column.button[toggle_index].className } onClick={ column.callback.bind(this, item) }>{ column.button[toggle_index].name }</button></td>);
+                        } else {
+                            return (<td key={ 'td' + column_index } { ...inputProps } style={ styles }></td>);
+                        }
 
                         {/* JSX ---------------------------------------------------------------------------------------------*/ }
 
