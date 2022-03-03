@@ -6,7 +6,7 @@ export function verifyHandle(handle, firebase, callback) {
 
 	return dispatch => {
 
-		firebase.firestore().collection('companies').doc(handle).get().then((doc) => {
+		firebase.firestore().collection('_companies').doc(handle).get().then((doc) => {
 			if (typeof callback === "function") callback(doc);
 		}).catch((error) => {
 			process_error(error, 'Verify Handle: ' + error.message);
