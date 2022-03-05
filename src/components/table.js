@@ -541,7 +541,7 @@ export class Table extends React.Component {
 
                     } else if (column.type == 'button') {
                         if (!column.callback) return (<td key={ 'td' + column_index } { ...inputProps } style={ styles }><button className={ 'btn ' + column.button.className }>{ column.button.name }</button></td>);
-                        return (<td key={ 'td' + column_index } { ...inputProps } style={ styles }><button className={ 'btn ' + column.button.className } onClick={ column.callback.bind(this, item[column.field]) }>{ column.button.name }</button></td>);
+                        return (<td key={ 'td' + column_index } { ...inputProps } style={ styles }><button className={ 'btn ' + column.button.className } onClick={ column.callback.bind(this, item) }>{ column.button.name }</button></td>);
 
                         {/* TOGGLE ---------------------------------------------------------------------------------------------*/ }
 

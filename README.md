@@ -2,6 +2,7 @@
 
 Version | Description of Changes
 --------|-----------------------
+0.13.0 | BREAKING - button now returns whole record
 0.12.8 | Add nullLabel
 0.11.2 | Add type 'jsx' to table
 0.11.0 | ModalForm add expand prop and onExpand prop, height: 80vh
