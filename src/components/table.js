@@ -403,7 +403,7 @@ export class Table extends React.Component {
             }
 
             if (!this.props.columns?.length) console.error('EM Table: Missing Columns Definition');
-            var fields = this.props.columns.map((column, column_index) => {
+            var fields = (this.props.columns?.length) ? this.props.columns.map((column, column_index) => {
 
                 var styles = { overflowWrap: 'anywhere' };
 
@@ -721,7 +721,7 @@ export class Table extends React.Component {
                         }
                     }
                 }
-            });
+            }) : null;
 
             // var highlight = null;
             // if (this.props.highlight_search) {
