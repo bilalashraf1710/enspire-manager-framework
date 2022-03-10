@@ -5,6 +5,7 @@ import Tooltip from 'react-bootstrap/Tooltip';
 import { Input } from './form-elements/input';
 import { Portal } from "react-overlays";
 
+
 const escapeStringRegexp = require('escape-string-regexp');
 var _ = require('lodash');
 var moment = require('moment');
@@ -42,14 +43,14 @@ export class Table extends React.Component {
 
     componentDidMount() {
         this.loadSessionStorage();
-        if (_.get(this.props, 'filters.active', null)) {
+        if (this.props.filters?.active) {
             if (this.props.filters?.buttons?.length <= 5) {
                 this.setState({ filter_button: this.props.filters.active });
             } else {
                 if (this.props.filters.active > 0) this.setState({ filter_button: this.props.filters.buttons[this.props.filters.active - 1].value });
             }
         }
-        if (_.get(this.props, 'filters.limit', null)) this.setState({ filter_limit: this.props.filters.limit });
+        if (this.props.filters?.limit) this.setState({ filter_limit: this.props.filters.limit });
         if (this.props.show_limit) this.setState({ limit: 25, show_limit: true });
         if (this.props.limit) this.setState({ limit: parseInt(this.props.limit), show_limit: true });
         if (this.props.order) this.setState({ order: this.props.order });
@@ -162,7 +163,8 @@ export class Table extends React.Component {
         this.setState({ search: '' });
         if (typeof this.props.search_callback === 'function') this.props.search_callback('');
     }
-    handleFilter(button) {
+    handleFilter(button, event) {
+        event.preventDefault();
         this.stopEdit();
         if (this.state.filter_button === button) button = 0;
         this.setState({ filter_button: button, page: 0 });
@@ -309,9 +311,9 @@ export class Table extends React.Component {
 
         /* Filtered -----------------------------------*/
 
-        if (_.get(this.props.filters, 'buttons', null)) { // has buttons?
+        if (this.props.filters?.buttons) { // has buttons?
             if (this.props.filters?.buttons?.length <= 5) {
-                if (this.state.filter_button && _.get(this.props.filters, 'buttons.' + (this.state.filter_button - 1) + '.value', null) !== null) {
+                if (this.state.filter_button && this.props.filters?.buttons?.[this.state.filter_button - 1]?.value) {
                     filtered_data = _.filter(filtered_data, { [this.props.filters.field]: this.props.filters.buttons[this.state.filter_button - 1].value });
                 }
             } else {
