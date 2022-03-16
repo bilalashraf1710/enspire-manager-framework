@@ -65,7 +65,7 @@ export class Combo extends React.Component {
 					/>
 					{ this.props.position == 'end' &&
 						<div className="input-group-append">
-							<button className={ 'btn ' + this.props.buttonClass } type="button" id="button-addon2" onClick={ this.props.onClick.bind(this, this.props.name) }>{ this.props.buttonText }</button>
+							<button className={ 'btn ' + this.props.buttonClass } type="button" id="button-addon2" onClick={ this.props.onClick.bind(this, this.props.name, this.props.value) }>{ this.props.buttonText }</button>
 						</div>
 					}
 				</div>
