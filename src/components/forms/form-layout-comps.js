@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import { Input } from '../form-elements/input';
+import { Combo } from '../form-elements/combo';
 import { Select } from '../form-elements/select';
 import { MultiSelect } from '../form-elements/multiselect';
 import { Checkbox } from '../form-elements/checkbox';
@@ -40,6 +41,35 @@ export default function FormBuilderComps(props) {
 				required={ required }
 				type="text" 
 				value={ (props.props.record[props.field.field]) ? props.props.record[props.field.field] : '' }
+			/>
+			break;
+		}
+		case 'combo'	: {
+
+			if (typeof props.props.callbacks?.text !== 'function') console.error('Missing Callback for Text');
+			if (typeof props.props.callbacks?.combo !== 'function') console.error('Missing Callback for Combo');
+
+			component =	<Combo
+				append={ props.field.append }
+				className={ props.field.grid } 
+				disabled={ props.field.disabled }
+				form_error={ props.props.form_error } 
+				hideLabel={ props.field.hideLabel }
+				label={ label } 
+				name={ props.field.field }
+				noLabel={ props.field.noLabel }
+				onBlur={ props.props.callbacks.blur } 
+				onChange={ props.props.callbacks.text } 
+				onClick={ props.props.callbacks.combo }
+				placeholder={ props.field.placeholder }
+				prepend={ props.field.prepend }
+				readOnly={ props.field.readOnly }
+				required={ required }
+				type="text" 
+				value={ (props.props.record[props.field.field]) ? props.props.record[props.field.field] : '' }
+				position={ props.field.position }
+				buttonClass={ props.field.buttonClass }
+				buttonText={ props.field.buttonText }
 			/>
 			break;
 		}
