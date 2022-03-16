@@ -43,6 +43,13 @@ export function ValidateForm(record, form_builder_layout) {
                 if (!value) form_error.push({ field: field.field, type: 'required' });
             }
 
+            /* Empty -----------------------------------------*/
+            if (field.valid && field.valid.includes('empty') && !field.disabled) {
+                value = (typeof record[field.field] == 'string') ? record[field.field].trim() : record[field.field];
+                if (typeof value == 'string') value = value.trim();
+                if (value) form_error.push({ field: field.field, type: 'empty' });
+            }
+
             /* numeric -----------------------------------------*/
             if (field.valid && field.valid.includes('numeric') && !field.disabled) {
                 value = (typeof record[field.field] == 'string') ? record[field.field].trim() : record[field.field];

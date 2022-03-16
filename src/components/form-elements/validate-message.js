@@ -6,6 +6,9 @@ export function ValidateMessage(error) {
 	if (error.type == 'required') {
 		error_message = "Field Required";
 
+	} else if (error.type == 'empty') {
+		error_message = "Empty Field Expected";
+	
 	} else if (error.type == 'numeric') {
 		error_message = "Number Expected";
 	
