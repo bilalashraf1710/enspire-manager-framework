@@ -7,6 +7,7 @@ export function Ibox(props) {
 	var styleIbox = (props.mini) ? { marginBottom: '12px' } : {};
 	var styleTitle = (props.mini) ? { padding: '10px', minHeight: 'auto', maxHeight: '34px' } : {};
 	var styleContent = (props.mini) ? { padding: '10px' } : {};
+	if (!props.title) styleContent.borderStyle = 'none';
 
 	var options = (props.dropdown_array) ? props.dropdown_array.map((option, index) => {
 		return (
