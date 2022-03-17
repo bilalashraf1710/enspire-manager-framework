@@ -18,38 +18,40 @@ export function Ibox(props) {
 
 		<div id={ props.id } className={ 'animated fadeInRight p-0 py ' + props.className } style={ props.style }>
 			<div className="ibox" style={ styleIbox }>
-				<div className="ibox-title" style={ styleTitle }>
-					<h5>{ props.title }
-						{ props.icon_array &&
-							<div className="ibox-tools" style={ { marginTop: '-5px' } }>
-								{
-									props.icon_callback_array?.slice().map((callback, index) => {
-										if (typeof callback === "function") return (
-											<a key={ 'icon' + index } onClick={ () => callback() } className="ml-2" style={ { fontSize: (props.mini) ? '14px' : '18px' } }>
-												<i className={ props.icon_array.slice()[index] } style={ { color: '#c4c4c4' } }></i>
-											</a>
-										);
-									})
-								}
-							</div>
-						}
-						{ props.button &&
-							<button type="button" className="btn btn-sm btn-primary ml-3 pull-right" style={ { marginTop: '-4px' } } onClick={ props.button_callback.bind(this) }>{ props.button }</button>
-						}
-						{ props.dropdown_callback &&
-							<div className={ 'ibox-tools' } style={ { marginTop: '-7px' } }>
-								< Select
-									noLabel={ true }
-									name={ 'dropdown' }
-									onChange={ props.dropdown_callback }
-									value={ props.dropdown_value }
-								>
-									{ options }
-								</Select>
-							</div>
-						}
-					</h5>
-				</div>
+				{ props.title && 
+					<div className="ibox-title" style={ styleTitle }>
+						<h5>{ props.title }
+							{ props.icon_array &&
+								<div className="ibox-tools" style={ { marginTop: '-5px' } }>
+									{
+										props.icon_callback_array?.slice().map((callback, index) => {
+											if (typeof callback === "function") return (
+												<a key={ 'icon' + index } onClick={ () => callback() } className="ml-2" style={ { fontSize: (props.mini) ? '14px' : '18px' } }>
+													<i className={ props.icon_array.slice()[index] } style={ { color: '#c4c4c4' } }></i>
+												</a>
+											);
+										})
+									}
+								</div>
+							}
+							{ props.button &&
+								<button type="button" className="btn btn-sm btn-primary ml-3 pull-right" style={ { marginTop: '-4px' } } onClick={ props.button_callback.bind(this) }>{ props.button }</button>
+							}
+							{ props.dropdown_callback &&
+								<div className={ 'ibox-tools' } style={ { marginTop: '-7px' } }>
+									< Select
+										noLabel={ true }
+										name={ 'dropdown' }
+										onChange={ props.dropdown_callback }
+										value={ props.dropdown_value }
+									>
+										{ options }
+									</Select>
+								</div>
+							}
+						</h5>
+					</div>
+				}
 				<div className={ 'ibox-content' + ((props.no_fade) ? ' no-fade' : '') + ((props.show_spinner) ? ' sk-loading' : '') } style={ styleContent }>
 
 					<Spinner />
