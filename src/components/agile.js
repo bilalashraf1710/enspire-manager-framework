@@ -45,6 +45,7 @@ export class Agile extends React.Component {
 
 		let style = (typeof this.props.onClick === "function") ? { cursor: 'pointer' } : null;
 		let TitleTag = (this.props.titleTag) ? this.props.titleTag : 'p';
+		let titleStyle = { fontWeight: (this.props.bold === false) ? 'normal' : 'bold' };
 
 
 		return (
@@ -64,10 +65,14 @@ export class Agile extends React.Component {
 						</OverlayTrigger>
 					</div>
 				}
-				<TitleTag className="m-0 p-0"><strong>{ this.props.title }</strong></TitleTag>
-				<div className="agile-detail" style={ { fontSize: '11px' } }>
-					{ this.props.detail } {/*<i className="far fa-clock"></i> 12.10.2015 */ }
-				</div>
+				{ this.props.title &&
+					<TitleTag className="m-0 p-0" style={ titleStyle }>{ this.props.title }</TitleTag>
+				}
+				{ this.props.detail &&
+					<div className="agile-detail" style={ { fontSize: '11px' } }>
+						{ this.props.detail } {/*<i className="far fa-clock"></i> 12.10.2015 */ }
+					</div>
+				}
 			</li>
 		);
 	}
