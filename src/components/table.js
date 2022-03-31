@@ -388,7 +388,7 @@ export class Table extends React.Component {
                     groupBy = item[this.props.group_by[0]];
                     rows.push(
                         <tr key={ 'heading:' + groupBy } style={ { backgroundColor: '#666666' } }>
-                            <td colSpan="99" style={ { color: 'white' } }>{ groupBy }</td>
+                            <td colSpan="99" style={ { color: 'white', textTransform: 'uppercase' } }>{ groupBy }</td>
                         </tr>
                     );
                 }
